@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,6 +13,7 @@ using WindowsDesktop;
 using WindowsInput;
 using WindowsInput.Native;
 using FreeVD.Internal;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace FreeVD
 {
@@ -37,17 +37,6 @@ namespace FreeVD
             mnuSettings.Click += mnuSettings_Click;
             VirtualDesktop.CurrentChanged += VirtualDesktop_CurrentChanged;
             VirtualDesktop.ApplicationViewChanged += VirtualDesktop_ApplicationViewChanged;
-            btnBrowseWallpaper1.Click += btnBrowseWallpaper_Click;
-            btnBrowseWallpaper2.Click += btnBrowseWallpaper_Click;
-            btnBrowseWallpaper3.Click += btnBrowseWallpaper_Click;
-            btnBrowseWallpaper4.Click += btnBrowseWallpaper_Click;
-            btnBrowseWallpaper5.Click += btnBrowseWallpaper_Click;
-            btnBrowseWallpaper6.Click += btnBrowseWallpaper_Click;
-            btnBrowseWallpaper7.Click += btnBrowseWallpaper_Click;
-            btnBrowseWallpaper8.Click += btnBrowseWallpaper_Click;
-            btnBrowseWallpaper9.Click += btnBrowseWallpaper_Click;
-            btnBrowseDefaultWalpaper.Click += btnBrowseWallpaper_Click;
-
             lblVersion.Text = Program.version;
             SystemTray.Text = "FreeVD " + Program.version;
 
@@ -55,33 +44,7 @@ namespace FreeVD
             //This is used so that the app is able to pin an application
             //System.Threading.Thread tGetProgs = new System.Threading.Thread(new System.Threading.ThreadStart(GetProgs));
             //tGetProgs.Start();
-        }
-
-        private static void GetProgs()
-        {
-            //var regClis = Registry.ClassesRoot.OpenSubKey("CLSID");
-            //var progs = new List<COMProgram>();
-
-            //foreach (var clsid in regClis.GetSubKeyNames())
-            //{
-            //    var regClsidKey = regClis.OpenSubKey(clsid);
-            //    var ProgID = regClsidKey.OpenSubKey("ProgID");
-            //    var regPath = regClsidKey.OpenSubKey("InprocServer32");
-
-            //    if (regPath == null)
-            //        regPath = regClsidKey.OpenSubKey("LocalServer32");
-
-            //    if (regPath != null && ProgID != null)
-            //    {
-            //        var pid = ProgID.GetValue("");
-            //        var filePath = regPath.GetValue("");
-            //        progs.Add(new COMProgram(pid.ToString(), filePath.ToString()));
-            //        regPath.Close();
-            //    }
-
-            //    regClsidKey.Close();
-            //}
-        }       
+        } 
 
         #region "Event Handlers"
 
@@ -89,7 +52,7 @@ namespace FreeVD
         {
             try
             {
-                this.Opacity = 0;
+                this.Visible = false;
                 this.ShowInTaskbar = false;
                 LoadSettings();
                 SetSystemTrayIcon();
@@ -119,7 +82,6 @@ namespace FreeVD
         private void VirtualDesktop_CurrentChanged(object sender, VirtualDesktopChangedEventArgs e)
         {
             SetSystemTrayIcon();
-            SetWallpaper();
             GC.Collect();
         }
 
@@ -132,7 +94,7 @@ namespace FreeVD
                     e.Cancel = true;
                     HideSettings();
                 }
-
+                return;
             }
             SystemTray.Visible = false;
             Log.LogEvent("Program Exited", "Icon Theme: " + Program.IconTheme +
@@ -141,7 +103,6 @@ namespace FreeVD
                             "\r\nNavigateCount: " + Program.NavigateCount, "", "frmMain", null);
             System.Threading.Thread.Sleep(3000);
             Environment.Exit(0);
-
         }
 
         private void timerCheckVersion_Tick(object sender, EventArgs e)
@@ -157,19 +118,6 @@ namespace FreeVD
 
         private void SystemTray_MouseClick(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
-            {
-                try
-                {
-                    var sim = new InputSimulator();
-                    sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.LWIN, VirtualKeyCode.TAB);
-                    sim = null;
-
-                }
-                catch { }
-
-            }
-
         }
 
         private void SystemTray_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -178,12 +126,9 @@ namespace FreeVD
             {
                 try
                 {
-                    var sim = new InputSimulator();
-                    sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.LWIN, VirtualKeyCode.VK_D);
-                    sim = null;
+                    ShowSettings();
                 }
                 catch { }
-
             }
         }
 
@@ -227,7 +172,7 @@ namespace FreeVD
                 ExitClicked = true;
                 this.Close();
 
-
+                MessageBox.Show("exiting");
             }
             catch (Exception ex)
             {
@@ -270,402 +215,7 @@ namespace FreeVD
 
         public void SetSystemTrayIcon()
         {
-
-            switch (Program.IconTheme)
-            {
-                case "Green":
-                    SystemTrayGreen();
-                    break;
-                case "Blue":
-                    SystemTrayBlue();
-                    break;
-                case "Digital - Green":
-                    SystemTrayDigitalGreen();
-                    break;
-                case "Digital - White":
-                    SystemTrayDigitalWhite();
-                    break;
-                case "Red Orb":
-                    SystemTrayRedOrb();
-                    break;
-                case "White Box":
-                    SystemTrayWhiteBox();
-                    break;
-                case "Black Box":
-                    SystemTrayBlackBox();
-                    break;
-                case "Round":
-                    SystemTrayRound();
-                    break;
-                case "White Border":
-                    SystemTrayWhiteBorder();
-                    break;
-                case "Numpad - White":
-                    SystemTrayNumpadWhite();
-                    break;
-                case "Grid - White":
-                    SystemTrayGridWhite();
-                    break;
-                case "3 Desktops":
-                    SystemTray3Desktops();
-                    break;
-                case "Narrow - White":
-                    SystemTrayNarrowWhite();
-                    break;
-                case "Agency - White":
-                    SystemTrayAgencyWhite();
-                    break;
-            }
-        }
-
-        private void SystemTrayAgencyWhite()
-        {
-            try
-            {
-                VirtualDesktop current = VirtualDesktop.Current;
-                int i = VirtualDestopFunctions.GetDesktopNumber(current.Id);
-                switch (i)
-                {
-                    case 1:
-                        SystemTray.Icon = Properties.Resources.Agency_1;
-                        break;
-                    case 2:
-                        SystemTray.Icon = Properties.Resources.Agency_2;
-                        break;
-                    case 3:
-                        SystemTray.Icon = Properties.Resources.Agency_3;
-                        break;
-                    case 4:
-                        SystemTray.Icon = Properties.Resources.Agency_4;
-                        break;
-                    case 5:
-                        SystemTray.Icon = Properties.Resources.Agency_5;
-                        break;
-                    case 6:
-                        SystemTray.Icon = Properties.Resources.Agency_6;
-                        break;
-                    case 7:
-                        SystemTray.Icon = Properties.Resources.Agency_7;
-                        break;
-                    case 8:
-                        SystemTray.Icon = Properties.Resources.Agency_8;
-                        break;
-                    case 9:
-                        SystemTray.Icon = Properties.Resources.Agency_9;
-                        break;
-                }
-
-                SystemTray.Visible = true;
-
-            }
-            catch (Exception ex)
-            {
-                SystemTray.Icon = Properties.Resources.Windows_8_Numbers_1_Black;
-                MessageBox.Show("An error occured setting the system tray icon. See additional details below." + Environment.NewLine + Environment.NewLine +
-                    ex.Message + Environment.NewLine +
-                    ex.Source + "::" + ex.TargetSite.Name);
-                Log.LogEvent("Exception", "", "", "frmMain", ex);
-            }
-        }
-
-        private void SystemTrayNarrowWhite()
-        {
-            try
-            {
-                VirtualDesktop current = VirtualDesktop.Current;
-                int i = VirtualDestopFunctions.GetDesktopNumber(current.Id);
-                switch (i)
-                {
-                    case 1:
-                        SystemTray.Icon = Properties.Resources.Narrow_1;
-                        break;
-                    case 2:
-                        SystemTray.Icon = Properties.Resources.Narrow_2;
-                        break;
-                    case 3:
-                        SystemTray.Icon = Properties.Resources.Narrow_3;
-                        break;
-                    case 4:
-                        SystemTray.Icon = Properties.Resources.Narrow_4;
-                        break;
-                    case 5:
-                        SystemTray.Icon = Properties.Resources.Narrow_5;
-                        break;
-                    case 6:
-                        SystemTray.Icon = Properties.Resources.Narrow_6;
-                        break;
-                    case 7:
-                        SystemTray.Icon = Properties.Resources.Narrow_7;
-                        break;
-                    case 8:
-                        SystemTray.Icon = Properties.Resources.Narrow_8;
-                        break;
-                    case 9:
-                        SystemTray.Icon = Properties.Resources.Narrow_9;
-                        break;
-                }
-
-                SystemTray.Visible = true;
-
-            }
-            catch (Exception ex)
-            {
-                SystemTray.Icon = Properties.Resources.Windows_8_Numbers_1_Black;
-                MessageBox.Show("An error occured setting the system tray icon. See additional details below." + Environment.NewLine + Environment.NewLine +
-                    ex.Message + Environment.NewLine +
-                    ex.Source + "::" + ex.TargetSite.Name);
-                Log.LogEvent("Exception", "", "", "frmMain", ex);
-            }
-        }
-
-        private void SystemTrayBlackBox()
-        {
-            try
-            {
-                VirtualDesktop current = VirtualDesktop.Current;
-                int i = VirtualDestopFunctions.GetDesktopNumber(current.Id);
-                switch (i)
-                {
-                    case 1:
-                        SystemTray.Icon = Properties.Resources.Windows_8_Numbers_1_Black;
-                        break;
-                    case 2:
-                        SystemTray.Icon = Properties.Resources.Windows_8_Numbers_2_Black;
-                        break;
-                    case 3:
-                        SystemTray.Icon = Properties.Resources.Windows_8_Numbers_3_Black;
-                        break;
-                    case 4:
-                        SystemTray.Icon = Properties.Resources.Windows_8_Numbers_4_Black;
-                        break;
-                    case 5:
-                        SystemTray.Icon = Properties.Resources.Windows_8_Numbers_5_Black;
-                        break;
-                    case 6:
-                        SystemTray.Icon = Properties.Resources.Windows_8_Numbers_6_Black;
-                        break;
-                    case 7:
-                        SystemTray.Icon = Properties.Resources.Windows_8_Numbers_7_Black;
-                        break;
-                    case 8:
-                        SystemTray.Icon = Properties.Resources.Windows_8_Numbers_8_Black;
-                        break;
-                    case 9:
-                        SystemTray.Icon = Properties.Resources.Windows_8_Numbers_9_Black;
-                        break;
-                }
-
-                SystemTray.Visible = true;
-
-            }
-            catch (Exception ex)
-            {
-                SystemTray.Icon = Properties.Resources.Windows_8_Numbers_1_Black;
-                MessageBox.Show("An error occured setting the system tray icon. See additional details below." + Environment.NewLine + Environment.NewLine +
-                    ex.Message + Environment.NewLine +
-                    ex.Source + "::" + ex.TargetSite.Name);
-                Log.LogEvent("Exception", "", "", "frmMain", ex);
-            }
-        }
-
-        private void SystemTray3Desktops()
-        {
-            try
-            {
-                VirtualDesktop current = VirtualDesktop.Current;
-                int i = VirtualDestopFunctions.GetDesktopNumber(current.Id);
-                switch (i)
-                {
-                    case 1:
-                        SystemTray.Icon = Properties.Resources._3Desktops_1;
-                        break;
-                    case 2:
-                        SystemTray.Icon = Properties.Resources._3Desktops_2;
-                        break;
-                    case 3:
-                        SystemTray.Icon = Properties.Resources._3Desktops_3;
-                        break;
-                    case 4:
-                        SystemTray.Icon = Properties.Resources._3Desktops_4;
-                        break;
-                    case 5:
-                        SystemTray.Icon = Properties.Resources._3Desktops_4;
-                        break;
-                    case 6:
-                        SystemTray.Icon = Properties.Resources._3Desktops_4;
-                        break;
-                    case 7:
-                        SystemTray.Icon = Properties.Resources._3Desktops_4;
-                        break;
-                    case 8:
-                        SystemTray.Icon = Properties.Resources._3Desktops_4;
-                        break;
-                    case 9:
-                        SystemTray.Icon = Properties.Resources._3Desktops_4;
-                        break;
-                }
-
-                SystemTray.Visible = true;
-
-            }
-            catch (Exception ex)
-            {
-                SystemTray.Icon = Properties.Resources.Windows_8_Numbers_1_Black;
-                MessageBox.Show("An error occured setting the system tray icon. See additional details below." + Environment.NewLine + Environment.NewLine +
-                    ex.Message + Environment.NewLine +
-                    ex.Source + "::" + ex.TargetSite.Name);
-                Log.LogEvent("Exception", "", "", "frmMain", ex);
-            }
-        }
-
-        private void SystemTrayGridWhite()
-        {
-            try
-            {
-                VirtualDesktop current = VirtualDesktop.Current;
-                int i = VirtualDestopFunctions.GetDesktopNumber(current.Id);
-                switch (i)
-                {
-                    case 1:
-                        SystemTray.Icon = Properties.Resources.NumPad1_7;
-                        break;
-                    case 2:
-                        SystemTray.Icon = Properties.Resources.NumPad1_8;
-                        break;
-                    case 3:
-                        SystemTray.Icon = Properties.Resources.NumPad1_9;
-                        break;
-                    case 4:
-                        SystemTray.Icon = Properties.Resources.NumPad1_4;
-                        break;
-                    case 5:
-                        SystemTray.Icon = Properties.Resources.NumPad1_5;
-                        break;
-                    case 6:
-                        SystemTray.Icon = Properties.Resources.NumPad1_6;
-                        break;
-                    case 7:
-                        SystemTray.Icon = Properties.Resources.NumPad1_1;
-                        break;
-                    case 8:
-                        SystemTray.Icon = Properties.Resources.NumPad1_2;
-                        break;
-                    case 9:
-                        SystemTray.Icon = Properties.Resources.NumPad1_3;
-                        break;
-                }
-
-                SystemTray.Visible = true;
-
-            }
-            catch (Exception ex)
-            {
-                SystemTray.Icon = Properties.Resources.Windows_8_Numbers_1_Black;
-                MessageBox.Show("An error occured setting the system tray icon. See additional details below." + Environment.NewLine + Environment.NewLine +
-                    ex.Message + Environment.NewLine +
-                    ex.Source + "::" + ex.TargetSite.Name);
-                Log.LogEvent("Exception", "", "", "frmMain", ex);
-            }
-        }
-
-        private void SystemTrayNumpadWhite()
-        {
-            try
-            {
-                VirtualDesktop current = VirtualDesktop.Current;
-                int i = VirtualDestopFunctions.GetDesktopNumber(current.Id);
-                switch (i)
-                {
-                    case 1:
-                        SystemTray.Icon = Properties.Resources.NumPad1_1;
-                        break;
-                    case 2:
-                        SystemTray.Icon = Properties.Resources.NumPad1_2;
-                        break;
-                    case 3:
-                        SystemTray.Icon = Properties.Resources.NumPad1_3;
-                        break;
-                    case 4:
-                        SystemTray.Icon = Properties.Resources.NumPad1_4;
-                        break;
-                    case 5:
-                        SystemTray.Icon = Properties.Resources.NumPad1_5;
-                        break;
-                    case 6:
-                        SystemTray.Icon = Properties.Resources.NumPad1_6;
-                        break;
-                    case 7:
-                        SystemTray.Icon = Properties.Resources.NumPad1_7;
-                        break;
-                    case 8:
-                        SystemTray.Icon = Properties.Resources.NumPad1_8;
-                        break;
-                    case 9:
-                        SystemTray.Icon = Properties.Resources.NumPad1_9;
-                        break;
-                }
-
-                SystemTray.Visible = true;
-
-            }
-            catch (Exception ex)
-            {
-                SystemTray.Icon = Properties.Resources.Windows_8_Numbers_1_Black;
-                MessageBox.Show("An error occured setting the system tray icon. See additional details below." + Environment.NewLine + Environment.NewLine +
-                    ex.Message + Environment.NewLine +
-                    ex.Source + "::" + ex.TargetSite.Name);
-                Log.LogEvent("Exception", "", "", "frmMain", ex);
-            }
-        }
-
-        private void SystemTrayWhiteBorder()
-        {
-            try
-            {
-                VirtualDesktop current = VirtualDesktop.Current;
-                int i = VirtualDestopFunctions.GetDesktopNumber(current.Id);
-                switch (i)
-                {
-                    case 1:
-                        SystemTray.Icon = Properties.Resources.White_Border_Box_1;
-                        break;
-                    case 2:
-                        SystemTray.Icon = Properties.Resources.White_Border_Box_2;
-                        break;
-                    case 3:
-                        SystemTray.Icon = Properties.Resources.White_Border_Box_3;
-                        break;
-                    case 4:
-                        SystemTray.Icon = Properties.Resources.White_Border_Box_4;
-                        break;
-                    case 5:
-                        SystemTray.Icon = Properties.Resources.White_Border_Box_5;
-                        break;
-                    case 6:
-                        SystemTray.Icon = Properties.Resources.White_Border_Box_6;
-                        break;
-                    case 7:
-                        SystemTray.Icon = Properties.Resources.White_Border_Box_7;
-                        break;
-                    case 8:
-                        SystemTray.Icon = Properties.Resources.White_Border_Box_8;
-                        break;
-                    case 9:
-                        SystemTray.Icon = Properties.Resources.White_Border_Box_9;
-                        break;
-                }
-
-                SystemTray.Visible = true;
-
-            }
-            catch (Exception ex)
-            {
-                SystemTray.Icon = Properties.Resources.Windows_8_Numbers_1_Black;
-                MessageBox.Show("An error occured setting the system tray icon. See additional details below." + Environment.NewLine + Environment.NewLine +
-                    ex.Message + Environment.NewLine +
-                    ex.Source + "::" + ex.TargetSite.Name);
-                Log.LogEvent("Exception", "", "", "frmMain", ex);
-            }
+            SystemTrayWhiteBox();
         }
 
         private void SystemTrayWhiteBox()
@@ -718,662 +268,9 @@ namespace FreeVD
             }
         }
 
-        private void SystemTrayRedOrb()
-        {
-            try
-            {
-                VirtualDesktop current = VirtualDesktop.Current;
-                int i = VirtualDestopFunctions.GetDesktopNumber(current.Id);
-                switch (i)
-                {
-                    case 1:
-                        SystemTray.Icon = Properties.Resources.Red_Orb_Alphabet_Number_1;
-                        break;
-                    case 2:
-                        SystemTray.Icon = Properties.Resources.Red_Orb_Alphabet_Number_2;
-                        break;
-                    case 3:
-                        SystemTray.Icon = Properties.Resources.Red_Orb_Alphabet_Number_3;
-                        break;
-                    case 4:
-                        SystemTray.Icon = Properties.Resources.Red_Orb_Alphabet_Number_4;
-                        break;
-                    case 5:
-                        SystemTray.Icon = Properties.Resources.Red_Orb_Alphabet_Number_5;
-                        break;
-                    case 6:
-                        SystemTray.Icon = Properties.Resources.Red_Orb_Alphabet_Number_6;
-                        break;
-                    case 7:
-                        SystemTray.Icon = Properties.Resources.Red_Orb_Alphabet_Number_7;
-                        break;
-                    case 8:
-                        SystemTray.Icon = Properties.Resources.Red_Orb_Alphabet_Number_8;
-                        break;
-                    case 9:
-                        SystemTray.Icon = Properties.Resources.Red_Orb_Alphabet_Number_9;
-                        break;
-                }
-
-                SystemTray.Visible = true;
-
-            }
-            catch (Exception ex)
-            {
-                SystemTray.Icon = Properties.Resources.Red_Orb_Alphabet_Number_1;
-                MessageBox.Show("An error occured setting the system tray icon. See additional details below." + Environment.NewLine + Environment.NewLine +
-                    ex.Message + Environment.NewLine +
-                    ex.Source + "::" + ex.TargetSite.Name);
-                Log.LogEvent("Exception", "", "", "frmMain", ex);
-            }
-        }
-
-        private void SystemTrayDigitalGreen()
-        {
-            try
-            {
-                VirtualDesktop current = VirtualDesktop.Current;
-                int i = VirtualDestopFunctions.GetDesktopNumber(current.Id);
-                switch (i)
-                {
-                    case 1:
-                        SystemTray.Icon = Properties.Resources.st_1;
-                        break;
-                    case 2:
-                        SystemTray.Icon = Properties.Resources.st_2;
-                        break;
-                    case 3:
-                        SystemTray.Icon = Properties.Resources.st_3;
-                        break;
-                    case 4:
-                        SystemTray.Icon = Properties.Resources.st_4;
-                        break;
-                    case 5:
-                        SystemTray.Icon = Properties.Resources.st_5;
-                        break;
-                    case 6:
-                        SystemTray.Icon = Properties.Resources.st_6;
-                        break;
-                    case 7:
-                        SystemTray.Icon = Properties.Resources.st_7;
-                        break;
-                    case 8:
-                        SystemTray.Icon = Properties.Resources.st_8;
-                        break;
-                    case 9:
-                        SystemTray.Icon = Properties.Resources.st_9;
-                        break;
-                }
-
-                SystemTray.Visible = true;
-
-            }
-            catch (Exception ex)
-            {
-                SystemTray.Icon = Properties.Resources.st_1;
-                MessageBox.Show("An error occured setting the system tray icon. See additional details below." + Environment.NewLine + Environment.NewLine +
-                    ex.Message + Environment.NewLine +
-                    ex.Source + "::" + ex.TargetSite.Name);
-                Log.LogEvent("Exception", "", "", "frmMain", ex);
-            }
-        }
-
-        private void SystemTrayDigitalWhite()
-        {
-            try
-            {
-                VirtualDesktop current = VirtualDesktop.Current;
-                int i = VirtualDestopFunctions.GetDesktopNumber(current.Id);
-                switch (i)
-                {
-                    case 1:
-                        SystemTray.Icon = Properties.Resources.white_digital_1;
-                        break;
-                    case 2:
-                        SystemTray.Icon = Properties.Resources.white_digital_2;
-                        break;
-                    case 3:
-                        SystemTray.Icon = Properties.Resources.white_digital_3;
-                        break;
-                    case 4:
-                        SystemTray.Icon = Properties.Resources.white_digital_4;
-                        break;
-                    case 5:
-                        SystemTray.Icon = Properties.Resources.white_digital_5;
-                        break;
-                    case 6:
-                        SystemTray.Icon = Properties.Resources.white_digital_6;
-                        break;
-                    case 7:
-                        SystemTray.Icon = Properties.Resources.white_digital_7;
-                        break;
-                    case 8:
-                        SystemTray.Icon = Properties.Resources.white_digital_8;
-                        break;
-                    case 9:
-                        SystemTray.Icon = Properties.Resources.white_digital_9;
-                        break;
-                }
-
-                SystemTray.Visible = true;
-
-            }
-            catch (Exception ex)
-            {
-                SystemTray.Icon = Properties.Resources.st_1;
-                MessageBox.Show("An error occured setting the system tray icon. See additional details below." + Environment.NewLine + Environment.NewLine +
-                    ex.Message + Environment.NewLine +
-                    ex.Source + "::" + ex.TargetSite.Name);
-                Log.LogEvent("Exception", "", "", "frmMain", ex);
-            }
-        }
-
-        private void SystemTrayBlue()
-        {
-            try
-            {
-                VirtualDesktop current = VirtualDesktop.Current;
-                int i = VirtualDestopFunctions.GetDesktopNumber(current.Id);
-                switch (i)
-                {
-                    case 1:
-                        SystemTray.Icon = Properties.Resources.number_1_blue;
-                        break;
-                    case 2:
-                        SystemTray.Icon = Properties.Resources.number_2_blue;
-                        break;
-                    case 3:
-                        SystemTray.Icon = Properties.Resources.number_3_blue;
-                        break;
-                    case 4:
-                        SystemTray.Icon = Properties.Resources.number_4_blue;
-                        break;
-                    case 5:
-                        SystemTray.Icon = Properties.Resources.number_5_blue;
-                        break;
-                    case 6:
-                        SystemTray.Icon = Properties.Resources.number_6_blue;
-                        break;
-                    case 7:
-                        SystemTray.Icon = Properties.Resources.number_7_blue;
-                        break;
-                    case 8:
-                        SystemTray.Icon = Properties.Resources.number_8_blue;
-                        break;
-                    case 9:
-                        SystemTray.Icon = Properties.Resources.number_9_blue;
-                        break;
-                }
-
-                SystemTray.Visible = true;
-
-            }
-            catch (Exception ex)
-            {
-                SystemTray.Icon = Properties.Resources.number_1_blue;
-                MessageBox.Show("An error occured setting the system tray icon. See additional details below." + Environment.NewLine + Environment.NewLine +
-                    ex.Message + Environment.NewLine +
-                    ex.Source + "::" + ex.TargetSite.Name);
-                Log.LogEvent("Exception", "", "", "frmMain", ex);
-            }
-        }
-
-        private void SystemTrayGreen()
-        {
-            try
-            {
-                VirtualDesktop current = VirtualDesktop.Current;
-                int i = VirtualDestopFunctions.GetDesktopNumber(current.Id);
-                switch (i)
-                {
-                    case 1:
-                        SystemTray.Icon = Properties.Resources.number_1_green;
-                        break;
-                    case 2:
-                        SystemTray.Icon = Properties.Resources.number_2_green;
-                        break;
-                    case 3:
-                        SystemTray.Icon = Properties.Resources.number_3_green;
-                        break;
-                    case 4:
-                        SystemTray.Icon = Properties.Resources.number_4_green;
-                        break;
-                    case 5:
-                        SystemTray.Icon = Properties.Resources.number_5_green;
-                        break;
-                    case 6:
-                        SystemTray.Icon = Properties.Resources.number_6_green;
-                        break;
-                    case 7:
-                        SystemTray.Icon = Properties.Resources.number_7_green;
-                        break;
-                    case 8:
-                        SystemTray.Icon = Properties.Resources.number_8_green;
-                        break;
-                    case 9:
-                        SystemTray.Icon = Properties.Resources.number_9_green;
-                        break;
-                }
-
-                SystemTray.Visible = true;
-
-            }
-            catch (Exception ex)
-            {
-                SystemTray.Icon = Properties.Resources.number_1_green;
-                MessageBox.Show("An error occured setting the system tray icon. See additional details below." + Environment.NewLine + Environment.NewLine +
-                    ex.Message + Environment.NewLine +
-                    ex.Source + "::" + ex.TargetSite.Name);
-                Log.LogEvent("Exception", "", "", "frmMain", ex);
-            }
-        }
-
-        private void SystemTrayRound()
-        {
-            try
-            {
-                VirtualDesktop current = VirtualDesktop.Current;
-                int i = VirtualDestopFunctions.GetDesktopNumber(current.Id);
-                switch (i)
-                {
-                    case 1:
-                        SystemTray.Icon = Properties.Resources.number_one;
-                        break;
-                    case 2:
-                        SystemTray.Icon = Properties.Resources.number_two;
-                        break;
-                    case 3:
-                        SystemTray.Icon = Properties.Resources.number_three;
-                        break;
-                    case 4:
-                        SystemTray.Icon = Properties.Resources.number_four;
-                        break;
-                    case 5:
-                        SystemTray.Icon = Properties.Resources.number_five;
-                        break;
-                    case 6:
-                        SystemTray.Icon = Properties.Resources.number_six;
-                        break;
-                    case 7:
-                        SystemTray.Icon = Properties.Resources.number_seven;
-                        break;
-                    case 8:
-                        SystemTray.Icon = Properties.Resources.number_eight;
-                        break;
-                    case 9:
-                        SystemTray.Icon = Properties.Resources.number_nine;
-                        break;
-                }
-
-                SystemTray.Visible = true;
-
-            }
-            catch (Exception ex)
-            {
-                SystemTray.Icon = Properties.Resources.number_1_green;
-                MessageBox.Show("An error occured setting the system tray icon. See additional details below." + Environment.NewLine + Environment.NewLine +
-                    ex.Message + Environment.NewLine +
-                    ex.Source + "::" + ex.TargetSite.Name);
-                Log.LogEvent("Exception", "", "", "frmMain", ex);
-            }
-        }
-
         #endregion
 
         #endregion        
-
-        #region "Wallpaper"
-        private Wallpaper.Style GetWallpaperStyle(string desktop)
-        {
-            switch (desktop)
-            {
-                case "1":
-                    if (Program.WallpaperStyles[1] == "")
-                    {
-                        return Wallpaper.Style.Centered;
-                    } else
-                    {
-                        switch (Program.WallpaperStyles[1])
-                        {
-                            case "Centered":
-                                return Wallpaper.Style.Centered;
-                            case "Streched":
-                                return Wallpaper.Style.Stretched;
-                            case "Tiled":
-                                return Wallpaper.Style.Tiled;
-                            default:
-                                return Wallpaper.Style.Centered;
-                        }
-                    }
-                    break;
-                case "2":
-                    if (Program.WallpaperStyles[2] == "")
-                    {
-                        return Wallpaper.Style.Centered;
-                    }
-                    else
-                    {
-                        switch (Program.WallpaperStyles[2])
-                        {
-                            case "Centered":
-                                return Wallpaper.Style.Centered;
-                            case "Streched":
-                                return Wallpaper.Style.Stretched;
-                            case "Tiled":
-                                return Wallpaper.Style.Tiled;
-                            default:
-                                return Wallpaper.Style.Centered;
-                        }
-                    }
-                    break;
-                case "3":
-                    if (Program.WallpaperStyles[3] == "")
-                    {
-                        return Wallpaper.Style.Centered;
-                    }
-                    else
-                    {
-                        switch (Program.WallpaperStyles[3])
-                        {
-                            case "Centered":
-                                return Wallpaper.Style.Centered;
-                            case "Streched":
-                                return Wallpaper.Style.Stretched;
-                            case "Tiled":
-                                return Wallpaper.Style.Tiled;
-                            default:
-                                return Wallpaper.Style.Centered;
-                        }
-                    }
-                    break;
-                case "4":
-                    if (Program.WallpaperStyles[4] == "")
-                    {
-                        return Wallpaper.Style.Centered;
-                    }
-                    else
-                    {
-                        switch (Program.WallpaperStyles[4])
-                        {
-                            case "Centered":
-                                return Wallpaper.Style.Centered;
-                            case "Streched":
-                                return Wallpaper.Style.Stretched;
-                            case "Tiled":
-                                return Wallpaper.Style.Tiled;
-                            default:
-                                return Wallpaper.Style.Centered;
-                        }
-                    }
-                    break;
-                case "5":
-                    if (Program.WallpaperStyles[5] == "")
-                    {
-                        return Wallpaper.Style.Centered;
-                    }
-                    else
-                    {
-                        switch (Program.WallpaperStyles[5])
-                        {
-                            case "Centered":
-                                return Wallpaper.Style.Centered;
-                            case "Streched":
-                                return Wallpaper.Style.Stretched;
-                            case "Tiled":
-                                return Wallpaper.Style.Tiled;
-                            default:
-                                return Wallpaper.Style.Centered;
-                        }
-                    }
-                    break;
-                case "6":
-                    if (Program.WallpaperStyles[6] == "")
-                    {
-                        return Wallpaper.Style.Centered;
-                    }
-                    else
-                    {
-                        switch (Program.WallpaperStyles[6])
-                        {
-                            case "Centered":
-                                return Wallpaper.Style.Centered;
-                            case "Streched":
-                                return Wallpaper.Style.Stretched;
-                            case "Tiled":
-                                return Wallpaper.Style.Tiled;
-                            default:
-                                return Wallpaper.Style.Centered;
-                        }
-                    }
-                    break;
-                case "7":
-                    if (Program.WallpaperStyles[7] == "")
-                    {
-                        return Wallpaper.Style.Centered;
-                    }
-                    else
-                    {
-                        switch (Program.WallpaperStyles[7])
-                        {
-                            case "Centered":
-                                return Wallpaper.Style.Centered;
-                            case "Streched":
-                                return Wallpaper.Style.Stretched;
-                            case "Tiled":
-                                return Wallpaper.Style.Tiled;
-                            default:
-                                return Wallpaper.Style.Centered;
-                        }
-                    }
-                    break;
-                case "8":
-                    if (Program.WallpaperStyles[8] == "")
-                    {
-                        return Wallpaper.Style.Centered;
-                    }
-                    else
-                    {
-                        switch (Program.WallpaperStyles[8])
-                        {
-                            case "Centered":
-                                return Wallpaper.Style.Centered;
-                            case "Streched":
-                                return Wallpaper.Style.Stretched;
-                            case "Tiled":
-                                return Wallpaper.Style.Tiled;
-                            default:
-                                return Wallpaper.Style.Centered;
-                        }
-                    }
-                    break;
-                case "9":
-                    if (Program.WallpaperStyles[9] == "")
-                    {
-                        return Wallpaper.Style.Centered;
-                    }
-                    else
-                    {
-                        switch (Program.WallpaperStyles[9])
-                        {
-                            case "Centered":
-                                return Wallpaper.Style.Centered;
-                            case "Streched":
-                                return Wallpaper.Style.Stretched;
-                            case "Tiled":
-                                return Wallpaper.Style.Tiled;
-                            default:
-                                return Wallpaper.Style.Centered;
-                        }
-                    }
-                    break;
-                case "default":
-                    if (Program.WallpaperStyles[0] == "")
-                    {
-                        return Wallpaper.Style.Centered;
-                    }
-                    else
-                    {
-                        switch (Program.WallpaperStyles[0])
-                        {
-                            case "Centered":
-                                return Wallpaper.Style.Centered;
-                            case "Streched":
-                                return Wallpaper.Style.Stretched;
-                            case "Tiled":
-                                return Wallpaper.Style.Tiled;
-                            default:
-                                return Wallpaper.Style.Centered;
-                        }
-                    }
-                    break;
-                default:
-                    if (Program.WallpaperStyles[0] == "")
-                    {
-                        return Wallpaper.Style.Centered;
-                    }
-                    else
-                    {
-                        switch (Program.WallpaperStyles[0])
-                        {
-                            case "Centered":
-                                return Wallpaper.Style.Centered;
-                            case "Streched":
-                                return Wallpaper.Style.Stretched;
-                            case "Tiled":
-                                return Wallpaper.Style.Tiled;
-                            default:
-                                return Wallpaper.Style.Centered;
-                        }
-                    }
-                    break;
-            }
-        }
-
-        private void SetWallpaper()
-        {
-            VirtualDesktop current = VirtualDesktop.Current;
-            int i = VirtualDestopFunctions.GetDesktopNumber(current.Id);
-            switch (i)
-            {
-                case 1:
-                    if (txtWallpaper1.Text != "" && System.IO.File.Exists(txtWallpaper1.Text))
-                    {
-                        Wallpaper.Set(new System.Uri(txtWallpaper1.Text), GetWallpaperStyle("1"));
-                    } else {
-                        if (txtDefaultWallpaper.Text != "" && System.IO.File.Exists(txtDefaultWallpaper.Text))
-                        {
-                            Wallpaper.Set(new System.Uri(txtDefaultWallpaper.Text), GetWallpaperStyle("default"));
-                        }
-                    }
-                    break;
-                case 2:
-                    if (txtWallpaper2.Text != "" && System.IO.File.Exists(txtWallpaper2.Text))
-                    {
-                        Wallpaper.Set(new System.Uri(txtWallpaper2.Text), GetWallpaperStyle("2"));
-                    }
-                    else
-                    {
-                        if (txtDefaultWallpaper.Text != "" && System.IO.File.Exists(txtDefaultWallpaper.Text))
-                        {
-                            Wallpaper.Set(new System.Uri(txtDefaultWallpaper.Text), GetWallpaperStyle("default"));
-                        }
-                    }
-                    break;
-                case 3:
-                    if (txtWallpaper3.Text != "" && System.IO.File.Exists(txtWallpaper3.Text))
-                    {
-                        Wallpaper.Set(new System.Uri(txtWallpaper3.Text), GetWallpaperStyle("3"));
-                    }
-                    else
-                    {
-                        if (txtDefaultWallpaper.Text != "" && System.IO.File.Exists(txtDefaultWallpaper.Text))
-                        {
-                            Wallpaper.Set(new System.Uri(txtDefaultWallpaper.Text), GetWallpaperStyle("default"));
-                        }
-                    }
-                    break;
-                case 4:
-                    if (txtWallpaper4.Text != "" && System.IO.File.Exists(txtWallpaper4.Text))
-                    {
-                        Wallpaper.Set(new System.Uri(txtWallpaper4.Text), GetWallpaperStyle("4"));
-                    }
-                    else
-                    {
-                        if (txtDefaultWallpaper.Text != "" && System.IO.File.Exists(txtDefaultWallpaper.Text))
-                        {
-                            Wallpaper.Set(new System.Uri(txtDefaultWallpaper.Text), GetWallpaperStyle("default"));
-                        }
-                    }
-                    break;
-                case 5:
-                    if (txtWallpaper5.Text != "" && System.IO.File.Exists(txtWallpaper5.Text))
-                    {
-                        Wallpaper.Set(new System.Uri(txtWallpaper5.Text), GetWallpaperStyle("5"));
-                    }
-                    else
-                    {
-                        if (txtDefaultWallpaper.Text != "" && System.IO.File.Exists(txtDefaultWallpaper.Text))
-                        {
-                            Wallpaper.Set(new System.Uri(txtDefaultWallpaper.Text), GetWallpaperStyle("default"));
-                        }
-                    }
-                    break;
-                case 6:
-                    if (txtWallpaper6.Text != "" && System.IO.File.Exists(txtWallpaper6.Text))
-                    {
-                        Wallpaper.Set(new System.Uri(txtWallpaper6.Text), GetWallpaperStyle("6"));
-                    }
-                    else
-                    {
-                        if (txtDefaultWallpaper.Text != "" && System.IO.File.Exists(txtDefaultWallpaper.Text))
-                        {
-                            Wallpaper.Set(new System.Uri(txtDefaultWallpaper.Text), GetWallpaperStyle("default"));
-                        }
-                    }
-                    break;
-                case 7:
-                    if (txtWallpaper7.Text != "" && System.IO.File.Exists(txtWallpaper7.Text))
-                    {
-                        Wallpaper.Set(new System.Uri(txtWallpaper7.Text), GetWallpaperStyle("7"));
-                    }
-                    else
-                    {
-                        if (txtDefaultWallpaper.Text != "" && System.IO.File.Exists(txtDefaultWallpaper.Text))
-                        {
-                            Wallpaper.Set(new System.Uri(txtDefaultWallpaper.Text), GetWallpaperStyle("default"));
-                        }
-                    }
-                    break;
-                case 8:
-                    if (txtWallpaper8.Text != "" && System.IO.File.Exists(txtWallpaper8.Text))
-                    {
-                        Wallpaper.Set(new System.Uri(txtWallpaper8.Text), GetWallpaperStyle("8"));
-                    }
-                    else
-                    {
-                        if (txtDefaultWallpaper.Text != "" && System.IO.File.Exists(txtDefaultWallpaper.Text))
-                        {
-                            Wallpaper.Set(new System.Uri(txtDefaultWallpaper.Text), GetWallpaperStyle("default"));
-                        }
-                    }
-                    break;
-                case 9:
-                    if (txtWallpaper9.Text != "" && System.IO.File.Exists(txtWallpaper9.Text))
-                    {
-                        Wallpaper.Set(new System.Uri(txtWallpaper9.Text), GetWallpaperStyle("9"));
-                    }
-                    else
-                    {
-                        if (txtDefaultWallpaper.Text != "" && System.IO.File.Exists(txtDefaultWallpaper.Text))
-                        {
-                            Wallpaper.Set(new System.Uri(txtDefaultWallpaper.Text), GetWallpaperStyle("default"));
-                        }
-                    }
-                    break;
-            }
-        }
-
-        #endregion
 
         #region "Settings"
 
@@ -1732,11 +629,16 @@ namespace FreeVD
         {
             try
             {
-                LoadSettings();
-                this.Opacity = 100;
-                this.Visible = true;
-                this.TopMost = true;
-                this.ShowInTaskbar = true;
+                if (ShowInTaskbar)
+                {
+                    BringToFront();
+                }
+                else
+                {
+                    LoadSettings();
+                    this.ShowInTaskbar = true;
+                    this.Visible = true;
+                }
             }
             catch (Exception ex)
             {
@@ -1830,9 +732,7 @@ namespace FreeVD
         {
             try
             {
-                this.Opacity = 0;
                 this.Visible = false;
-                this.TopMost = false;
                 this.ShowInTaskbar = false;
             }
             catch (Exception ex)
@@ -1850,47 +750,24 @@ namespace FreeVD
             {
                 if (Program.storage.FileExists("FreeVD.bin") == false)
                 {
-                    cmbIcons.Text = "Green";
                     CreateDefaultHotkeys_Numpad();
                     //CreateDefaultHotkeys_D();
                     CreateDefaultHotkeys();
                     SaveSettings();
                 }
-              
-                System.IO.Stream stream = new IsolatedStorageFileStream("FreeVD.bin", System.IO.FileMode.Open, Program.storage);
-                System.Runtime.Serialization.Formatters.Binary.BinaryFormatter bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                object oo = bf.Deserialize(stream);
-                string settings = (string)oo;
-                string[] indivdualSettings = settings.Split('~');
 
+                string[] individualSettings;
 
-                cmbIcons.Text = indivdualSettings[0].Split(';')[1];
-                Program.IconTheme = cmbIcons.Text;
-
-                //wallpaper image location
-                txtWallpaper1.Text = indivdualSettings[1].Split(';')[1];
-                txtWallpaper2.Text = indivdualSettings[2].Split(';')[1];
-                txtWallpaper3.Text = indivdualSettings[3].Split(';')[1];
-                txtWallpaper4.Text = indivdualSettings[4].Split(';')[1];
-                txtWallpaper5.Text = indivdualSettings[5].Split(';')[1];
-                txtWallpaper6.Text = indivdualSettings[6].Split(';')[1];
-                txtWallpaper7.Text = indivdualSettings[7].Split(';')[1];
-                txtWallpaper8.Text = indivdualSettings[8].Split(';')[1];
-                txtWallpaper9.Text = indivdualSettings[9].Split(';')[1];
-                txtDefaultWallpaper.Text = indivdualSettings[10].Split(';')[1];
-
-                //wallpaper style
-                cmbWallpaperStyle1.Text = indivdualSettings[1].Split(';')[2];
-                cmbWallpaperStyle2.Text = indivdualSettings[2].Split(';')[2];
-                cmbWallpaperStyle3.Text = indivdualSettings[3].Split(';')[2];
-                cmbWallpaperStyle4.Text = indivdualSettings[4].Split(';')[2];
-                cmbWallpaperStyle5.Text = indivdualSettings[5].Split(';')[2];
-                cmbWallpaperStyle6.Text = indivdualSettings[6].Split(';')[2];
-                cmbWallpaperStyle7.Text = indivdualSettings[7].Split(';')[2];
-                cmbWallpaperStyle8.Text = indivdualSettings[8].Split(';')[2];
-                cmbWallpaperStyle9.Text = indivdualSettings[9].Split(';')[2];
-                cmbWallpaperStyleDefault.Text = indivdualSettings[10].Split(';')[2];
-
+                using (var stream = new IsolatedStorageFileStream("FreeVD.bin", System.IO.FileMode.Open, Program.storage))
+                {
+                    var bf = new BinaryFormatter();
+                    object oo = bf.Deserialize(stream);
+                    string settings = (string)oo;
+                    individualSettings = settings.Split('~');
+                }
+                
+                Program.IconTheme = "White Box";
+                
                 //unregister all current hotkeys and remove from the list
                 foreach (HotkeyItem hki in Program.hotkeys)
                 {
@@ -1900,15 +777,15 @@ namespace FreeVD
                 Program.hotkeys.Clear();
 
                 //hotkeys
-                for (int i = 11; i < indivdualSettings.Length; i++)
+                for (int i = 1; i < individualSettings.Length; i++)
                 {
-                    string type = indivdualSettings[i].Split(';')[0];
-                    string desktopNumber = indivdualSettings[i].Split(';')[1];
-                    bool ALT = bool.Parse(indivdualSettings[i].Split(';')[2]);
-                    bool CTRL = bool.Parse(indivdualSettings[i].Split(';')[3]);
-                    bool SHIFT = bool.Parse(indivdualSettings[i].Split(';')[4]);
-                    bool WIN = bool.Parse(indivdualSettings[i].Split(';')[5]);
-                    string KEY = indivdualSettings[i].Split(';')[6];
+                    string type = individualSettings[i].Split(';')[0];
+                    string desktopNumber = individualSettings[i].Split(';')[1];
+                    bool ALT = bool.Parse(individualSettings[i].Split(';')[2]);
+                    bool CTRL = bool.Parse(individualSettings[i].Split(';')[3]);
+                    bool SHIFT = bool.Parse(individualSettings[i].Split(';')[4]);
+                    bool WIN = bool.Parse(individualSettings[i].Split(';')[5]);
+                    string KEY = individualSettings[i].Split(';')[6];
 
                     Hotkey hk = new Hotkey(desktopNumber);
                     KeysConverter kc = new KeysConverter();
@@ -1982,25 +859,7 @@ namespace FreeVD
                     }
 
                 }
-
-                stream.Close();
-                stream.Dispose();
-
-                Program.WallpaperStyles.Clear();
-                Program.WallpaperStyles.Add(cmbWallpaperStyleDefault.Text);
-                Program.WallpaperStyles.Add(cmbWallpaperStyle1.Text);
-                Program.WallpaperStyles.Add(cmbWallpaperStyle2.Text);
-                Program.WallpaperStyles.Add(cmbWallpaperStyle3.Text);
-                Program.WallpaperStyles.Add(cmbWallpaperStyle4.Text);
-                Program.WallpaperStyles.Add(cmbWallpaperStyle5.Text);
-                Program.WallpaperStyles.Add(cmbWallpaperStyle6.Text);
-                Program.WallpaperStyles.Add(cmbWallpaperStyle7.Text);
-                Program.WallpaperStyles.Add(cmbWallpaperStyle8.Text);
-                Program.WallpaperStyles.Add(cmbWallpaperStyle9.Text);
-
                 UpdateHotkeyTab();
-               
-
             }
             catch (Exception ex)
             {
@@ -2012,51 +871,20 @@ namespace FreeVD
         {
             try
             {
-
-               
-
-                Program.IconTheme = cmbIcons.Text;
                 StringBuilder settings = new StringBuilder();
-                settings.Append("IconTheme;" + cmbIcons.Text);
-                //Get the URI for each desktop
-                settings.Append("~DesktopWallpaper1;" + txtWallpaper1.Text + ";" + cmbWallpaperStyle1.Text);
-                settings.Append("~DesktopWallpaper2;" + txtWallpaper2.Text + ";" + cmbWallpaperStyle2.Text);
-                settings.Append("~DesktopWallpaper3;" + txtWallpaper3.Text + ";" + cmbWallpaperStyle3.Text);
-                settings.Append("~DesktopWallpaper4;" + txtWallpaper4.Text + ";" + cmbWallpaperStyle4.Text);
-                settings.Append("~DesktopWallpaper5;" + txtWallpaper5.Text + ";" + cmbWallpaperStyle5.Text);
-                settings.Append("~DesktopWallpaper6;" + txtWallpaper6.Text + ";" + cmbWallpaperStyle6.Text);
-                settings.Append("~DesktopWallpaper7;" + txtWallpaper7.Text + ";" + cmbWallpaperStyle7.Text);
-                settings.Append("~DesktopWallpaper8;" + txtWallpaper8.Text + ";" + cmbWallpaperStyle8.Text);
-                settings.Append("~DesktopWallpaper9;" + txtWallpaper9.Text + ";" + cmbWallpaperStyle9.Text);
-                settings.Append("~DefaultWallpaper;" + txtDefaultWallpaper.Text + ";" + cmbWallpaperStyleDefault.Text);
+                settings.Append("IconTheme;White Box");
 
                 foreach(HotkeyItem hki in Program.hotkeys)
                 {
                     settings.Append("~" + hki.Type + ";" + hki.DesktopNumber() + ";" + hki.ALT().ToString() + ";" + hki.CTRL().ToString() + ";" + hki.SHIFT().ToString() + ";" + hki.WIN().ToString() + ";" + hki.KEY());
                 }
 
-                System.IO.Stream stream = new IsolatedStorageFileStream("FreeVD.bin", System.IO.FileMode.OpenOrCreate, Program.storage);
-                System.Runtime.Serialization.Formatters.Binary.BinaryFormatter bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                bf.Serialize(stream, settings.ToString());
-                stream.Close();
-                stream.Dispose();
-
-
-                Program.WallpaperStyles.Clear();
-                Program.WallpaperStyles.Add(cmbWallpaperStyleDefault.Text);
-                Program.WallpaperStyles.Add(cmbWallpaperStyle1.Text);
-                Program.WallpaperStyles.Add(cmbWallpaperStyle2.Text);
-                Program.WallpaperStyles.Add(cmbWallpaperStyle3.Text);
-                Program.WallpaperStyles.Add(cmbWallpaperStyle4.Text);
-                Program.WallpaperStyles.Add(cmbWallpaperStyle5.Text);
-                Program.WallpaperStyles.Add(cmbWallpaperStyle6.Text);
-                Program.WallpaperStyles.Add(cmbWallpaperStyle7.Text);
-                Program.WallpaperStyles.Add(cmbWallpaperStyle8.Text);
-                Program.WallpaperStyles.Add(cmbWallpaperStyle9.Text);
-
+                using (var stream = new IsolatedStorageFileStream("FreeVD.bin", System.IO.FileMode.OpenOrCreate, Program.storage))
+                {
+                    var bf = new BinaryFormatter();
+                    bf.Serialize(stream, settings.ToString());
+                }
                 SetSystemTrayIcon();
-                SetWallpaper();
-
             }
             catch (Exception ex)
             {
@@ -2083,19 +911,11 @@ namespace FreeVD
         {
             SaveSettings();
             HideSettings();
-            GC.Collect();
         }
 
         private void lblGithub_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start("https://github.com/marcus-l/freevd");
-        }
-
-        private void lblEasterEgg_Click(object sender, EventArgs e)
-        {
-            picMax.Visible = true;
-            lblEasterEgg.Text = "X";
-            Log.LogEvent("Easter Egg Found", "", "", "frmMain", null);
         }
 
         #region "Hotkey Tab"
@@ -2104,7 +924,6 @@ namespace FreeVD
         {
             frmHotKey f = new frmHotKey();
             f.ShowDialog(this);
-
         }
 
         private void btnDeleteHotkey_Click(object sender, EventArgs e)
@@ -2127,67 +946,6 @@ namespace FreeVD
                 Log.LogEvent("Exception", "", "", "frmMain", ex);
             }
             
-        }
-
-        #endregion
-
-        #region "Wallpaper Tab"
-
-        private void GetFileDialogResult(string desktop)
-        {
-            OpenFileDialog dlg = new OpenFileDialog();
-            dlg.Multiselect = false;
-
-            DialogResult result = dlg.ShowDialog();
-
-            if (result == DialogResult.OK)
-            {
-                switch (desktop)
-                {
-                    case "1":
-                        txtWallpaper1.Text = dlg.FileName;
-                        break;
-                    case "2":
-                        txtWallpaper2.Text = dlg.FileName;
-                        break;
-                    case "3":
-                        txtWallpaper3.Text = dlg.FileName;
-                        break;
-                    case "4":
-                        txtWallpaper4.Text = dlg.FileName;
-                        break;
-                    case "5":
-                        txtWallpaper5.Text = dlg.FileName;
-                        break;
-                    case "6":
-                        txtWallpaper6.Text = dlg.FileName;
-                        break;
-                    case "7":
-                        txtWallpaper7.Text = dlg.FileName;
-                        break;
-                    case "8":
-                        txtWallpaper8.Text = dlg.FileName;
-                        break;
-                    case "9":
-                        txtWallpaper9.Text = dlg.FileName;
-                        break;
-                    case "default":
-                        txtDefaultWallpaper.Text = dlg.FileName;
-                        break;
-                }
-            }
-            else
-            {
-                //do nothing
-            }
-
-            dlg.Dispose();
-        }
-
-        private void btnBrowseWallpaper_Click(object sender, EventArgs e)
-        {
-            Button btn = (Button)sender;
-            GetFileDialogResult(btn.Tag.ToString());
         }
 
         #endregion
@@ -2232,7 +990,7 @@ namespace FreeVD
 
         #endregion
 
-        #endregion   
+        #endregion
     }
 }
 

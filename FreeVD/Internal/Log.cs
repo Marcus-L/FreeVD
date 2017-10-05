@@ -27,8 +27,8 @@ namespace FreeVD
 
                 AddEventToDatabase("FreeVD", Program.version, DateTime.Now, eventName, eventDetails, additionalDetails, moduleName, e, 1, SystemInformation.UserName,
                 SystemInformation.ComputerName, computerInfo);
-                
 
+                //MessageBox.Show($"{eventName}\n{eventDetails}\n{additionalDetails}");
             }
             catch (Exception ex)
             {

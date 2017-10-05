@@ -1,7 +1,5 @@
 # FreeVD
-Windows 10 Virtual Desktop Hotkeys and System Tray Icon  
-
-**FreeVD forked from the last FOSS version of [mzomparelli](https://github.com/mzomparelli)'s [zVirtualDesktop](https://github.com/mzomparelli/zVirtualDesktop).**
+Windows 10 Virtual Desktop Hotkeys and System Tray Icon
 
 __Installation__  
 This program uses `IsolatedStorage` for the settings file so in order for each new version to read the same settings file it is important that the program be unzipped and run from the same location everytime.
@@ -28,9 +26,6 @@ Move Window & Follow:
 <kbd>WIN</kbd>+<kbd>CTRL</kbd>+<kbd>ALT</kbd>+<kbd>Numpad</kbd>  
 <kbd>WIN</kbd>+<kbd>CTRL</kbd>+<kbd>ALT</kbd>+<kbd>LEFT</kbd> or <kbd>RIGHT</kbd>
 
-Pin/Unpin Windows:  
-<kbd>WIN</kbd>+<kbd>ALT</kbd>+<kbd>Z</kbd>
-
 Pin/Unpin Applications:  
 <kbd>WIN</kbd>+<kbd>ALT</kbd>+<kbd>A</kbd>
 
@@ -39,3 +34,6 @@ An easy way to imagine this is if you use `pin window` on a chrome browser windo
 only that window will be visible on all desktops. Any other chrome windows would 
 stay on a single desktop. If you were to `pin application` on a chrome window then 
 all chrome windows would show up on all desktops. This includes new chrome windows.
+
+---
+**FreeVD started as a fork from the [last FOSS version](https://github.com/Marcus-L/FreeVD-fork/commit/b623c87da69e9b45cf87141a216787a30477b934) of [mzomparelli](https://github.com/mzomparelli)'s [zVirtualDesktop](https://github.com/mzomparelli/zVirtualDesktop), and has continued to be developed as free and open-source.**

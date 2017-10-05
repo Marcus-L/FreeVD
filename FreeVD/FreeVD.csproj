@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FreeVD</RootNamespace>
     <AssemblyName>FreeVD</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
@@ -39,11 +39,12 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Icons\MAINICON.ico</ApplicationIcon>
+    <ApplicationIcon>Windows-8-Numbers-1.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
@@ -188,7 +189,9 @@
     <None Include="Internal\WindowsInput\WindowsInput.snk" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icons\10.ico" />
@@ -202,6 +205,7 @@
     <Content Include="Icons\18.ico" />
     <Content Include="Icons\19.ico" />
     <Content Include="Icons\20.ico" />
+    <Content Include="Windows-8-Numbers-1.ico" />
     <None Include="Icons\3Desktops_1.ico" />
     <None Include="Icons\3Desktops_2.ico" />
     <None Include="Icons\3Desktops_3.ico" />
