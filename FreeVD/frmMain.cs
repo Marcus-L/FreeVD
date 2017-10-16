@@ -14,6 +14,7 @@ using WindowsInput;
 using WindowsInput.Native;
 using FreeVD.Internal;
 using System.Runtime.Serialization.Formatters.Binary;
+using FreeVD;
 
 namespace FreeVD
 {
@@ -25,10 +26,6 @@ namespace FreeVD
         public frmMain()
         {
             InitializeComponent();
-            //foreach(VirtualDesktop d in VirtualDesktop.GetDesktops())
-            //{
-            //    d.Remove();
-            //}
             Log.LogEvent("Program Started", "", "", "", null);
             //Wire up some events
             this.Closing += frmMain_Closing;
@@ -56,12 +53,6 @@ namespace FreeVD
                 this.ShowInTaskbar = false;
                 LoadSettings();
                 SetSystemTrayIcon();
-                ////Make sure there are at least 9 desktops.
-                //int diff = Math.Abs(Program.Desktops.Count() - 9);
-                //for (int i = 1; i <= diff; i += 1)
-                //{
-                //    VirtualDesktop.Create();
-                //}
                 timerCheckVersion.Tick += timerCheckVersion_Tick;
                 timerCheckVersion.Interval = 600000; //10 minutes
                 timerCheckVersion.Start();
@@ -297,26 +288,24 @@ namespace FreeVD
                              hkiMoveNext, hkiMoveNextFollow, hkiMovePrevious, hkiMovePreviousFollow,
                              hkiPinWindow, hkiPinApp });
 
-            keyMoveNext.HotkeyActivated += VirtualDestopFunctions.DesktopMoveNext;
+            keyMoveNext.Callback = VirtualDestopFunctions.DesktopMoveNext;
             keyMoveNext.Register(Keys.Right, true, false, false, true);
 
-            keyMoveNextFollow.HotkeyActivated += VirtualDestopFunctions.DesktopMoveNextFollow;
+            keyMoveNextFollow.Callback = VirtualDestopFunctions.DesktopMoveNextFollow;
             keyMoveNextFollow.Register(Keys.Right, true, true, false, true);
 
-            keyMovePrevious.HotkeyActivated += VirtualDestopFunctions.DesktopMovePrevious;
+            keyMovePrevious.Callback = VirtualDestopFunctions.DesktopMovePrevious;
             keyMovePrevious.Register(Keys.Left, true, false, false, true);
 
-            keyMovePreviousFollow.HotkeyActivated += VirtualDestopFunctions.DesktopMovePreviousFollow;
+            keyMovePreviousFollow.Callback = VirtualDestopFunctions.DesktopMovePreviousFollow;
             keyMovePreviousFollow.Register(Keys.Left, true, true, false, true);
 
 
-            keyPinWindow.HotkeyActivated += VirtualDestopFunctions.PinWindow;
+            keyPinWindow.Callback = VirtualDestopFunctions.PinWindow;
             keyPinWindow.Register(Keys.Z, true, false, false, true);
 
-            keyPinApp.HotkeyActivated += VirtualDestopFunctions.PinApp;
+            keyPinApp.Callback = VirtualDestopFunctions.PinApp;
             keyPinApp.Register(Keys.A, true, false, false, true);
-
-
         }
 
         private void CreateDefaultHotkeys_Numpad()
@@ -386,243 +375,88 @@ namespace FreeVD
                              hkiMoveTo01, hkiMoveTo02, hkiMoveTo03, hkiMoveTo04, hkiMoveTo05, hkiMoveTo06, hkiMoveTo07, hkiMoveTo08, hkiMoveTo09,
                              hkiMoveFollowTo01, hkiMoveFollowTo02, hkiMoveFollowTo03, hkiMoveFollowTo04, hkiMoveFollowTo05, hkiMoveFollowTo06, hkiMoveFollowTo07, hkiMoveFollowTo08, hkiMoveFollowTo09 });
 
-            keyGoTo01.HotkeyActivated += VirtualDestopFunctions.DesktopGo;
+            keyGoTo01.Callback = VirtualDestopFunctions.DesktopGo;
             keyGoTo01.Register(Keys.NumPad1, false, true, false, true);
 
-            keyGoTo02.HotkeyActivated += VirtualDestopFunctions.DesktopGo;
+            keyGoTo02.Callback = VirtualDestopFunctions.DesktopGo;
             keyGoTo02.Register(Keys.NumPad2, false, true, false, true);
 
-            keyGoTo03.HotkeyActivated += VirtualDestopFunctions.DesktopGo;
+            keyGoTo03.Callback = VirtualDestopFunctions.DesktopGo;
             keyGoTo03.Register(Keys.NumPad3, false, true, false, true);
-
-            keyGoTo04.HotkeyActivated += VirtualDestopFunctions.DesktopGo;
+                      
+            keyGoTo04.Callback = VirtualDestopFunctions.DesktopGo;
             keyGoTo04.Register(Keys.NumPad4, false, true, false, true);
-
-            keyGoTo05.HotkeyActivated += VirtualDestopFunctions.DesktopGo;
+                      
+            keyGoTo05.Callback = VirtualDestopFunctions.DesktopGo;
             keyGoTo05.Register(Keys.NumPad5, false, true, false, true);
 
-            keyGoTo06.HotkeyActivated += VirtualDestopFunctions.DesktopGo;
+            keyGoTo06.Callback = VirtualDestopFunctions.DesktopGo;
             keyGoTo06.Register(Keys.NumPad6, false, true, false, true);
 
-            keyGoTo07.HotkeyActivated += VirtualDestopFunctions.DesktopGo;
+            keyGoTo07.Callback = VirtualDestopFunctions.DesktopGo;
             keyGoTo07.Register(Keys.NumPad7, false, true, false, true);
 
-            keyGoTo08.HotkeyActivated += VirtualDestopFunctions.DesktopGo;
+            keyGoTo08.Callback = VirtualDestopFunctions.DesktopGo;
             keyGoTo08.Register(Keys.NumPad8, false, true, false, true);
 
-            keyGoTo09.HotkeyActivated += VirtualDestopFunctions.DesktopGo;
+            keyGoTo09.Callback = VirtualDestopFunctions.DesktopGo;
             keyGoTo09.Register(Keys.NumPad9, false, true, false, true);
 
 
-            keyMoveTo01.HotkeyActivated += VirtualDestopFunctions.DesktopMove;
+            keyMoveTo01.Callback = VirtualDestopFunctions.DesktopMove;
             keyMoveTo01.Register(Keys.NumPad1, true, false, false, true);
 
-            keyMoveTo02.HotkeyActivated += VirtualDestopFunctions.DesktopMove;
+            keyMoveTo02.Callback = VirtualDestopFunctions.DesktopMove;
             keyMoveTo02.Register(Keys.NumPad2, true, false, false, true);
 
-            keyMoveTo03.HotkeyActivated += VirtualDestopFunctions.DesktopMove;
+            keyMoveTo03.Callback = VirtualDestopFunctions.DesktopMove;
             keyMoveTo03.Register(Keys.NumPad3, true, false, false, true);
 
-            keyMoveTo04.HotkeyActivated += VirtualDestopFunctions.DesktopMove;
+            keyMoveTo04.Callback = VirtualDestopFunctions.DesktopMove;
             keyMoveTo04.Register(Keys.NumPad4, true, false, false, true);
 
-            keyMoveTo05.HotkeyActivated += VirtualDestopFunctions.DesktopMove;
+            keyMoveTo05.Callback = VirtualDestopFunctions.DesktopMove;
             keyMoveTo05.Register(Keys.NumPad5, true, false, false, true);
 
-            keyMoveTo06.HotkeyActivated += VirtualDestopFunctions.DesktopMove;
+            keyMoveTo06.Callback = VirtualDestopFunctions.DesktopMove;
             keyMoveTo06.Register(Keys.NumPad6, true, false, false, true);
 
-            keyMoveTo07.HotkeyActivated += VirtualDestopFunctions.DesktopMove;
+            keyMoveTo07.Callback = VirtualDestopFunctions.DesktopMove;
             keyMoveTo07.Register(Keys.NumPad7, true, false, false, true);
 
-            keyMoveTo08.HotkeyActivated += VirtualDestopFunctions.DesktopMove;
+            keyMoveTo08.Callback = VirtualDestopFunctions.DesktopMove;
             keyMoveTo08.Register(Keys.NumPad8, true, false, false, true);
 
-            keyMoveTo09.HotkeyActivated += VirtualDestopFunctions.DesktopMove;
+            keyMoveTo09.Callback = VirtualDestopFunctions.DesktopMove;
             keyMoveTo09.Register(Keys.NumPad9, true, false, false, true);
 
 
-            keyMoveFollowTo01.HotkeyActivated += VirtualDestopFunctions.DesktopMoveFollow;
+            keyMoveFollowTo01.Callback = VirtualDestopFunctions.DesktopMoveFollow;
             keyMoveFollowTo01.Register(Keys.NumPad1, true, true, false, true);
 
-            keyMoveFollowTo02.HotkeyActivated += VirtualDestopFunctions.DesktopMoveFollow;
+            keyMoveFollowTo02.Callback = VirtualDestopFunctions.DesktopMoveFollow;
             keyMoveFollowTo02.Register(Keys.NumPad2, true, true, false, true);
 
-            keyMoveFollowTo03.HotkeyActivated += VirtualDestopFunctions.DesktopMoveFollow;
+            keyMoveFollowTo03.Callback = VirtualDestopFunctions.DesktopMoveFollow;
             keyMoveFollowTo03.Register(Keys.NumPad3, true, true, false, true);
 
-            keyMoveFollowTo04.HotkeyActivated += VirtualDestopFunctions.DesktopMoveFollow;
+            keyMoveFollowTo04.Callback = VirtualDestopFunctions.DesktopMoveFollow;
             keyMoveFollowTo04.Register(Keys.NumPad4, true, true, false, true);
 
-            keyMoveFollowTo05.HotkeyActivated += VirtualDestopFunctions.DesktopMoveFollow;
+            keyMoveFollowTo05.Callback = VirtualDestopFunctions.DesktopMoveFollow;
             keyMoveFollowTo05.Register(Keys.NumPad5, true, true, false, true);
 
-            keyMoveFollowTo06.HotkeyActivated += VirtualDestopFunctions.DesktopMoveFollow;
+            keyMoveFollowTo06.Callback = VirtualDestopFunctions.DesktopMoveFollow;
             keyMoveFollowTo06.Register(Keys.NumPad6, true, true, false, true);
 
-            keyMoveFollowTo07.HotkeyActivated += VirtualDestopFunctions.DesktopMoveFollow;
+            keyMoveFollowTo07.Callback = VirtualDestopFunctions.DesktopMoveFollow;
             keyMoveFollowTo07.Register(Keys.NumPad7, true, true, false, true);
 
-            keyMoveFollowTo08.HotkeyActivated += VirtualDestopFunctions.DesktopMoveFollow;
+            keyMoveFollowTo08.Callback = VirtualDestopFunctions.DesktopMoveFollow;
             keyMoveFollowTo08.Register(Keys.NumPad8, true, true, false, true);
 
-            keyMoveFollowTo09.HotkeyActivated += VirtualDestopFunctions.DesktopMoveFollow;
+            keyMoveFollowTo09.Callback = VirtualDestopFunctions.DesktopMoveFollow;
             keyMoveFollowTo09.Register(Keys.NumPad9, true, true, false, true);
-
-
-        }
-
-        private void CreateDefaultHotkeys_D()
-        {
-            Hotkey keyGoTo01 = new Hotkey("1");
-            Hotkey keyGoTo02 = new Hotkey("2");
-            Hotkey keyGoTo03 = new Hotkey("3");
-            Hotkey keyGoTo04 = new Hotkey("4");
-            Hotkey keyGoTo05 = new Hotkey("5");
-            Hotkey keyGoTo06 = new Hotkey("6");
-            Hotkey keyGoTo07 = new Hotkey("7");
-            Hotkey keyGoTo08 = new Hotkey("8");
-            Hotkey keyGoTo09 = new Hotkey("9");
-
-            Hotkey keyMoveTo01 = new Hotkey("1");
-            Hotkey keyMoveTo02 = new Hotkey("2");
-            Hotkey keyMoveTo03 = new Hotkey("3");
-            Hotkey keyMoveTo04 = new Hotkey("4");
-            Hotkey keyMoveTo05 = new Hotkey("5");
-            Hotkey keyMoveTo06 = new Hotkey("6");
-            Hotkey keyMoveTo07 = new Hotkey("7");
-            Hotkey keyMoveTo08 = new Hotkey("8");
-            Hotkey keyMoveTo09 = new Hotkey("9");
-
-            Hotkey keyMoveFollowTo01 = new Hotkey("1");
-            Hotkey keyMoveFollowTo02 = new Hotkey("2");
-            Hotkey keyMoveFollowTo03 = new Hotkey("3");
-            Hotkey keyMoveFollowTo04 = new Hotkey("4");
-            Hotkey keyMoveFollowTo05 = new Hotkey("5");
-            Hotkey keyMoveFollowTo06 = new Hotkey("6");
-            Hotkey keyMoveFollowTo07 = new Hotkey("7");
-            Hotkey keyMoveFollowTo08 = new Hotkey("8");
-            Hotkey keyMoveFollowTo09 = new Hotkey("9");
-
-            HotkeyItem hkiGoTo01 = new HotkeyItem("Navigate to Desktop", keyGoTo01);
-            HotkeyItem hkiGoTo02 = new HotkeyItem("Navigate to Desktop", keyGoTo02);
-            HotkeyItem hkiGoTo03 = new HotkeyItem("Navigate to Desktop", keyGoTo03);
-            HotkeyItem hkiGoTo04 = new HotkeyItem("Navigate to Desktop", keyGoTo04);
-            HotkeyItem hkiGoTo05 = new HotkeyItem("Navigate to Desktop", keyGoTo05);
-            HotkeyItem hkiGoTo06 = new HotkeyItem("Navigate to Desktop", keyGoTo06);
-            HotkeyItem hkiGoTo07 = new HotkeyItem("Navigate to Desktop", keyGoTo07);
-            HotkeyItem hkiGoTo08 = new HotkeyItem("Navigate to Desktop", keyGoTo08);
-            HotkeyItem hkiGoTo09 = new HotkeyItem("Navigate to Desktop", keyGoTo09);
-
-            HotkeyItem hkiMoveTo01 = new HotkeyItem("Move Window to Desktop", keyMoveTo01);
-            HotkeyItem hkiMoveTo02 = new HotkeyItem("Move Window to Desktop", keyMoveTo02);
-            HotkeyItem hkiMoveTo03 = new HotkeyItem("Move Window to Desktop", keyMoveTo03);
-            HotkeyItem hkiMoveTo04 = new HotkeyItem("Move Window to Desktop", keyMoveTo04);
-            HotkeyItem hkiMoveTo05 = new HotkeyItem("Move Window to Desktop", keyMoveTo05);
-            HotkeyItem hkiMoveTo06 = new HotkeyItem("Move Window to Desktop", keyMoveTo06);
-            HotkeyItem hkiMoveTo07 = new HotkeyItem("Move Window to Desktop", keyMoveTo07);
-            HotkeyItem hkiMoveTo08 = new HotkeyItem("Move Window to Desktop", keyMoveTo08);
-            HotkeyItem hkiMoveTo09 = new HotkeyItem("Move Window to Desktop", keyMoveTo09);
-
-            HotkeyItem hkiMoveFollowTo01 = new HotkeyItem("Move Window to Desktop & Follow", keyMoveFollowTo01);
-            HotkeyItem hkiMoveFollowTo02 = new HotkeyItem("Move Window to Desktop & Follow", keyMoveFollowTo02);
-            HotkeyItem hkiMoveFollowTo03 = new HotkeyItem("Move Window to Desktop & Follow", keyMoveFollowTo03);
-            HotkeyItem hkiMoveFollowTo04 = new HotkeyItem("Move Window to Desktop & Follow", keyMoveFollowTo04);
-            HotkeyItem hkiMoveFollowTo05 = new HotkeyItem("Move Window to Desktop & Follow", keyMoveFollowTo05);
-            HotkeyItem hkiMoveFollowTo06 = new HotkeyItem("Move Window to Desktop & Follow", keyMoveFollowTo06);
-            HotkeyItem hkiMoveFollowTo07 = new HotkeyItem("Move Window to Desktop & Follow", keyMoveFollowTo07);
-            HotkeyItem hkiMoveFollowTo08 = new HotkeyItem("Move Window to Desktop & Follow", keyMoveFollowTo08);
-            HotkeyItem hkiMoveFollowTo09 = new HotkeyItem("Move Window to Desktop & Follow", keyMoveFollowTo09);
-
-            Program.hotkeys.AddRange(new HotkeyItem[] {
-                             hkiGoTo01, hkiGoTo02, hkiGoTo03, hkiGoTo04, hkiGoTo05, hkiGoTo06, hkiGoTo07, hkiGoTo08, hkiGoTo09,
-                             hkiMoveTo01, hkiMoveTo02, hkiMoveTo03, hkiMoveTo04, hkiMoveTo05, hkiMoveTo06, hkiMoveTo07, hkiMoveTo08, hkiMoveTo09,
-                             hkiMoveFollowTo01, hkiMoveFollowTo02, hkiMoveFollowTo03, hkiMoveFollowTo04, hkiMoveFollowTo05, hkiMoveFollowTo06, hkiMoveFollowTo07, hkiMoveFollowTo08, hkiMoveFollowTo09 });
-
-            keyGoTo01.HotkeyActivated += VirtualDestopFunctions.DesktopGo;
-            keyGoTo01.Register(Keys.D1, false, true, false, true);
-
-            keyGoTo02.HotkeyActivated += VirtualDestopFunctions.DesktopGo;
-            keyGoTo02.Register(Keys.D2, false, true, false, true);
-
-            keyGoTo03.HotkeyActivated += VirtualDestopFunctions.DesktopGo;
-            keyGoTo03.Register(Keys.D3, false, true, false, true);
-
-            keyGoTo04.HotkeyActivated += VirtualDestopFunctions.DesktopGo;
-            keyGoTo04.Register(Keys.D4, false, true, false, true);
-
-            keyGoTo05.HotkeyActivated += VirtualDestopFunctions.DesktopGo;
-            keyGoTo05.Register(Keys.D5, false, true, false, true);
-
-            keyGoTo06.HotkeyActivated += VirtualDestopFunctions.DesktopGo;
-            keyGoTo06.Register(Keys.D6, false, true, false, true);
-
-            keyGoTo07.HotkeyActivated += VirtualDestopFunctions.DesktopGo;
-            keyGoTo07.Register(Keys.D7, false, true, false, true);
-
-            keyGoTo08.HotkeyActivated += VirtualDestopFunctions.DesktopGo;
-            keyGoTo08.Register(Keys.D8, false, true, false, true);
-
-            keyGoTo09.HotkeyActivated += VirtualDestopFunctions.DesktopGo;
-            keyGoTo09.Register(Keys.D9, false, true, false, true);
-
-
-            keyMoveTo01.HotkeyActivated += VirtualDestopFunctions.DesktopMove;
-            keyMoveTo01.Register(Keys.D1, true, false, false, true);
-
-            keyMoveTo02.HotkeyActivated += VirtualDestopFunctions.DesktopMove;
-            keyMoveTo02.Register(Keys.D2, true, false, false, true);
-
-            keyMoveTo03.HotkeyActivated += VirtualDestopFunctions.DesktopMove;
-            keyMoveTo03.Register(Keys.D3, true, false, false, true);
-
-            keyMoveTo04.HotkeyActivated += VirtualDestopFunctions.DesktopMove;
-            keyMoveTo04.Register(Keys.D4, true, false, false, true);
-
-            keyMoveTo05.HotkeyActivated += VirtualDestopFunctions.DesktopMove;
-            keyMoveTo05.Register(Keys.D5, true, false, false, true);
-
-            keyMoveTo06.HotkeyActivated += VirtualDestopFunctions.DesktopMove;
-            keyMoveTo06.Register(Keys.D6, true, false, false, true);
-
-            keyMoveTo07.HotkeyActivated += VirtualDestopFunctions.DesktopMove;
-            keyMoveTo07.Register(Keys.D7, true, false, false, true);
-
-            keyMoveTo08.HotkeyActivated += VirtualDestopFunctions.DesktopMove;
-            keyMoveTo08.Register(Keys.D8, true, false, false, true);
-
-            keyMoveTo09.HotkeyActivated += VirtualDestopFunctions.DesktopMove;
-            keyMoveTo09.Register(Keys.D9, true, false, false, true);
-
-
-            keyMoveFollowTo01.HotkeyActivated += VirtualDestopFunctions.DesktopMoveFollow;
-            keyMoveFollowTo01.Register(Keys.D1, true, true, false, true);
-
-            keyMoveFollowTo02.HotkeyActivated += VirtualDestopFunctions.DesktopMoveFollow;
-            keyMoveFollowTo02.Register(Keys.D2, true, true, false, true);
-
-            keyMoveFollowTo03.HotkeyActivated += VirtualDestopFunctions.DesktopMoveFollow;
-            keyMoveFollowTo03.Register(Keys.D3, true, true, false, true);
-
-            keyMoveFollowTo04.HotkeyActivated += VirtualDestopFunctions.DesktopMoveFollow;
-            keyMoveFollowTo04.Register(Keys.D4, true, true, false, true);
-
-            keyMoveFollowTo05.HotkeyActivated += VirtualDestopFunctions.DesktopMoveFollow;
-            keyMoveFollowTo05.Register(Keys.D5, true, true, false, true);
-
-            keyMoveFollowTo06.HotkeyActivated += VirtualDestopFunctions.DesktopMoveFollow;
-            keyMoveFollowTo06.Register(Keys.D6, true, true, false, true);
-
-            keyMoveFollowTo07.HotkeyActivated += VirtualDestopFunctions.DesktopMoveFollow;
-            keyMoveFollowTo07.Register(Keys.D7, true, true, false, true);
-
-            keyMoveFollowTo08.HotkeyActivated += VirtualDestopFunctions.DesktopMoveFollow;
-            keyMoveFollowTo08.Register(Keys.D8, true, true, false, true);
-
-            keyMoveFollowTo09.HotkeyActivated += VirtualDestopFunctions.DesktopMoveFollow;
-            keyMoveFollowTo09.Register(Keys.D9, true, true, false, true);
-
-
         }
 
         public void ShowSettings()
@@ -798,7 +632,7 @@ namespace FreeVD
                     switch (type)
                     {
                         case "Navigate to Desktop":
-                            hk.HotkeyActivated += VirtualDestopFunctions.DesktopGo;
+                            hk.Callback = VirtualDestopFunctions.DesktopGo;
                             break;
                         case "Move Window to Desktop":
                             switch (desktopNumber)
@@ -812,13 +646,13 @@ namespace FreeVD
                                 case "7":
                                 case "8":
                                 case "9":
-                                    hk.HotkeyActivated += VirtualDestopFunctions.DesktopMove;
+                                    hk.Callback = VirtualDestopFunctions.DesktopMove;
                                     break;
                                 case "Next":
-                                    hk.HotkeyActivated += VirtualDestopFunctions.DesktopMoveNext;
+                                    hk.Callback = VirtualDestopFunctions.DesktopMoveNext;
                                     break;
                                 case "Previous":
-                                    hk.HotkeyActivated += VirtualDestopFunctions.DesktopMovePrevious;
+                                    hk.Callback = VirtualDestopFunctions.DesktopMovePrevious;
                                     break;
                                 default:
                                     break;
@@ -836,23 +670,23 @@ namespace FreeVD
                                 case "7":
                                 case "8":
                                 case "9":
-                                    hk.HotkeyActivated += VirtualDestopFunctions.DesktopMoveFollow;
+                                    hk.Callback = VirtualDestopFunctions.DesktopMoveFollow;
                                     break;
                                 case "Next":
-                                    hk.HotkeyActivated += VirtualDestopFunctions.DesktopMoveNextFollow;
+                                    hk.Callback = VirtualDestopFunctions.DesktopMoveNextFollow;
                                     break;
                                 case "Previous":
-                                    hk.HotkeyActivated += VirtualDestopFunctions.DesktopMovePreviousFollow;
+                                    hk.Callback = VirtualDestopFunctions.DesktopMovePreviousFollow;
                                     break;
                                 default:
                                     break;
                             }
                             break;
                         case "Pin/Unpin Window":
-                            hk.HotkeyActivated += VirtualDestopFunctions.PinWindow;
+                            hk.Callback = VirtualDestopFunctions.PinWindow;
                             break;
                         case "Pin/Unpin Application":
-                            hk.HotkeyActivated += VirtualDestopFunctions.PinApp;
+                            hk.Callback = VirtualDestopFunctions.PinApp;
                             break;
                         default:
                             break;
@@ -1011,32 +845,32 @@ public class HotkeyItem
     
     public bool ALT()
     {
-        return hk.modifierALT;
+        return hk.Alt;
     }
 
     public bool CTRL()
     {
-        return hk.modifierCTRL;
+        return hk.Ctrl;
     }
 
     public bool SHIFT()
     {
-        return hk.modifierSHIFT;
+        return hk.Shift;
     }
 
     public bool WIN()
     {
-        return hk.modifierWIN;
+        return hk.Win;
     }
 
     public string KEY()
     {
-        return hk.Key;
+        return hk.Key.ToString();
     }
 
     public string DesktopNumber()
     {
-        return hk.DesktopNumber();
+        return hk.ID;
     }
 
 }

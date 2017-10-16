@@ -11,11 +11,10 @@ namespace FreeVD
     public static class VirtualDestopFunctions
     {
 
-        public static void PinWindow(object sender, EventArgs e)
+        public static void PinWindow(Hotkey hotkey)
         {
             try
             {
-                Hotkey hotkey = (Hotkey)sender;
                 Window win = Window.ForegroundWindow();
                 IEnumerable<Window> window = from Window w in Program.windows
                                              where w.Handle == win.Handle
@@ -47,11 +46,10 @@ namespace FreeVD
 
         }
 
-        public static void PinApp(object sender, EventArgs e)
+        public static void PinApp(Hotkey hotkey)
         {
             try
             {
-                Hotkey hotkey = (Hotkey)sender;
                 Window win = Window.ForegroundWindow();
                 IEnumerable<Window> window = from Window w in Program.windows
                                              where w.Handle == win.Handle
@@ -84,15 +82,14 @@ namespace FreeVD
 
         }
 
-        public static void DesktopGo(object sender, EventArgs e)
+        public static void DesktopGo(Hotkey hotkey)
         {
-            Hotkey hotkey = (Hotkey)sender;
             int hotkeyID;
             int.TryParse(hotkey.ID, out hotkeyID);
             GoToDesktop(hotkeyID);
         }
 
-        public static void DesktopMove(object sender, EventArgs e)
+        public static void DesktopMove(Hotkey hotkey)
         {
 
             Window win = Window.ForegroundWindow();
@@ -105,14 +102,12 @@ namespace FreeVD
                 Program.windows.Add(win);
             }
 
-            Hotkey hotkey = (Hotkey)sender;
             int hotkeyID;
             int.TryParse(hotkey.ID, out hotkeyID);
             win.MoveToDesktop(hotkeyID);
-            //MoveToDesktop(hotkey.ID);
         }
 
-        public static void DesktopMoveFollow(object sender, EventArgs e)
+        public static void DesktopMoveFollow(Hotkey hotkey)
         {
 
             Window win = Window.ForegroundWindow();
@@ -121,18 +116,15 @@ namespace FreeVD
                                          select w;
             if (window.Count() < 1)
             {
-                //win = new Window(hWnd);
                 Program.windows.Add(win);
             }
 
-            Hotkey hotkey = (Hotkey)sender;
             int hotkeyID;
             int.TryParse(hotkey.ID, out hotkeyID);
             win.MoveToDesktop(hotkeyID, true);
-            //MoveToDesktop(hotkey.ID);
         }
 
-        public static void DesktopMoveNextFollow(object sender, EventArgs e)
+        public static void DesktopMoveNextFollow(Hotkey hotkey)
         {
 
             Window win = Window.ForegroundWindow();
@@ -141,16 +133,13 @@ namespace FreeVD
                                          select w;
             if (window.Count() < 1)
             {
-                //win = new Window(hWnd);
                 Program.windows.Add(win);
             }
 
-            Hotkey hotkey = (Hotkey)sender;
             win.MoveToNextDesktop(true);
-            //MoveToDesktop(hotkey.ID);
         }
 
-        public static void DesktopMoveNext(object sender, EventArgs e)
+        public static void DesktopMoveNext(Hotkey hotkey)
         {
 
             Window win = Window.ForegroundWindow();
@@ -159,16 +148,13 @@ namespace FreeVD
                                          select w;
             if (window.Count() < 1)
             {
-                //win = new Window(hWnd);
                 Program.windows.Add(win);
             }
 
-            Hotkey hotkey = (Hotkey)sender;
             win.MoveToNextDesktop();
-            //MoveToDesktop(hotkey.ID);
         }
 
-        public static void DesktopMovePreviousFollow(object sender, EventArgs e)
+        public static void DesktopMovePreviousFollow(Hotkey hotkey)
         {
 
             Window win = Window.ForegroundWindow();
@@ -177,16 +163,13 @@ namespace FreeVD
                                          select w;
             if (window.Count() < 1)
             {
-                //win = new Window(hWnd);
                 Program.windows.Add(win);
             }
 
-            Hotkey hotkey = (Hotkey)sender;
             win.MoveToPreviousDesktop(true);
-            //MoveToDesktop(hotkey.ID);
         }
 
-        public static void DesktopMovePrevious(object sender, EventArgs e)
+        public static void DesktopMovePrevious(Hotkey hotkey)
         {
 
             Window win = Window.ForegroundWindow();
@@ -195,13 +178,10 @@ namespace FreeVD
                                          select w;
             if (window.Count() < 1)
             {
-                //win = new Window(hWnd);
                 Program.windows.Add(win);
             }
 
-            Hotkey hotkey = (Hotkey)sender;
             win.MoveToPreviousDesktop();
-            //MoveToDesktop(hotkey.ID);
         }
 
         public static int GetDesktopNumber(Guid Guid)

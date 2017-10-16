@@ -45,7 +45,7 @@ namespace FreeVD
                 switch (cmbHotkeyType.Text)
                 {
                     case "Navigate to Desktop":
-                        hk.HotkeyActivated += VirtualDestopFunctions.DesktopGo;
+                        hk.Callback = VirtualDestopFunctions.DesktopGo;
                         break;
                     case "Move Window to Desktop":
                         switch (cmbDesktopNumber.Text)
@@ -59,13 +59,13 @@ namespace FreeVD
                             case "7":
                             case "8":
                             case "9":
-                                hk.HotkeyActivated += VirtualDestopFunctions.DesktopMove;
+                                hk.Callback = VirtualDestopFunctions.DesktopMove;
                                 break;
                             case "Next":
-                                hk.HotkeyActivated += VirtualDestopFunctions.DesktopMoveNext;
+                                hk.Callback = VirtualDestopFunctions.DesktopMoveNext;
                                 break;
                             case "Previous":
-                                hk.HotkeyActivated += VirtualDestopFunctions.DesktopMovePrevious;
+                                hk.Callback = VirtualDestopFunctions.DesktopMovePrevious;
                                 break;
                             default:
                                 break;
@@ -83,23 +83,23 @@ namespace FreeVD
                             case "7":
                             case "8":
                             case "9":
-                                hk.HotkeyActivated += VirtualDestopFunctions.DesktopMoveFollow;
+                                hk.Callback = VirtualDestopFunctions.DesktopMoveFollow;
                                 break;
                             case "Next":
-                                hk.HotkeyActivated += VirtualDestopFunctions.DesktopMoveNextFollow;
+                                hk.Callback = VirtualDestopFunctions.DesktopMoveNextFollow;
                                 break;
                             case "Previous":
-                                hk.HotkeyActivated += VirtualDestopFunctions.DesktopMovePreviousFollow;
+                                hk.Callback = VirtualDestopFunctions.DesktopMovePreviousFollow;
                                 break;
                             default:
                                 break;
                         }
                         break;
                     case "Pin/Unpin Window":
-                        hk.HotkeyActivated += VirtualDestopFunctions.PinWindow;
+                        hk.Callback = VirtualDestopFunctions.PinWindow;
                         break;
                     case "Pin/Unpin Application":
-                        hk.HotkeyActivated += VirtualDestopFunctions.PinApp;
+                        hk.Callback = VirtualDestopFunctions.PinApp;
                         break;
                     default:
                         break;
@@ -107,7 +107,6 @@ namespace FreeVD
 
                 Program.MainForm.UpdateHotkeyTab();
                 Program.MainForm.SaveSettings();
-                //Program.MainForm.LoadSettings();
                 this.Close();
             }
         }

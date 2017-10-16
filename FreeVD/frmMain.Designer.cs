@@ -163,6 +163,8 @@
             this.btnOK = new System.Windows.Forms.Button();
             this.btnApply = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.tabOptions = new System.Windows.Forms.TabPage();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.SystemTrayMenu.SuspendLayout();
             this.mnuPinnedApps.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -172,6 +174,7 @@
             this.tabs.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPinnedApps.SuspendLayout();
+            this.tabOptions.SuspendLayout();
             this.SuspendLayout();
             // 
             // SystemTray
@@ -294,6 +297,7 @@
             // 
             this.tabs.Controls.Add(this.tabPage1);
             this.tabs.Controls.Add(this.tabPinnedApps);
+            this.tabs.Controls.Add(this.tabOptions);
             this.tabs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabs.Location = new System.Drawing.Point(0, 0);
             this.tabs.Margin = new System.Windows.Forms.Padding(2);
@@ -469,6 +473,26 @@
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
+            // tabOptions
+            // 
+            this.tabOptions.Controls.Add(this.checkBox1);
+            this.tabOptions.Location = new System.Drawing.Point(4, 22);
+            this.tabOptions.Name = "tabOptions";
+            this.tabOptions.Size = new System.Drawing.Size(526, 388);
+            this.tabOptions.TabIndex = 4;
+            this.tabOptions.Text = "Options";
+            this.tabOptions.UseVisualStyleBackColor = true;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(16, 16);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(278, 17);
+            this.checkBox1.TabIndex = 0;
+            this.checkBox1.Text = "Start FreeVD automatically when I sign in to Windows";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -494,6 +518,8 @@
             this.tabs.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPinnedApps.ResumeLayout(false);
+            this.tabOptions.ResumeLayout(false);
+            this.tabOptions.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -527,6 +553,8 @@
         internal System.Windows.Forms.Button btnDeleteHotkey;
         private System.Windows.Forms.TabPage tabPinnedApps;
         private System.Windows.Forms.ListBox lstPinnedApps;
+        private System.Windows.Forms.TabPage tabOptions;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }
 

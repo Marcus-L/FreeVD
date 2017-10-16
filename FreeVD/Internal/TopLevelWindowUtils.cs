@@ -1,7 +1,7 @@
-﻿using System;
+﻿using FreeVD.Interop;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Win32Interop.WinHandles.Internal;
 
 namespace Win32Interop.WinHandles
 {
@@ -14,7 +14,7 @@ namespace Win32Interop.WinHandles
     /// <returns> The foreground window. </returns>
     public static WindowHandle GetForegroundWindow()
     {
-      var ptr = NativeMethods.GetForegroundWindow();
+      var ptr = User32.GetForegroundWindow();
       return new WindowHandle(ptr);
     }
 
@@ -31,7 +31,7 @@ namespace Win32Interop.WinHandles
 
       List<WindowHandle> windows = null;
 
-      NativeMethods.EnumWindows((ptr, param) =>
+      User32.EnumWindows((ptr, param) =>
                                 {
                                   var window = new WindowHandle(ptr);
                                   if (windowPredicate.Invoke(window))
@@ -44,7 +44,7 @@ namespace Win32Interop.WinHandles
                                     windows.Add(window);
                                   }
 
-                                  return NativeMethods.EnumWindows_ContinueEnumerating;
+                                  return Consts.EnumWindows_ContinueEnumerating;
                                 },
                                 IntPtr.Zero);
 
@@ -69,16 +69,16 @@ namespace Win32Interop.WinHandles
         throw new ArgumentNullException(nameof(callback));
 
       WindowHandle found = WindowHandle.Invalid;
-      NativeMethods.EnumWindows(delegate(IntPtr wnd, IntPtr param)
+      User32.EnumWindows(delegate(IntPtr wnd, IntPtr param)
                                 {
                                   var window = new WindowHandle(wnd);
                                   if (callback.Invoke(window))
                                   {
                                     found = window;
-                                    return NativeMethods.EnumWindows_StopEnumerating;
+                                    return Consts.EnumWindows_StopEnumerating;
                                   }
 
-                                  return NativeMethods.EnumWindows_ContinueEnumerating;
+                                  return Consts.EnumWindows_ContinueEnumerating;
                                 },
                                 IntPtr.Zero);
 
