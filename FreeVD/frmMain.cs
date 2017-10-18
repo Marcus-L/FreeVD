@@ -266,8 +266,8 @@ namespace FreeVD
                 ));
             Settings.Save();
 
-            // reload settings, reactivate hotkeys
-            Settings.LoadSettings();
+            // reload settings to activate hotkeys
+            Settings.Reload();
         }
 
         private void btnCancel_Click(object sender, EventArgs e)

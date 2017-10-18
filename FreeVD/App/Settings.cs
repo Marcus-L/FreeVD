@@ -14,16 +14,15 @@ namespace FreeVD
     {
         private static IsolatedStorageFile Storage = IsolatedStorageFile.GetUserStoreForAssembly();
 
-        public static Settings Default = LoadSettings();
+        public static Settings Default = LoadDefaultSettings();
 
         public bool AutoStart { get; set; }
 
         public List<VDHotkey> Hotkeys { get; set; } = new List<VDHotkey>();
 
-        #region Load/Save
         private const string SETTINGS_FILENAME = "settings.json";
 
-        public static Settings LoadSettings()
+        private static Settings LoadDefaultSettings()
         {
             if (Storage.FileExists(SETTINGS_FILENAME))
             {
@@ -47,6 +46,11 @@ namespace FreeVD
             return null;
         }
 
+        public static void Reload()
+        {
+            LoadDefaultSettings();
+        }
+
         public static void Save()
         {
             using (var stream = new IsolatedStorageFileStream(SETTINGS_FILENAME, FileMode.Create, Storage))
@@ -55,6 +59,5 @@ namespace FreeVD
                 writer.Write(JsonConvert.SerializeObject(Default));
             }
         }
-        #endregion
     }
 }
