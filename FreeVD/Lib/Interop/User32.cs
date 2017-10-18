@@ -1,28 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace FreeVD.Interop
+namespace FreeVD.Lib.Interop
 {
-    public delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
-
-    public static class Consts
-    {
-        public const uint MOD_ALT = 0x1;
-        public const uint MOD_CONTROL = 0x2;
-        public const uint MOD_SHIFT = 0x4;
-        public const uint MOD_WIN = 0x8;
-        public const int WM_HOTKEY = 0x312;
-
-        public const bool EnumWindows_ContinueEnumerating = true;
-        public const bool EnumWindows_StopEnumerating = false;
-    }
-    
     public static class User32
     {
+        public delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
+
         [DllImport("user32.dll")]
         public static extern bool EnumWindows(EnumWindowsProc enumProc, IntPtr lParam);
 
@@ -54,11 +39,17 @@ namespace FreeVD.Interop
 
         [DllImport("user32", SetLastError = true)]
         public static extern int UnregisterHotKey(IntPtr hWnd, int id);
-    }
 
-    public static class Kernel32
-    {
-        [DllImport("kernel32", EntryPoint = "GlobalAddAtom", SetLastError = true, ExactSpelling = false)]
-        public static extern int GlobalAddAtom([MarshalAs(UnmanagedType.LPTStr)] string lpString);
+        [DllImport("USER32.DLL")]
+        public static extern IntPtr GetShellWindow();
+
+        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        public static extern IntPtr FindWindowEx(IntPtr parentHandle, IntPtr childAfter, string lclassName, string windowTitle);
+
+        [DllImport("user32.dll")]
+        public static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        [DllImport("user32.dll")]
+        public static extern int GetSystemMetrics(SystemMetric smIndex);
     }
 }

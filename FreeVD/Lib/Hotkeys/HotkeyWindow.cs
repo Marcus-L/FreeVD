@@ -1,9 +1,9 @@
-﻿using FreeVD.Interop;
+﻿using FreeVD.Lib.Interop;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace FreeVD
+namespace FreeVD.Lib.Hotkeys
 {
     public class HotkeyWindow : NativeWindow
     {
@@ -22,8 +22,7 @@ namespace FreeVD
                     var wParam = m.WParam.ToInt32();
                     if (Hotkeys.TryGetValue(wParam, out var hotkey))
                     {
-                        hotkey.Callback(hotkey);
-                        //VirtualDesktopFunctions.HandleHotkey(hotkey);
+                        hotkey.Callback();
                     }
                     break;
             }

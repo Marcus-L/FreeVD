@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FreeVD.Lib.Interop;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -12,15 +13,36 @@ namespace FreeVD
 {
     public class Window
     {
+        public static IDictionary<IntPtr, string> GetOpenWindows()
+        {
+            IntPtr shellWindow = User32.GetShellWindow();
+            Dictionary<IntPtr, string> windows = new Dictionary<IntPtr, string>();
 
-        #region "Static Instances"
+            User32.EnumWindows(delegate (IntPtr hWnd, IntPtr lParam)
+            {
+                if (hWnd == shellWindow) return true;
+                if (!User32.IsWindowVisible(hWnd)) return true;
+
+                int length = User32.GetWindowTextLength(hWnd);
+                if (length == 0) return true;
+
+                StringBuilder builder = new StringBuilder(length);
+                User32.GetWindowText(hWnd, builder, length + 1);
+
+                windows[hWnd] = builder.ToString();
+                return true;
+
+            }, IntPtr.Zero);
+
+            return windows;
+        }
 
         //Create a new instance from the current foreground window
         public static Window ForegroundWindow()
         {
             try
             {
-                Window win = new Window(GetForegroundWindow());
+                Window win = new Window(User32.GetForegroundWindow());
                 return win;
             }catch
             {
@@ -34,7 +56,7 @@ namespace FreeVD
         {
             try
             {
-                IntPtr hWnd = FindWindow("Shell_TrayWnd", null);
+                IntPtr hWnd = User32.FindWindow("Shell_TrayWnd", null);
                 Window win = new Window(hWnd);
                 return win;
             }
@@ -42,46 +64,18 @@ namespace FreeVD
             {
                 return null;
             }
-
         }
-
-        #endregion
 
         public Window(IntPtr hWnd)
         {
-            this.hWnd = hWnd;
+            this.Handle = hWnd;
         }
 
+        public IntPtr Handle { get; set; }
 
+        public string Caption => GetWindowText();
 
-        private IntPtr hWnd;
-
-        public IntPtr Handle
-        {
-            get
-            {
-                return hWnd;
-            }
-            set
-            {
-                hWnd = value;
-            }
-        }
-
-        public string Caption
-        { get
-            {
-                return GetWindowText();
-            }
-        }
-
-        public string ApplicationName
-        {
-            get
-            {
-                return GetWindowName();
-            }
-        }
+        public string ApplicationName => GetWindowName();
 
         public int DesktopNumber
         {
@@ -93,11 +87,11 @@ namespace FreeVD
                     {
                         return 1;
                     }
-                    return GetDesktopNumber(VirtualDesktop.FromHwnd(hWnd).Id);
+                    return GetDesktopNumber(VirtualDesktop.FromHwnd(Handle).Id);
                 }catch(Exception ex)
                 {
                     Log.LogEvent("Exception", 
-                                 "Handle: " + hWnd.ToString() + 
+                                 "Handle: " + Handle.ToString() + 
                                  "\r\nCaption: " + this.Caption, 
                                  "", 
                                  "Window", ex);
@@ -115,7 +109,7 @@ namespace FreeVD
                 {
                     const int maxChars = 256;
                     StringBuilder className = new StringBuilder(maxChars);
-                    if (GetClassName(this.hWnd, className, maxChars) > 0)
+                    if (User32.GetClassName(this.Handle, className, maxChars) > 0)
                     {
                         string cName = className.ToString();
                         if (cName == "Progman" || cName == "WorkerW")
@@ -147,7 +141,7 @@ namespace FreeVD
         {
             try
             {
-                return SetForegroundWindow(this.hWnd);
+                return User32.SetForegroundWindow(this.Handle);
             }
             catch (Exception ex)
             {
@@ -162,7 +156,7 @@ namespace FreeVD
             {
                 try
                 {
-                    return ApplicationHelper.GetAppId(hWnd);
+                    return ApplicationHelper.GetAppId(Handle);
                 }
                 catch (Exception ex)
                 {
@@ -178,9 +172,9 @@ namespace FreeVD
             {
                 try
                 {
-                    if(hWnd != IntPtr.Zero)
+                    if(Handle != IntPtr.Zero)
                     {
-                        return VirtualDesktop.IsPinnedWindow(hWnd);
+                        return VirtualDesktop.IsPinnedWindow(Handle);
                     }else
                     {
                         return false;
@@ -202,7 +196,7 @@ namespace FreeVD
             {
                 try
                 {
-                    if (hWnd != IntPtr.Zero)
+                    if (Handle != IntPtr.Zero)
                     {
                         return VirtualDesktop.IsPinnedApplication(AppID);
                     }
@@ -240,7 +234,7 @@ namespace FreeVD
         {
             try
             {
-                VirtualDesktop.UnpinWindow(hWnd);
+                VirtualDesktop.UnpinWindow(Handle);
             }
             catch (Exception ex)
             {
@@ -281,7 +275,7 @@ namespace FreeVD
         {
             try
             {
-                VirtualDesktop.PinWindow(hWnd);
+                VirtualDesktop.PinWindow(Handle);
                 Program.PinCount++;
             }
             catch (Exception ex)
@@ -334,7 +328,7 @@ namespace FreeVD
         public void MoveToPreviousDesktop(bool follow)
         {
             MoveToPreviousDesktop();
-            this.GoToDesktop();
+            if (follow) GoToDesktop();
         }
 
         public void MoveToNextDesktop()
@@ -353,7 +347,7 @@ namespace FreeVD
         public void MoveToNextDesktop(bool follow)
         {
             MoveToNextDesktop();
-            this.GoToDesktop();
+            if (follow) GoToDesktop();
         }
 
         public void MoveToDesktop(int desktopNumber)
@@ -380,7 +374,7 @@ namespace FreeVD
                 int i = GetDesktopNumber(current.Id);
                 if (i == desktopNumber)
                 {
-                    VirtualDesktopHelper.MoveToDesktop(hWnd, current);
+                    VirtualDesktopHelper.MoveToDesktop(Handle, current);
                     return;
                 }
                 else
@@ -400,7 +394,7 @@ namespace FreeVD
                             current = current.GetLeft();
                         }
                     }
-                    VirtualDesktopHelper.MoveToDesktop(hWnd, current);
+                    VirtualDesktopHelper.MoveToDesktop(Handle, current);
                     Program.MoveCount++;
                 }
 
@@ -436,8 +430,6 @@ namespace FreeVD
         {
             GoToDesktop(DesktopNumber);
         }
-
-        #region "pInvoke & Private"
 
         private void GoToDesktop(int desktopNumber)
         {
@@ -485,26 +477,21 @@ namespace FreeVD
                     ex.Source + "::" + ex.TargetSite.Name);
                 Log.LogEvent("Exception", "", "", "Window", ex);
             }
-
-
-
-
         }
 
         private string GetWindowText()
         {
             try
             {
-                int length = GetWindowTextLength(hWnd);
+                int length = User32.GetWindowTextLength(Handle);
                 StringBuilder text = new StringBuilder(length + 1);
-                GetWindowText(hWnd, text, text.Capacity);
+                User32.GetWindowText(Handle, text, text.Capacity);
                 return text.ToString();
             }catch (Exception ex)
             {
                 Log.LogEvent("Exception", "", "", "Window", ex);
                 return "";
             }
-            
         }
 
         private string GetWindowName()
@@ -512,15 +499,15 @@ namespace FreeVD
             try
             {
                 uint lpdwProcessId;
-                GetWindowThreadProcessId(hWnd, out lpdwProcessId);
+                User32.GetWindowThreadProcessId(Handle, out lpdwProcessId);
 
-                IntPtr hProcess = OpenProcess(0x0410, false, lpdwProcessId);
+                IntPtr hProcess = Kernel32.OpenProcess(0x0410, false, lpdwProcessId);
 
                 StringBuilder text = new StringBuilder(1000);
                 //GetModuleBaseName(hProcess, IntPtr.Zero, text, text.Capacity);
-                GetModuleFileNameEx(hProcess, IntPtr.Zero, text, text.Capacity);
+                Psapi.GetModuleFileNameEx(hProcess, IntPtr.Zero, text, text.Capacity);
 
-                CloseHandle(hProcess);
+                Kernel32.CloseHandle(hProcess);
 
                 return text.ToString();
             }
@@ -537,7 +524,7 @@ namespace FreeVD
             try
             {
                 uint lpdwProcessId;
-                GetWindowThreadProcessId(hWnd, out lpdwProcessId);
+                User32.GetWindowThreadProcessId(Handle, out lpdwProcessId);
                 return lpdwProcessId;
             }catch (Exception ex)
             {
@@ -571,66 +558,5 @@ namespace FreeVD
             }
 
         }
-
-        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
-
-        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr FindWindowEx(IntPtr parentHandle, IntPtr childAfter, string lclassName, string windowTitle);
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern IntPtr GetForegroundWindow();
-
-        [DllImport("user32.dll")]
-        private static extern bool SetForegroundWindow(IntPtr hWnd);
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern int GetWindowTextLength(IntPtr hWnd);
-
-        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        private static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
-
-        //  DWORD GetWindowThreadProcessId(
-        //      __in   HWND hWnd,
-        //      __out  LPDWORD lpdwProcessId
-        //  );
-        [DllImport("user32.dll")]
-        private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
-
-        //  DWORD WINAPI GetModuleBaseName(
-        //      __in      HANDLE hProcess,
-        //      __in_opt  HMODULE hModule,
-        //      __out     LPTSTR lpBaseName,
-        //      __in      DWORD nSize
-        //  );
-        [DllImport("psapi.dll")]
-        private static extern uint GetModuleBaseName(IntPtr hWnd, IntPtr hModule, StringBuilder lpFileName, int nSize);
-
-        //  DWORD WINAPI GetModuleFileNameEx(
-        //      __in      HANDLE hProcess,
-        //      __in_opt  HMODULE hModule,
-        //      __out     LPTSTR lpFilename,
-        //      __in      DWORD nSize
-        //  );
-        [DllImport("psapi.dll")]
-        private static extern uint GetModuleFileNameEx(IntPtr hWnd, IntPtr hModule, StringBuilder lpFileName, int nSize);
-
-        //HANDLE WINAPI OpenProcess(
-        //  __in  DWORD dwDesiredAccess,
-        //  __in  BOOL bInheritHandle,
-        //  __in  DWORD dwProcessId
-        //);
-        [DllImport("kernel32.dll")]
-        private static extern IntPtr OpenProcess(uint dwDesiredAccess, bool bInheritHandle, uint dwProcessId);
-
-        [DllImport("kernel32.dll")]
-        private static extern bool CloseHandle(IntPtr handle);
-
-        #endregion
-
-
     }
 }

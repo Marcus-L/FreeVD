@@ -1,20 +1,19 @@
 # FreeVD
 Windows 10 Virtual Desktop Hotkeys and System Tray Icon
 
-__Installation__  
-This program uses `IsolatedStorage` for the settings file so in order for each new version to read the same settings file it is important that the program be unzipped and run from the same location everytime.
+## Installation
+Install the app automatically with [Chocolatey](https://chocolatey.org)
+```powershell
+choco install FreeVD
+```
 
-It's preferable to run directly from the `Startup` folder
+## Features:
 
-You can get to the `Startup` folder by typing `Startup` into the address bar of any Windows Explorer window. Simply copy the file into that folder.
-
-__Features:__
-
-__Hotkeys:__
+### Hotkeys:
 
 These are the default hotkeys. You can configure these any way you'd like.
 
-__Navigate Desktops:__  
+Navigate Desktops:  
 <kbd>WIN</kbd>+<kbd>CTRL</kbd>+<kbd>Numpad</kbd>  
 <kbd>WIN</kbd>+<kbd>CTRL</kbd>+<kbd>LEFT</kbd> or <kbd>RIGHT</kbd> - this is Windows Default
 
@@ -36,4 +35,4 @@ stay on a single desktop. If you were to `pin application` on a chrome window th
 all chrome windows would show up on all desktops. This includes new chrome windows.
 
 ---
-**FreeVD started as a fork from the [last FOSS version](https://github.com/Marcus-L/FreeVD-fork/commit/b623c87da69e9b45cf87141a216787a30477b934) of [mzomparelli](https://github.com/mzomparelli)'s [zVirtualDesktop](https://github.com/mzomparelli/zVirtualDesktop), and has continued to be developed as free and open-source.**
+**FreeVD started as a fork from the [last FOSS version](https://github.com/mzomparelli/zVirtualDesktop/tree/b623c87da69e9b45cf87141a216787a30477b934) of [mzomparelli](https://github.com/mzomparelli)'s [zVirtualDesktop](https://github.com/mzomparelli/zVirtualDesktop), and has continued to be developed as free and open-source.**

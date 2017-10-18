@@ -10,12 +10,7 @@ namespace FreeVD
 {
     public static class VirtualDesktopFunctions
     {
-        public static void HandleHotkey(Hotkey hotkey)
-        {
-
-        }
-
-        public static void PinWindow(Hotkey hotkey)
+        public static void PinWindow()
         {
             try
             {
@@ -50,7 +45,7 @@ namespace FreeVD
 
         }
 
-        public static void PinApp(Hotkey hotkey)
+        public static void PinApp()
         {
             try
             {
@@ -86,32 +81,7 @@ namespace FreeVD
 
         }
 
-        public static void DesktopGo(Hotkey hotkey)
-        {
-            int hotkeyID;
-            int.TryParse(hotkey.ID, out hotkeyID);
-            GoToDesktop(hotkeyID);
-        }
-
-        public static void DesktopMove(Hotkey hotkey)
-        {
-
-            Window win = Window.ForegroundWindow();
-            IEnumerable<Window> window = from Window w in Program.windows
-                                         where w.Handle == win.Handle
-                                         select w;
-            if (window.Count() < 1)
-            {
-                //win = new Window(hWnd);
-                Program.windows.Add(win);
-            }
-
-            int hotkeyID;
-            int.TryParse(hotkey.ID, out hotkeyID);
-            win.MoveToDesktop(hotkeyID);
-        }
-
-        public static void DesktopMoveFollow(Hotkey hotkey)
+        public static void DesktopMove(int desktopNumber, bool follow)
         {
 
             Window win = Window.ForegroundWindow();
@@ -123,12 +93,10 @@ namespace FreeVD
                 Program.windows.Add(win);
             }
 
-            int hotkeyID;
-            int.TryParse(hotkey.ID, out hotkeyID);
-            win.MoveToDesktop(hotkeyID, true);
+            win.MoveToDesktop(desktopNumber, follow);
         }
 
-        public static void DesktopMoveNextFollow(Hotkey hotkey)
+        public static void DesktopMoveNext(bool follow)
         {
 
             Window win = Window.ForegroundWindow();
@@ -140,10 +108,10 @@ namespace FreeVD
                 Program.windows.Add(win);
             }
 
-            win.MoveToNextDesktop(true);
+            win.MoveToNextDesktop(follow);
         }
 
-        public static void DesktopMoveNext(Hotkey hotkey)
+        public static void DesktopMovePrevious(bool follow)
         {
 
             Window win = Window.ForegroundWindow();
@@ -155,37 +123,7 @@ namespace FreeVD
                 Program.windows.Add(win);
             }
 
-            win.MoveToNextDesktop();
-        }
-
-        public static void DesktopMovePreviousFollow(Hotkey hotkey)
-        {
-
-            Window win = Window.ForegroundWindow();
-            IEnumerable<Window> window = from Window w in Program.windows
-                                         where w.Handle == win.Handle
-                                         select w;
-            if (window.Count() < 1)
-            {
-                Program.windows.Add(win);
-            }
-
-            win.MoveToPreviousDesktop(true);
-        }
-
-        public static void DesktopMovePrevious(Hotkey hotkey)
-        {
-
-            Window win = Window.ForegroundWindow();
-            IEnumerable<Window> window = from Window w in Program.windows
-                                         where w.Handle == win.Handle
-                                         select w;
-            if (window.Count() < 1)
-            {
-                Program.windows.Add(win);
-            }
-
-            win.MoveToPreviousDesktop();
+            win.MoveToPreviousDesktop(follow);
         }
 
         public static int GetDesktopNumber(Guid Guid)
@@ -258,10 +196,6 @@ namespace FreeVD
                     ex.Source + "::" + ex.TargetSite.Name);
                 Log.LogEvent("Exception", "", "", "frmMain", ex);
             }
-
-
-
-
         }
 
         public static int GetCurrentDesktopNumber()

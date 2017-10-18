@@ -21,8 +21,6 @@ namespace FreeVD
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            CheckVersion();
-
             //Add Excluded windows
             ExcludedWindowCaptions.Add("ASUS_Check");
             ExcludedWindowCaptions.Add("NVIDIA GeForce Overlay");
@@ -30,7 +28,6 @@ namespace FreeVD
 
             //Run the main form
             Application.Run(MainForm = new frmMain());
-
         }
 
         public static frmMain MainForm;
@@ -39,16 +36,12 @@ namespace FreeVD
             get { return typeof(Program).Assembly.GetName().Version.ToString(); }
         }
 
-        public static IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForAssembly();
         public static List<string> WallpaperStyles = new List<string>();
         public static List<string> PinnedApps = new List<string>();
         public static List<Window> windows = new List<Window>();
-        public static List<HotkeyItem> hotkeys = new List<HotkeyItem>();
+        public static List<VDHotkey> hotkeys = new List<VDHotkey>();
         public static VirtualDesktop[] Desktops = VirtualDesktop.GetDesktops();
         public static List<string> ExcludedWindowCaptions = new List<string>();
-        
-
-        public static string IconTheme = "White Box";
 
         //stats to log
         public static uint PinCount = 0;
@@ -57,10 +50,7 @@ namespace FreeVD
 
         public static void AddWindowToList(Window win)
         {
-            IEnumerable<Window> window = from Window w in Program.windows
-                                         where w.Handle == win.Handle
-                                         select w;
-            if (window.Count() < 1)
+            if (!Program.windows.Any(w => w.Handle == win.Handle))
             {
                 windows.Add(win);
             }
@@ -78,58 +68,5 @@ namespace FreeVD
 
             return false;
         }
-
-        public static void CheckVersion()
-        {
-            try
-            {
-                MainForm.timerCheckVersion.Enabled = false;
-            }
-            catch { }
-            
-            string latestversion = GetCurrentVersion();
-            if (latestversion != "" && latestversion != version)
-            {
-                // TODO: add auto updating
-                //DialogResult result = MessageBox.Show("FreeVD " + latestversion + " is available.\r\n" +
-                //    "You are currently running version "+ version + "\r\n" + 
-                //    "Would you like to download it now?", "FreeVD", MessageBoxButtons.YesNo);
-                //if (result == DialogResult.Yes)
-                //{
-                //    System.Diagnostics.Process.Start("https://");
-                //    Environment.Exit(0);
-                //}
-            }
-            try
-            {
-                MainForm.timerCheckVersion.Enabled = true;
-            }
-            catch { }
-        }
-
-        public static string GetCurrentVersion()
-        {
-            try
-            {
-                // TODO: add current version checking
-                //WSHttpBinding b = new WSHttpBinding(SecurityMode.Transport);
-                //b.Security.Transport.ClientCredentialType = HttpClientCredentialType.None;
-                //b.Name = "WSHttpBinding_IService";
-                //EndpointAddress address = new EndpointAddress("https://");
-
-                //using (SVC.ServiceClient z = new SVC.ServiceClient(b, address))
-                //{
-                //    return z.zVD_CurrentVersion();
-                //}
-                return "0.1";
-            }
-            catch (Exception)
-            {
-                return "";
-            }
-
-
-        }
-
     }
 }
