@@ -42,7 +42,13 @@
     <ApplicationIcon>Windows-8-Numbers-1.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Humanizer, Version=2.2.0.0, Culture=neutral, PublicKeyToken=979442b78dfc278e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Humanizer.Core.2.2.0\lib\netstandard1.0\Humanizer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -74,11 +80,11 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Internal\Hook\MouseHookEventArgs.cs" />
-    <Compile Include="Internal\HotkeyWindow.cs" />
+    <Compile Include="Internal\HotkeyAction.cs" />
+    <Compile Include="Internal\Hotkeys\HotkeyWindow.cs" />
     <Compile Include="Internal\NativeMethods.cs" />
     <Compile Include="Internal\TopLevelWindowUtils.cs" />
     <Compile Include="Internal\VirtualDesktop\ApplicationHelper.cs" />
-    <Compile Include="Internal\VirtualDesktop\COMProgram.cs" />
     <Compile Include="frmHotKey.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -93,7 +99,7 @@
     </Compile>
     <Compile Include="Internal\Log.cs" />
     <Compile Include="Internal\PInvoke.cs" />
-    <Compile Include="Internal\Hotkey.cs" />
+    <Compile Include="Internal\Hotkeys\Hotkey.cs" />
     <Compile Include="Internal\Disposable.cs" />
     <Compile Include="Internal\RawWindow.cs" />
     <Compile Include="Internal\TransparentWindow.cs" />
@@ -124,8 +130,7 @@
     <Compile Include="Internal\VirtualDesktop\VirtualDesktopChangedEventArgs.cs" />
     <Compile Include="Internal\VirtualDesktop\VirtualDesktopDestroyEventArgs.cs" />
     <Compile Include="Internal\VirtualDesktop\VirtualDesktopHelper.cs" />
-    <Compile Include="Internal\VirtualDesktop\VirtualDestopFunctions.cs" />
-    <Compile Include="Internal\Wallpaper.cs" />
+    <Compile Include="Internal\VirtualDesktop\VirtualDesktopFunctions.cs" />
     <Compile Include="Internal\Window.cs" />
     <Compile Include="Internal\WindowsInput\IInputDeviceStateAdaptor.cs" />
     <Compile Include="Internal\WindowsInput\IInputMessageDispatcher.cs" />
@@ -176,7 +181,7 @@
     <None Include="app.manifest">
       <SubType>Designer</SubType>
     </None>
-    <None Include="bin\Release\FreeVD.zip" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -186,9 +191,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="Internal\VirtualDesktop\VirtualDesktop.nuspec" />
-    <None Include="Internal\WindowsInput\WindowsInput.nuspec" />
-    <None Include="Internal\WindowsInput\WindowsInput.snk" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -219,9 +221,7 @@
     <None Include="Icons\Windows-8-Numbers-9.ico" />
     <None Include="Icons\Windows-8-Numbers-9-Black.ico" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="bin\Debug\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

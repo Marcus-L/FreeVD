@@ -45,7 +45,7 @@ namespace FreeVD
                 switch (cmbHotkeyType.Text)
                 {
                     case "Navigate to Desktop":
-                        hk.Callback = VirtualDestopFunctions.DesktopGo;
+                        hk.Callback = VirtualDesktopFunctions.DesktopGo;
                         break;
                     case "Move Window to Desktop":
                         switch (cmbDesktopNumber.Text)
@@ -59,13 +59,13 @@ namespace FreeVD
                             case "7":
                             case "8":
                             case "9":
-                                hk.Callback = VirtualDestopFunctions.DesktopMove;
+                                hk.Callback = VirtualDesktopFunctions.DesktopMove;
                                 break;
                             case "Next":
-                                hk.Callback = VirtualDestopFunctions.DesktopMoveNext;
+                                hk.Callback = VirtualDesktopFunctions.DesktopMoveNext;
                                 break;
                             case "Previous":
-                                hk.Callback = VirtualDestopFunctions.DesktopMovePrevious;
+                                hk.Callback = VirtualDesktopFunctions.DesktopMovePrevious;
                                 break;
                             default:
                                 break;
@@ -83,23 +83,23 @@ namespace FreeVD
                             case "7":
                             case "8":
                             case "9":
-                                hk.Callback = VirtualDestopFunctions.DesktopMoveFollow;
+                                hk.Callback = VirtualDesktopFunctions.DesktopMoveFollow;
                                 break;
                             case "Next":
-                                hk.Callback = VirtualDestopFunctions.DesktopMoveNextFollow;
+                                hk.Callback = VirtualDesktopFunctions.DesktopMoveNextFollow;
                                 break;
                             case "Previous":
-                                hk.Callback = VirtualDestopFunctions.DesktopMovePreviousFollow;
+                                hk.Callback = VirtualDesktopFunctions.DesktopMovePreviousFollow;
                                 break;
                             default:
                                 break;
                         }
                         break;
                     case "Pin/Unpin Window":
-                        hk.Callback = VirtualDestopFunctions.PinWindow;
+                        hk.Callback = VirtualDesktopFunctions.PinWindow;
                         break;
                     case "Pin/Unpin Application":
-                        hk.Callback = VirtualDestopFunctions.PinApp;
+                        hk.Callback = VirtualDesktopFunctions.PinApp;
                         break;
                     default:
                         break;

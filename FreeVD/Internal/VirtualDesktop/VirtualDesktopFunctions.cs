@@ -8,8 +8,12 @@ using WindowsDesktop;
 
 namespace FreeVD
 {
-    public static class VirtualDestopFunctions
+    public static class VirtualDesktopFunctions
     {
+        public static void HandleHotkey(Hotkey hotkey)
+        {
+
+        }
 
         public static void PinWindow(Hotkey hotkey)
         {

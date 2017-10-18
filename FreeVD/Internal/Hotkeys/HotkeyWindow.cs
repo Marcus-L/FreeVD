@@ -23,6 +23,7 @@ namespace FreeVD
                     if (Hotkeys.TryGetValue(wParam, out var hotkey))
                     {
                         hotkey.Callback(hotkey);
+                        //VirtualDesktopFunctions.HandleHotkey(hotkey);
                     }
                     break;
             }

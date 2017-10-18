@@ -142,11 +142,6 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.mnuSettings = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuExit = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuBuyBeer = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuBuyLunch = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuBuyDinner = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuBuyLamborghini = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuBuyOtherAmount = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuPinnedApps = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mnuUnpin = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -159,12 +154,12 @@
             this.btnDeleteHotkey = new System.Windows.Forms.Button();
             this.tabPinnedApps = new System.Windows.Forms.TabPage();
             this.lstPinnedApps = new System.Windows.Forms.ListBox();
+            this.tabOptions = new System.Windows.Forms.TabPage();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.lblVersion = new System.Windows.Forms.Label();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnApply = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.tabOptions = new System.Windows.Forms.TabPage();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.SystemTrayMenu.SuspendLayout();
             this.mnuPinnedApps.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -229,31 +224,6 @@
             this.mnuExit.Name = "mnuExit";
             this.mnuExit.Size = new System.Drawing.Size(174, 22);
             this.mnuExit.Text = "Exit";
-            // 
-            // mnuBuyBeer
-            // 
-            this.mnuBuyBeer.Name = "mnuBuyBeer";
-            this.mnuBuyBeer.Size = new System.Drawing.Size(32, 19);
-            // 
-            // mnuBuyLunch
-            // 
-            this.mnuBuyLunch.Name = "mnuBuyLunch";
-            this.mnuBuyLunch.Size = new System.Drawing.Size(32, 19);
-            // 
-            // mnuBuyDinner
-            // 
-            this.mnuBuyDinner.Name = "mnuBuyDinner";
-            this.mnuBuyDinner.Size = new System.Drawing.Size(32, 19);
-            // 
-            // mnuBuyLamborghini
-            // 
-            this.mnuBuyLamborghini.Name = "mnuBuyLamborghini";
-            this.mnuBuyLamborghini.Size = new System.Drawing.Size(32, 19);
-            // 
-            // mnuBuyOtherAmount
-            // 
-            this.mnuBuyOtherAmount.Name = "mnuBuyOtherAmount";
-            this.mnuBuyOtherAmount.Size = new System.Drawing.Size(32, 19);
             // 
             // mnuPinnedApps
             // 
@@ -424,6 +394,26 @@
             this.lstPinnedApps.Size = new System.Drawing.Size(522, 384);
             this.lstPinnedApps.TabIndex = 0;
             // 
+            // tabOptions
+            // 
+            this.tabOptions.Controls.Add(this.checkBox1);
+            this.tabOptions.Location = new System.Drawing.Point(4, 22);
+            this.tabOptions.Name = "tabOptions";
+            this.tabOptions.Size = new System.Drawing.Size(526, 388);
+            this.tabOptions.TabIndex = 4;
+            this.tabOptions.Text = "Options";
+            this.tabOptions.UseVisualStyleBackColor = true;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(16, 16);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(278, 17);
+            this.checkBox1.TabIndex = 0;
+            this.checkBox1.Text = "Start FreeVD automatically when I sign in to Windows";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
             // lblVersion
             // 
             this.lblVersion.AutoSize = true;
@@ -473,26 +463,6 @@
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // tabOptions
-            // 
-            this.tabOptions.Controls.Add(this.checkBox1);
-            this.tabOptions.Location = new System.Drawing.Point(4, 22);
-            this.tabOptions.Name = "tabOptions";
-            this.tabOptions.Size = new System.Drawing.Size(526, 388);
-            this.tabOptions.TabIndex = 4;
-            this.tabOptions.Text = "Options";
-            this.tabOptions.UseVisualStyleBackColor = true;
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(16, 16);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(278, 17);
-            this.checkBox1.TabIndex = 0;
-            this.checkBox1.Text = "Start FreeVD automatically when I sign in to Windows";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -534,11 +504,6 @@
         private System.Windows.Forms.ToolStripMenuItem mnuUnpin;
         private System.Windows.Forms.ToolStripMenuItem mnuGatherWindows;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripMenuItem mnuBuyBeer;
-        private System.Windows.Forms.ToolStripMenuItem mnuBuyLunch;
-        private System.Windows.Forms.ToolStripMenuItem mnuBuyDinner;
-        private System.Windows.Forms.ToolStripMenuItem mnuBuyLamborghini;
-        private System.Windows.Forms.ToolStripMenuItem mnuBuyOtherAmount;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.Label lblVersion;
         internal System.Windows.Forms.Button btnOK;

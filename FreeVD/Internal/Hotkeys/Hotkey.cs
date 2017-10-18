@@ -9,11 +9,6 @@ namespace FreeVD
 {
     public class Hotkey : IDisposable
     {
-        private static void Log(string message)
-        {
-            File.AppendAllText("log.txt", message + "\n");
-        }
-
         private static int GlobalID = 0;
         private static HotkeyWindow Window = new HotkeyWindow();
 
@@ -49,61 +44,14 @@ namespace FreeVD
 
         public uint Key { get; set; }
 
-        public string HotKeyString()
+        public override string ToString()
         {
-            string keys__1 = "";
+            string keys = (Ctrl ? "Ctrl+" : "") +
+                          (Alt ? "Alt+" : "") +
+                          (Shift ? "Shift+" : "") +
+                          (Win ? "Win+" : "");
 
-            if (Alt)
-            {
-                if (string.IsNullOrEmpty(keys__1))
-                {
-                    keys__1 = keys__1 + "ALT";
-                }
-                else
-                {
-                    keys__1 = keys__1 + "+ALT";
-                }
-            }
-
-            if (Ctrl)
-            {
-                if (string.IsNullOrEmpty(keys__1))
-                {
-                    keys__1 = keys__1 + "CTRL";
-                }
-                else
-                {
-                    keys__1 = keys__1 + "+CTRL";
-                }
-            }
-
-            if (Shift)
-            {
-                if (string.IsNullOrEmpty(keys__1))
-                {
-                    keys__1 = keys__1 + "SHIFT";
-                }
-                else
-                {
-                    keys__1 = keys__1 + "+SHIFT";
-                }
-            }
-
-            if (Win)
-            {
-                if (string.IsNullOrEmpty(keys__1))
-                {
-                    keys__1 = keys__1 + "WIN";
-                }
-                else
-                {
-                    keys__1 = keys__1 + "+WIN";
-                }
-            }
-
-            keys__1 = keys__1 + "+" + (Keys)Key;
-
-            return keys__1;
+            return keys + (Keys)Key;
         }
 
         public bool Register(Keys key, bool alt, bool ctrl, bool shift, bool win)
@@ -119,34 +67,23 @@ namespace FreeVD
             Win = win;
             Key = (uint)key;
 
-            uint Modifiers = 0;
-            if (alt)
-            {
-                Modifiers += Consts.MOD_ALT;
-            }
-            if (ctrl)
-            {
-                Modifiers += Consts.MOD_CONTROL;
-            }
-            if (shift)
-            {
-                Modifiers += Consts.MOD_SHIFT;
-            }
-            if (win)
-            {
-                Modifiers += Consts.MOD_WIN;
-            }
+            uint Modifiers = (alt ? Consts.MOD_ALT : 0)
+                           + (ctrl ? Consts.MOD_CONTROL : 0)
+                           + (shift ? Consts.MOD_SHIFT : 0)
+                           + (win ? Consts.MOD_WIN : 0);
+
             uint keyValue = Convert.ToUInt32(key);
 
-
-            Log($"registering {HotkeyID}: {Modifiers} {keyValue}");
+            System.Diagnostics.Debug.WriteLine($"registering {HotkeyID}: {Modifiers} {keyValue}");
             if (User32.RegisterHotKey(Window.Handle, HotkeyID, Modifiers, keyValue) == 0)
             {
-                MessageBox.Show(HotKeyString() + Convert.ToString(" hotkey is already registered."));
+                System.Diagnostics.Debug.WriteLine("already registered " + HotkeyID);
+                MessageBox.Show(ToString() + Convert.ToString(" hotkey is already registered."));
                 return false;
             }
             else
             {
+                System.Diagnostics.Debug.WriteLine("registered " + HotkeyID);
                 Window.Hotkeys[HotkeyID] = this;
                 IsRegistered = true;
                 return true;
@@ -160,6 +97,7 @@ namespace FreeVD
                 IsRegistered = (User32.UnregisterHotKey(Window.Handle, HotkeyID) == 0);
                 if (!IsRegistered)
                 {
+                    System.Diagnostics.Debug.WriteLine("unregistered " + HotkeyID);
                     Window.Hotkeys.Remove(HotkeyID);
                 }
             }
