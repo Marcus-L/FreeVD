@@ -79,7 +79,6 @@
     <Compile Include="Lib\Interop\Kernel32.cs" />
     <Compile Include="Lib\Interop\SystemMetric.cs" />
     <Compile Include="Lib\Interop\User32.cs" />
-    <Compile Include="Lib\VirtualDesktop\ApplicationHelper.cs" />
     <Compile Include="frmHotKey.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -94,33 +93,8 @@
     </Compile>
     <Compile Include="App\Log.cs" />
     <Compile Include="Lib\Hotkeys\Hotkey.cs" />
-    <Compile Include="Lib\VirtualDesktop\Disposable.cs" />
-    <Compile Include="Lib\RawWindow.cs" />
-    <Compile Include="Lib\TransparentWindow.cs" />
-    <Compile Include="Lib\VirtualDesktop\Interop\CLSID.cs" />
-    <Compile Include="Lib\VirtualDesktop\Interop\ComObjects.cs" />
-    <Compile Include="Lib\VirtualDesktop\Interop\HResult.cs" />
-    <Compile Include="Lib\VirtualDesktop\Interop\IApplicationView.cs" />
-    <Compile Include="Lib\VirtualDesktop\Interop\IApplicationViewCollection.cs" />
-    <Compile Include="Lib\VirtualDesktop\Interop\IObjectArray.cs" />
-    <Compile Include="Lib\VirtualDesktop\Interop\IServiceProvider.cs" />
-    <Compile Include="Lib\VirtualDesktop\Interop\IVirtualDesktop.cs" />
-    <Compile Include="Lib\VirtualDesktop\Interop\IVirtualDesktopManager.cs" />
-    <Compile Include="Lib\VirtualDesktop\Interop\IVirtualDesktopManagerInternal.cs" />
-    <Compile Include="Lib\VirtualDesktop\Interop\IVirtualDesktopNotification.cs" />
-    <Compile Include="Lib\VirtualDesktop\Interop\IVirtualDesktopNotificationService.cs" />
-    <Compile Include="Lib\VirtualDesktop\Interop\IVirtualDesktopPinnedApps.cs" />
-    <Compile Include="Lib\VirtualDesktop\Interop\NativeMethods.cs" />
-    <Compile Include="Lib\VirtualDesktop\Interop\VirtualDesktopManagerInternal.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Lib\VirtualDesktop\VirtualDesktop.cs" />
-    <Compile Include="Lib\VirtualDesktop\VirtualDesktop.static.cs" />
-    <Compile Include="Lib\VirtualDesktop\VirtualDesktop.static.notification.cs" />
-    <Compile Include="Lib\VirtualDesktop\VirtualDesktop.static.pin.cs" />
-    <Compile Include="Lib\VirtualDesktop\VirtualDesktopChangedEventArgs.cs" />
-    <Compile Include="Lib\VirtualDesktop\VirtualDesktopDestroyEventArgs.cs" />
-    <Compile Include="Lib\VirtualDesktop\VirtualDesktopHelper.cs" />
     <Compile Include="App\VirtualDesktopFunctions.cs" />
     <Compile Include="App\Window.cs" />
     <Compile Include="App\Settings.cs" />
@@ -186,7 +160,12 @@
     <None Include="Icons\Windows-8-Numbers-9.ico" />
     <None Include="Icons\Windows-8-Numbers-9-Black.ico" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\VirtualDesktop\source\VirtualDesktop\VirtualDesktop.csproj">
+      <Project>{ab848ecd-76aa-41c0-b63d-86a8591b25aa}</Project>
+      <Name>VirtualDesktop</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
