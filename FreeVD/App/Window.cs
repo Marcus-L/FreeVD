@@ -1,81 +1,66 @@
 ﻿using FreeVD.Lib.Interop;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using WindowsDesktop;
-using WindowsDesktop.Internal;
+using WindowsDesktop.Interop;
 
 namespace FreeVD
 {
-    public class Window
+    public class Window : IEquatable<Window>
     {
-        public static IDictionary<IntPtr, string> GetOpenWindows()
+        static Window()
+        {
+            Debug.WriteLine("windowww");
+        }
+
+        public static IEnumerable<Window> GetOpenWindows()
         {
             IntPtr shellWindow = User32.GetShellWindow();
-            Dictionary<IntPtr, string> windows = new Dictionary<IntPtr, string>();
-
-            User32.EnumWindows(delegate (IntPtr hWnd, IntPtr lParam)
+            var windows = new List<Window>();
+            User32.EnumWindows((handle,lParam) =>
             {
-                if (hWnd == shellWindow) return true;
-                if (!User32.IsWindowVisible(hWnd)) return true;
-
-                int length = User32.GetWindowTextLength(hWnd);
-                if (length == 0) return true;
-
-                StringBuilder builder = new StringBuilder(length);
-                User32.GetWindowText(hWnd, builder, length + 1);
-
-                windows[hWnd] = builder.ToString();
+                if (handle != shellWindow &&
+                    User32.IsWindowVisible(handle) &&
+                    User32.GetWindowTextLength(handle) > 0)
+                {
+                    windows.Add(new Window(handle));
+                }
                 return true;
-
-            }, IntPtr.Zero);
-
+            },
+            IntPtr.Zero);
             return windows;
         }
 
-        //Create a new instance from the current foreground window
-        public static Window ForegroundWindow()
+        public Window(IntPtr handle)
         {
-            try
-            {
-                Window win = new Window(User32.GetForegroundWindow());
-                return win;
-            }catch
-            {
-                return null;
-            }
-            
+            Handle = handle;
         }
 
-        //Create a new instance from the taskbar window
-        public static Window Taskbar()
+        private static readonly List<string> ExcludedWindowText = new List<string>()
         {
-            try
-            {
-                IntPtr hWnd = User32.FindWindow("Shell_TrayWnd", null);
-                Window win = new Window(hWnd);
-                return win;
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        public Window(IntPtr hWnd)
-        {
-            this.Handle = hWnd;
-        }
+            "ASUS_Check", "NVIDIA GeForce Overlay", "FreeVD Settings"
+        };
 
         public IntPtr Handle { get; set; }
 
-        public string Caption => GetWindowText();
+        public string GetAppId()
+        {
+            try
+            {
+                return ApplicationHelper.GetAppId(Handle);
+            }
+            catch (Exception)
+            {
+                return "Error";
+            }
+        }
 
-        public string ApplicationName => GetWindowName();
+        public static Window GetForegroundWindow() => new Window(User32.GetForegroundWindow());
+
+        public static Window GetTaskbar() => new Window(User32.FindWindow("Shell_TrayWnd", null));
 
         public int DesktopNumber
         {
@@ -83,21 +68,18 @@ namespace FreeVD
             {
                 try
                 {
-                    if (Program.IsExcludedWindow(this.Caption))
+                    if (!ExcludedWindowText.Contains(GetWindowText()) &&
+                        ComObjects.GetVirtualDesktopManager().GetWindowDesktopId(Handle) != Guid.Empty)
                     {
-                        return 1;
+                        return (IsPinnedWindow ? VirtualDesktop.Current : VirtualDesktop.FromHwnd(Handle)).GetNumber();
                     }
-                    return GetDesktopNumber(VirtualDesktop.FromHwnd(Handle).Id);
-                }catch(Exception ex)
-                {
-                    Log.LogEvent("Exception", 
-                                 "Handle: " + Handle.ToString() + 
-                                 "\r\nCaption: " + this.Caption, 
-                                 "", 
-                                 "Window", ex);
-                    return 1;
                 }
-                
+                catch (Exception ex) when (ex.HResult == Consts.TYPE_E_ELEMENTNOTFOUND) {}
+                catch (Exception ex)
+                {
+                    Log.LogEvent("Window", $"Handle: {Handle}\nCaption: {GetWindowText()}", ex);
+                }
+                return -1;
             }
         }
 
@@ -105,63 +87,15 @@ namespace FreeVD
         {
             get
             {
-                try
+                switch (GetClassName())
                 {
-                    const int maxChars = 256;
-                    StringBuilder className = new StringBuilder(maxChars);
-                    if (User32.GetClassName(this.Handle, className, maxChars) > 0)
-                    {
-                        string cName = className.ToString();
-                        if (cName == "Progman" || cName == "WorkerW")
-                        {
-                            return true;
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-                    else
-                    {
+                    case "Progman":
+                    case "WorkerW":
+                    case "Shell_TrayWnd":
+                    case "Shell_SecondaryTrayWnd":
+                        return true;
+                    default:
                         return false;
-                    }
-
-
-                }
-                catch (Exception ex)
-                {
-                    Log.LogEvent("Exception", "", "", "Window", ex);
-                    return false;
-                }
-
-            }
-        }
-
-        public bool SetAsForegroundWindow()
-        {
-            try
-            {
-                return User32.SetForegroundWindow(this.Handle);
-            }
-            catch (Exception ex)
-            {
-                Log.LogEvent("Exception", "", "", "Window", ex);
-                return false;
-            }
-        }
-
-        public string AppID
-        {
-            get
-            {
-                try
-                {
-                    return ApplicationHelper.GetAppId(Handle);
-                }
-                catch (Exception ex)
-                {
-                    Log.LogEvent("Exception", "", "", "Window", ex);
-                    return "";
                 }
             }
         }
@@ -172,21 +106,13 @@ namespace FreeVD
             {
                 try
                 {
-                    if(Handle != IntPtr.Zero)
-                    {
-                        return VirtualDesktop.IsPinnedWindow(Handle);
-                    }else
-                    {
-                        return false;
-                    }
-                    
+                    return Handle == IntPtr.Zero ? false : VirtualDesktop.IsPinnedWindow(Handle);
                 }
                 catch (Exception ex)
                 {
-                    Log.LogEvent("Exception", "", "", "Window", ex);
+                    Log.LogEvent("Window", $"Handle: {Handle}\nCaption: {GetWindowText()}", ex);
                     return false;
                 }
-                
             }
         }
 
@@ -196,367 +122,180 @@ namespace FreeVD
             {
                 try
                 {
-                    if (Handle != IntPtr.Zero)
-                    {
-                        return VirtualDesktop.IsPinnedApplication(AppID);
-                    }
-                    else
-                    {
-                        return false;
-                    }                    
+                    return Handle == IntPtr.Zero ? false : VirtualDesktop.IsPinnedApplication(GetAppId());
                 }
                 catch (Exception ex)
                 {
-                    Log.LogEvent("Exception", "", "", "Window", ex);
+                    Log.LogEvent("Window", $"Handle: {Handle}\nCaption: {GetWindowText()}", ex);
                     return false;
                 }
-
             }
         }
 
-        public System.Diagnostics.Process Process
+        public string GetClassName()
         {
-            get
+            int max = 512;
+            var sb = new StringBuilder(max);
+            return User32.GetClassName(Handle, sb, max) > 0 ? sb.ToString() : "ERR";
+        }
+
+        public Window MoveToPreviousDesktop()
+        {
+            var desktops = VirtualDesktop.GetDesktops();
+            if (DesktopNumber == -1 || desktops.Count() == 1) return this;
+            int prevDesktop = DesktopNumber == 1 ? desktops.Count() : DesktopNumber - 1;
+            return MoveToDesktop(prevDesktop);
+        }
+
+        public Window MoveToNextDesktop()
+        {
+            var desktops = VirtualDesktop.GetDesktops();
+            if (DesktopNumber == -1 || desktops.Count() == 1) return this;
+            int nextDesktop = DesktopNumber == desktops.Count() ? 1 : DesktopNumber + 1;
+            return MoveToDesktop(nextDesktop);
+        }
+
+        public Window MoveToDesktop(VirtualDesktop desktop)
+        {
+            if (DesktopNumber != -1)
+            {
+                AppModel.PinnedWindows.Remove(this);
+                AppModel.PinnedApps.Remove(AppInfo.FromWindow(this));
+                VirtualDesktopHelper.MoveToDesktop(Handle, desktop);
+            }
+            return this;
+        }
+
+        public Window MoveToDesktop(int desktopNumber)
+        {
+            // do not move popups (which exception out anyway) or explicitly excluded windows
+            if (DesktopNumber != -1 && desktopNumber > 0)
             {
                 try
                 {
-                    return System.Diagnostics.Process.GetProcessById((int)GetProcessID());
-                }catch(Exception ex)
-                {
-                    Log.LogEvent("Exception", "", "", "Window", ex);
-                    return null;
+                    EnsureDesktops(desktopNumber); // Create addtional desktops if necessary
+                    MoveToDesktop(VirtualDesktop.GetDesktops()[desktopNumber - 1]);
                 }
-                
-            }
-        }
-
-        public void Unpin()
-        {
-            try
-            {
-                VirtualDesktop.UnpinWindow(Handle);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("An error occured unpinning the specified window. See additional details below." + Environment.NewLine + Environment.NewLine +
-                    ex.Message + Environment.NewLine +
-                    ex.Source + "::" + ex.TargetSite.Name);
-                Log.LogEvent("Exception", "",
-                             "Window Handle: " + this.Handle.ToString() + Environment.NewLine +
-                             "Window Caption: " + this.Caption + Environment.NewLine +
-                             "Application: " + this.ApplicationName,
-                             "Window",
-                             ex);
-            }
-        } 
-
-        public void UnpinApplication()
-        {
-            try
-            {
-                VirtualDesktop.UnpinApplication(AppID);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("An error occured unpinning the specified application. See additional details below." + Environment.NewLine + Environment.NewLine +
-                    ex.Message + Environment.NewLine +
-                    ex.Source + "::" + ex.TargetSite.Name);
-                Log.LogEvent("Exception", "",
-                             "Window Handle: " + this.Handle.ToString() + Environment.NewLine +
-                             "Window Caption: " + this.Caption + Environment.NewLine +
-                             "Application: " + this.ApplicationName,
-                             "Window",
-                             ex);
-
-            }
-        }
-
-        public void Pin()
-        {
-            try
-            {
-                VirtualDesktop.PinWindow(Handle);
-                Program.PinCount++;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("An error occured pinning the specified window. See additional details below." + Environment.NewLine + Environment.NewLine +
-                    ex.Message + Environment.NewLine +
-                    ex.Source + "::" + ex.TargetSite.Name);
-                Log.LogEvent("Exception", "",
-                             "Window Handle: " + this.Handle.ToString() + Environment.NewLine +
-                             "Window Caption: " + this.Caption + Environment.NewLine +
-                             "Application: " + this.ApplicationName,
-                             "Window",
-                             ex);
-            }
-        }
-
-        public void PinApplication()
-        {
-            try
-            {
-                VirtualDesktop.PinApplication(AppID);
-                Program.PinCount++;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("An error occured pinning the specified application. See additional details below." + Environment.NewLine + Environment.NewLine +
-                    ex.Message + Environment.NewLine +
-                    ex.Source + "::" + ex.TargetSite.Name);
-                Log.LogEvent("Exception", "",
-                             "Window Handle: " + this.Handle.ToString() + Environment.NewLine +
-                             "Window Caption: " + this.Caption + Environment.NewLine +
-                             "Application: " + this.ApplicationName,
-                             "Window",
-                             ex);
-            }
-        }
-
-        public void MoveToPreviousDesktop()
-        {
-            if (this.DesktopNumber == 1)
-            {
-                MoveToDesktop(VirtualDesktop.GetDesktops().Count());
-            }
-            else
-            {
-                MoveToDesktop(this.DesktopNumber - 1);
-            }
-        }
-
-        public void MoveToPreviousDesktop(bool follow)
-        {
-            MoveToPreviousDesktop();
-            if (follow) GoToDesktop();
-        }
-
-        public void MoveToNextDesktop()
-        {
-            if (this.DesktopNumber == VirtualDesktop.GetDesktops().Count())
-            {
-                MoveToDesktop(1);
-            }
-            else
-            {
-                MoveToDesktop(this.DesktopNumber + 1);
-            }
-            
-        }
-
-        public void MoveToNextDesktop(bool follow)
-        {
-            MoveToNextDesktop();
-            if (follow) GoToDesktop();
-        }
-
-        public void MoveToDesktop(int desktopNumber)
-        {
-            try
-            {
-                if(Program.IsExcludedWindow(this.Caption))
+                catch (Exception ex)
                 {
-                    return;
+                    Log.LogEvent("Window", $"Handle: {Handle}\nCaption: {GetWindowText()}", ex);
                 }
-                //Create addtional desktops if necessary
-                VirtualDesktop[] Desktops = VirtualDesktop.GetDesktops();
-                if (Desktops.Count() < desktopNumber)
-                {
-                    int diff = Math.Abs(Desktops.Count() - desktopNumber);
-                    for (int x = 1; x <= diff; x++)
-                    {
-                        VirtualDesktop.Create();
-                    }
-                }             
+            }
+            return this;
+        }
 
-                VirtualDesktop current = VirtualDesktop.Current;
+        public static void EnsureDesktops(int desktopCount)
+        {
+            int createNew = desktopCount - VirtualDesktop.GetDesktops().Count();
+            while (createNew-- > 0) VirtualDesktop.Create();
+        }
 
-                int i = GetDesktopNumber(current.Id);
-                if (i == desktopNumber)
+        public void Follow(bool follow = false)
+        {
+            if (follow && DesktopNumber != -1) // do not follow immovable windows
+            {
+                //User32.SetForegroundWindow(Window.GetTaskbar().Handle);
+                VirtualDesktop.FromHwnd(Handle).Switch();
+                User32.SetForegroundWindow(Handle);
+            }
+        }
+
+        public void TogglePinWindow()
+        {
+            try
+            {
+                if (IsPinnedApplication) return; // don't pin a window of an already pinned app
+                if (!IsPinnedWindow)
                 {
-                    VirtualDesktopHelper.MoveToDesktop(Handle, current);
-                    return;
+                    VirtualDesktop.PinWindow(Handle);
+                    PinWatcher.WatchWindow(this);
+                    AppModel.PinnedWindows.Add(this);
                 }
                 else
                 {
-                    int diff = Math.Abs(i - desktopNumber);
-                    if (i < desktopNumber)
-                    {
-                        for (int z = 1; z <= diff; z++)
-                        {
-                            current = current.GetRight();
-                        }
-                    }
-                    else
-                    {
-                        for (int z = 1; z <= diff; z++)
-                        {
-                            current = current.GetLeft();
-                        }
-                    }
-                    VirtualDesktopHelper.MoveToDesktop(Handle, current);
-                    Program.MoveCount++;
+                    VirtualDesktop.UnpinWindow(Handle);
+                    AppModel.PinnedWindows.Remove(this);
                 }
-
             }
             catch (Exception ex)
             {
-                if (this.Caption != "")
-                {
-                    
-                }
-                
-                Log.LogEvent("Exception", "", 
-                             "Window Handle: " + this.Handle.ToString() + Environment.NewLine + 
-                             "Window Caption: " + this.Caption + Environment.NewLine + 
-                             "Application: " + this.ApplicationName, 
-                             "Window", 
-                             ex);
-            }
-
-
-        }
-
-        public void MoveToDesktop(int desktopNumber, bool follow)
-        {
-            MoveToDesktop(desktopNumber);
-            if(follow)
-            {                
-                GoToDesktop(desktopNumber);
+                Log.LogEvent("Window", $"Handle: {Handle}\nCaption: {GetWindowText()}", ex);
             }
         }
 
-        public void GoToDesktop()
-        {
-            GoToDesktop(DesktopNumber);
-        }
-
-        private void GoToDesktop(int desktopNumber)
+        public void TogglePinApp()
         {
             try
             {
-                VirtualDesktop current = VirtualDesktop.Current;
-                int i = GetDesktopNumber(current.Id);
-                if (i == desktopNumber)
+                var info = AppInfo.FromWindow(this);
+                if (IsPinnedApplication)
                 {
-                    return;
+                    VirtualDesktop.UnpinApplication(info.Id);
+                    AppModel.PinnedApps.Remove(info);
                 }
                 else
                 {
-                    int diff = Math.Abs(i - desktopNumber);
-                    if (i < desktopNumber)
-                    {
-                        for (int z = 1; z <= diff; z++)
-                        {
-                            current = current.GetRight();
-                        }
-                    }
-                    else
-                    {
-                        for (int z = 1; z <= diff; z++)
-                        {
-                            current = current.GetLeft();
-                        }
-                    }
-
-                    //Right before switching the desktop, set the active window as the taskbar
-                    //This prevents windows from flashing in the taskbar when switching desktops
-                    Window w = Window.Taskbar();
-                    w.SetAsForegroundWindow();
-                    current.Switch();
-                    //give focus to the window we followed
-                    this.SetAsForegroundWindow();
-                    Program.NavigateCount++;
+                    AppModel.PinnedWindows.Remove(this);
+                    VirtualDesktop.PinApplication(info.Id);
+                    AppModel.PinnedApps.Add(info);
                 }
-
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An error occured navigating to the specified desktop. See additional details below." + Environment.NewLine + Environment.NewLine +
-                    ex.Message + Environment.NewLine +
-                    ex.Source + "::" + ex.TargetSite.Name);
-                Log.LogEvent("Exception", "", "", "Window", ex);
+                Log.LogEvent("Window", $"Handle: {Handle}\nCaption: {GetWindowText()}", ex);
             }
         }
 
-        private string GetWindowText()
+        public string GetWindowText()
         {
             try
             {
-                int length = User32.GetWindowTextLength(Handle);
-                StringBuilder text = new StringBuilder(length + 1);
+                var text = new StringBuilder(User32.GetWindowTextLength(Handle) + 1);
                 User32.GetWindowText(Handle, text, text.Capacity);
                 return text.ToString();
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
-                Log.LogEvent("Exception", "", "", "Window", ex);
+                Log.LogEvent("Window", $"Handle: {Handle}\nCaption: {GetWindowText()}", ex);
                 return "";
             }
         }
 
-        private string GetWindowName()
+        public string GetWindowName()
         {
             try
             {
-                uint lpdwProcessId;
-                User32.GetWindowThreadProcessId(Handle, out lpdwProcessId);
-
-                IntPtr hProcess = Kernel32.OpenProcess(0x0410, false, lpdwProcessId);
-
-                StringBuilder text = new StringBuilder(1000);
-                //GetModuleBaseName(hProcess, IntPtr.Zero, text, text.Capacity);
-                Psapi.GetModuleFileNameEx(hProcess, IntPtr.Zero, text, text.Capacity);
-
-                Kernel32.CloseHandle(hProcess);
-
+                User32.GetWindowThreadProcessId(Handle, out var lpdwProcessId);
+                var handle = Kernel32.OpenProcess(0x0410, false, lpdwProcessId);
+                var text = new StringBuilder(1000);
+                Psapi.GetModuleFileNameEx(handle, IntPtr.Zero, text, text.Capacity);
+                Kernel32.CloseHandle(handle);
                 return text.ToString();
             }
             catch (Exception ex)
             {
-                Log.LogEvent("Exception", "", "", "Window", ex);
+                Log.LogEvent("Window", $"Handle: {Handle}\nCaption: {GetWindowText()}", ex);
                 return "";
             }
-            
         }
 
-        private uint GetProcessID()
+        public Process GetProcess()
         {
             try
             {
-                uint lpdwProcessId;
-                User32.GetWindowThreadProcessId(Handle, out lpdwProcessId);
-                return lpdwProcessId;
-            }catch (Exception ex)
-            {
-                Log.LogEvent("Exception", "", "", "Window", ex);
-                return 0;
-            }
-            
-        }
-
-        private int GetDesktopNumber(Guid Guid)
-        {
-            try
-            {
-                VirtualDesktop[] Desktops = VirtualDesktop.GetDesktops();
-                for (int i = 0; i <= Desktops.Count() - 1; i++)
-                {
-                    if (Desktops[i].Id == Guid)
-                    {
-                        return i + 1;
-                    }
-                }
-                return 1;
+                User32.GetWindowThreadProcessId(Handle, out var lpdwProcessId);
+                return Process.GetProcessById((int)lpdwProcessId);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An error occured identifying the desktop number. See additional details below." + Environment.NewLine + Environment.NewLine +
-                    ex.Message + Environment.NewLine +
-                    ex.Source + "::" + ex.TargetSite.Name);
-                Log.LogEvent("Exception", "", "", "Window", ex);
-                return 1;
+                Log.LogEvent("Window", $"Handle: {Handle}\nCaption: {GetWindowText()}", ex);
+                return null;
             }
-
         }
+
+        // equality overrides, IEquatable<Window>
+        public override bool Equals(object o) => o is Window ? Equals((Window)o) : base.Equals(o);
+        public bool Equals(Window other) => Handle == other.Handle;
+        public override int GetHashCode() => Handle.ToInt32().GetHashCode();
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace FreeVD
 {
-    partial class frmHotKey
+    partial class HotKeyForm
     {
         /// <summary>
         /// Required designer variable.

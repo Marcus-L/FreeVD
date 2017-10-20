@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO.IsolatedStorage;
-using System.Linq;
-using System.ServiceModel;
-using System.Threading.Tasks;
+using System.ComponentModel;
 using System.Windows.Forms;
-using WindowsDesktop;
+using System.Windows.Threading;
 
 namespace FreeVD
 {
     static class Program
     {
+        public static TrayContext Context;
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -21,52 +18,54 @@ namespace FreeVD
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            //Add Excluded windows
-            ExcludedWindowCaptions.Add("ASUS_Check");
-            ExcludedWindowCaptions.Add("NVIDIA GeForce Overlay");
-            ExcludedWindowCaptions.Add("FreeVD Settings");
+            // create default settings
+            EnsureDefaultSettings();
 
-            //Run the main form
-            Application.Run(MainForm = new frmMain());
+            // watch pinned apps/windows
+            PinWatcher.LoadPins();
+
+            Context = new TrayContext();
+            Application.Run(Context);
         }
 
-        public static frmMain MainForm;
-        public static string version
+        //private static void LoadPins()
+        //{
+        //    foreach (var window in Window.GetOpenWindows())
+        //    {
+        //        if (window.IsPinnedApplication)
+        //        {
+        //            if (!AppModel.PinnedApps.Contains(window.GetAppId()))
+        //            {
+        //                AppModel.PinnedApps.Add(window.GetAppId());
+        //            }
+        //        }
+        //        else if (window.IsPinnedWindow)
+        //        {
+        //            AppModel.PinnedWindows.Add(window);
+        //            Automation.AddAutom ationEventHandler(WindowPattern.WindowClosedEvent,
+        //                AutomationElement.FromHandle(window.Handle), TreeScope.Subtree,
+        //                (sender, e) => {
+        //                    AppModel.PinnedWindows.Remove(window);
+        //                });
+        //        }
+        //    }
+        //}
+
+        private static void WindowWatcher_WindowDestroyed(object obj, Window window, IntPtr lp)
         {
-            get { return typeof(Program).Assembly.GetName().Version.ToString(); }
+            AppModel.PinnedWindows.Remove(window);
         }
 
-        public static List<string> WallpaperStyles = new List<string>();
-        public static List<string> PinnedApps = new List<string>();
-        public static List<Window> windows = new List<Window>();
-        public static List<VDHotkey> hotkeys = new List<VDHotkey>();
-        public static VirtualDesktop[] Desktops = VirtualDesktop.GetDesktops();
-        public static List<string> ExcludedWindowCaptions = new List<string>();
-
-        //stats to log
-        public static uint PinCount = 0;
-        public static uint MoveCount = 0;
-        public static uint NavigateCount = 0;
-
-        public static void AddWindowToList(Window win)
+        private static void EnsureDefaultSettings()
         {
-            if (!Program.windows.Any(w => w.Handle == win.Handle))
+            if (Settings.Default == null)
             {
-                windows.Add(win);
+                Settings.Default = new Settings();
+                Settings.Default.Hotkeys.AddRange(VDHotkey.CreateDefaultHotkeys_Numpad());
+                Settings.Default.Hotkeys.AddRange(VDHotkey.CreateDefaultHotkeys());
+                Settings.Default.Hotkeys.ForEach(hotkey => hotkey.Register());
+                Settings.Save();
             }
-        }
-
-        public static bool IsExcludedWindow(string caption)
-        {
-            foreach(string s in ExcludedWindowCaptions)
-            {
-                if(caption == s)
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
     }
 }

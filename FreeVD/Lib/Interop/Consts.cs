@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace FreeVD.Lib.Interop
 {
@@ -12,5 +13,12 @@ namespace FreeVD.Lib.Interop
 
         public const bool EnumWindows_ContinueEnumerating = true;
         public const bool EnumWindows_StopEnumerating = false;
+
+        ///<summary>
+        ///Element not found.
+        ///</summary>
+        [Description("Element not found.")]
+        public const int TYPE_E_ELEMENTNOTFOUND = unchecked((int)0x8002802B);
     }
+
 }

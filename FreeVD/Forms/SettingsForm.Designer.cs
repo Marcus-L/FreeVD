@@ -1,6 +1,6 @@
 ﻿namespace FreeVD
 {
-    partial class frmMain
+    partial class SettingsForm
     {
         /// <summary>
         /// Required designer variable.
@@ -29,34 +29,28 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            this.SystemTray = new System.Windows.Forms.NotifyIcon(this.components);
-            this.SystemTrayMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.mnuSwitchDesktop = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuGatherWindows = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.mnuSettings = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuExit = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuPinnedApps = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.mnuUnpin = new System.Windows.Forms.ToolStripMenuItem();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
+            this.PinnedAppsMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.MenuUnpin = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tabs = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.lstHotkeys = new System.Windows.Forms.ListView();
+            this.HotkeyList = new System.Windows.Forms.ListView();
             this.colTask = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colHotKey = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnAddHotkey = new System.Windows.Forms.Button();
             this.btnDeleteHotkey = new System.Windows.Forms.Button();
             this.tabPinnedApps = new System.Windows.Forms.TabPage();
-            this.lstPinnedApps = new System.Windows.Forms.ListBox();
+            this.PinnedAppList = new System.Windows.Forms.ListView();
+            this.TypeHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.NameHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabOptions = new System.Windows.Forms.TabPage();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.lblVersion = new System.Windows.Forms.Label();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnApply = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.SystemTrayMenu.SuspendLayout();
-            this.mnuPinnedApps.SuspendLayout();
+            this.PinnedAppsMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -67,74 +61,20 @@
             this.tabOptions.SuspendLayout();
             this.SuspendLayout();
             // 
-            // SystemTray
+            // PinnedAppsMenu
             // 
-            this.SystemTray.ContextMenuStrip = this.SystemTrayMenu;
-            this.SystemTray.Icon = ((System.Drawing.Icon)(resources.GetObject("SystemTray.Icon")));
-            this.SystemTray.Text = "FreeVD";
-            this.SystemTray.Visible = true;
-            this.SystemTray.MouseClick += new System.Windows.Forms.MouseEventHandler(this.SystemTray_MouseClick);
-            this.SystemTray.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.SystemTray_MouseDoubleClick);
+            this.PinnedAppsMenu.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.PinnedAppsMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MenuUnpin});
+            this.PinnedAppsMenu.Name = "mnuPinnedApps";
+            this.PinnedAppsMenu.Size = new System.Drawing.Size(153, 48);
             // 
-            // SystemTrayMenu
+            // MenuUnpin
             // 
-            this.SystemTrayMenu.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.SystemTrayMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuSwitchDesktop,
-            this.mnuGatherWindows,
-            this.toolStripSeparator2,
-            this.mnuSettings,
-            this.mnuExit});
-            this.SystemTrayMenu.Name = "SystemTrayMenu";
-            this.SystemTrayMenu.ShowImageMargin = false;
-            this.SystemTrayMenu.Size = new System.Drawing.Size(175, 98);
-            this.SystemTrayMenu.Opening += new System.ComponentModel.CancelEventHandler(this.SystemTrayMenu_Opening);
-            // 
-            // mnuSwitchDesktop
-            // 
-            this.mnuSwitchDesktop.Name = "mnuSwitchDesktop";
-            this.mnuSwitchDesktop.Size = new System.Drawing.Size(174, 22);
-            this.mnuSwitchDesktop.Text = "Switch Desktop";
-            // 
-            // mnuGatherWindows
-            // 
-            this.mnuGatherWindows.Name = "mnuGatherWindows";
-            this.mnuGatherWindows.Size = new System.Drawing.Size(174, 22);
-            this.mnuGatherWindows.Text = "Bring All Windows Here";
-            this.mnuGatherWindows.Click += new System.EventHandler(this.mnuGatherWindows_Click);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(171, 6);
-            // 
-            // mnuSettings
-            // 
-            this.mnuSettings.Name = "mnuSettings";
-            this.mnuSettings.Size = new System.Drawing.Size(174, 22);
-            this.mnuSettings.Text = "Settings";
-            // 
-            // mnuExit
-            // 
-            this.mnuExit.Name = "mnuExit";
-            this.mnuExit.Size = new System.Drawing.Size(174, 22);
-            this.mnuExit.Text = "Exit";
-            // 
-            // mnuPinnedApps
-            // 
-            this.mnuPinnedApps.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.mnuPinnedApps.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuUnpin});
-            this.mnuPinnedApps.Name = "mnuPinnedApps";
-            this.mnuPinnedApps.Size = new System.Drawing.Size(107, 26);
-            this.mnuPinnedApps.Opening += new System.ComponentModel.CancelEventHandler(this.mnuPinnedApps_Opening);
-            // 
-            // mnuUnpin
-            // 
-            this.mnuUnpin.Name = "mnuUnpin";
-            this.mnuUnpin.Size = new System.Drawing.Size(106, 22);
-            this.mnuUnpin.Text = "Unpin";
-            this.mnuUnpin.Click += new System.EventHandler(this.mnuUnpin_Click);
+            this.MenuUnpin.Name = "MenuUnpin";
+            this.MenuUnpin.Size = new System.Drawing.Size(152, 22);
+            this.MenuUnpin.Text = "Unpin";
+            this.MenuUnpin.Click += new System.EventHandler(this.MenuUnpin_Click);
             // 
             // splitContainer1
             // 
@@ -173,7 +113,7 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.lstHotkeys);
+            this.tabPage1.Controls.Add(this.HotkeyList);
             this.tabPage1.Controls.Add(this.btnAddHotkey);
             this.tabPage1.Controls.Add(this.btnDeleteHotkey);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
@@ -185,19 +125,20 @@
             this.tabPage1.Text = "Hotkeys";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // lstHotkeys
+            // HotkeyList
             // 
-            this.lstHotkeys.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.HotkeyList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colTask,
             this.colHotKey});
-            this.lstHotkeys.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lstHotkeys.Location = new System.Drawing.Point(2, 2);
-            this.lstHotkeys.Margin = new System.Windows.Forms.Padding(2);
-            this.lstHotkeys.Name = "lstHotkeys";
-            this.lstHotkeys.Size = new System.Drawing.Size(522, 384);
-            this.lstHotkeys.TabIndex = 11;
-            this.lstHotkeys.UseCompatibleStateImageBehavior = false;
-            this.lstHotkeys.View = System.Windows.Forms.View.Details;
+            this.HotkeyList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.HotkeyList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.HotkeyList.Location = new System.Drawing.Point(2, 2);
+            this.HotkeyList.Margin = new System.Windows.Forms.Padding(2);
+            this.HotkeyList.Name = "HotkeyList";
+            this.HotkeyList.Size = new System.Drawing.Size(522, 384);
+            this.HotkeyList.TabIndex = 11;
+            this.HotkeyList.UseCompatibleStateImageBehavior = false;
+            this.HotkeyList.View = System.Windows.Forms.View.Details;
             // 
             // colTask
             // 
@@ -231,27 +172,41 @@
             // 
             // tabPinnedApps
             // 
-            this.tabPinnedApps.Controls.Add(this.lstPinnedApps);
+            this.tabPinnedApps.Controls.Add(this.PinnedAppList);
             this.tabPinnedApps.Location = new System.Drawing.Point(4, 22);
             this.tabPinnedApps.Margin = new System.Windows.Forms.Padding(2);
             this.tabPinnedApps.Name = "tabPinnedApps";
             this.tabPinnedApps.Padding = new System.Windows.Forms.Padding(2);
             this.tabPinnedApps.Size = new System.Drawing.Size(526, 388);
             this.tabPinnedApps.TabIndex = 3;
-            this.tabPinnedApps.Text = "Pinned Applications";
+            this.tabPinnedApps.Text = "Pinned Apps";
             this.tabPinnedApps.UseVisualStyleBackColor = true;
             // 
-            // lstPinnedApps
+            // PinnedAppList
             // 
-            this.lstPinnedApps.ContextMenuStrip = this.mnuPinnedApps;
-            this.lstPinnedApps.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lstPinnedApps.FormattingEnabled = true;
-            this.lstPinnedApps.HorizontalScrollbar = true;
-            this.lstPinnedApps.Location = new System.Drawing.Point(2, 2);
-            this.lstPinnedApps.Margin = new System.Windows.Forms.Padding(2);
-            this.lstPinnedApps.Name = "lstPinnedApps";
-            this.lstPinnedApps.Size = new System.Drawing.Size(522, 384);
-            this.lstPinnedApps.TabIndex = 0;
+            this.PinnedAppList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.TypeHeader,
+            this.NameHeader});
+            this.PinnedAppList.ContextMenuStrip = this.PinnedAppsMenu;
+            this.PinnedAppList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.PinnedAppList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.PinnedAppList.Location = new System.Drawing.Point(2, 2);
+            this.PinnedAppList.MultiSelect = false;
+            this.PinnedAppList.Name = "PinnedAppList";
+            this.PinnedAppList.Size = new System.Drawing.Size(522, 384);
+            this.PinnedAppList.TabIndex = 0;
+            this.PinnedAppList.UseCompatibleStateImageBehavior = false;
+            this.PinnedAppList.View = System.Windows.Forms.View.Details;
+            // 
+            // TypeHeader
+            // 
+            this.TypeHeader.Text = "Type";
+            this.TypeHeader.Width = 87;
+            // 
+            // NameHeader
+            // 
+            this.NameHeader.Text = "Name";
+            this.NameHeader.Width = 428;
             // 
             // tabOptions
             // 
@@ -294,7 +249,7 @@
             this.btnOK.TabIndex = 22;
             this.btnOK.Text = "&OK";
             this.btnOK.UseVisualStyleBackColor = true;
-            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
+            this.btnOK.Click += new System.EventHandler(this.ButtonOK_Click);
             // 
             // btnApply
             // 
@@ -307,7 +262,7 @@
             this.btnApply.TabIndex = 21;
             this.btnApply.Text = "&Apply";
             this.btnApply.UseVisualStyleBackColor = true;
-            this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
+            this.btnApply.Click += new System.EventHandler(this.ButtonApply_Click);
             // 
             // btnCancel
             // 
@@ -320,9 +275,9 @@
             this.btnCancel.TabIndex = 20;
             this.btnCancel.Text = "&Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            this.btnCancel.Click += new System.EventHandler(this.ButtonCancel_Click);
             // 
-            // frmMain
+            // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -333,12 +288,11 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(560, 500);
-            this.Name = "frmMain";
+            this.Name = "SettingsForm";
             this.Padding = new System.Windows.Forms.Padding(5);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FreeVD Settings";
-            this.SystemTrayMenu.ResumeLayout(false);
-            this.mnuPinnedApps.ResumeLayout(false);
+            this.PinnedAppsMenu.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.Panel2.PerformLayout();
@@ -354,15 +308,8 @@
         }
 
         #endregion
-        internal System.Windows.Forms.NotifyIcon SystemTray;
-        internal System.Windows.Forms.ContextMenuStrip SystemTrayMenu;
-        internal System.Windows.Forms.ToolStripMenuItem mnuSettings;
-        internal System.Windows.Forms.ToolStripMenuItem mnuExit;
-        private System.Windows.Forms.ToolStripMenuItem mnuSwitchDesktop;
-        private System.Windows.Forms.ContextMenuStrip mnuPinnedApps;
-        private System.Windows.Forms.ToolStripMenuItem mnuUnpin;
-        private System.Windows.Forms.ToolStripMenuItem mnuGatherWindows;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ContextMenuStrip PinnedAppsMenu;
+        private System.Windows.Forms.ToolStripMenuItem MenuUnpin;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.Label lblVersion;
         internal System.Windows.Forms.Button btnOK;
@@ -370,15 +317,17 @@
         internal System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.TabControl tabs;
         private System.Windows.Forms.TabPage tabPage1;
-        internal System.Windows.Forms.ListView lstHotkeys;
+        internal System.Windows.Forms.ListView HotkeyList;
         internal System.Windows.Forms.ColumnHeader colTask;
         internal System.Windows.Forms.ColumnHeader colHotKey;
         internal System.Windows.Forms.Button btnAddHotkey;
         internal System.Windows.Forms.Button btnDeleteHotkey;
         private System.Windows.Forms.TabPage tabPinnedApps;
-        private System.Windows.Forms.ListBox lstPinnedApps;
         private System.Windows.Forms.TabPage tabOptions;
         private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.ListView PinnedAppList;
+        private System.Windows.Forms.ColumnHeader TypeHeader;
+        private System.Windows.Forms.ColumnHeader NameHeader;
     }
 }
 

@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace FreeVD
 {
-    public partial class frmHotKey : Form
+    public partial class HotKeyForm : Form
     {
-        public frmHotKey()
+        public HotKeyForm()
         {
             InitializeComponent();
             Array values = Enum.GetValues(typeof(Keys));

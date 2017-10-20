@@ -68,7 +68,6 @@ namespace FreeVD.Lib.Hotkeys
             }
             else
             {
-                Debug.WriteLine($"registered {HotkeyID}: {Modifiers} {Key}");
                 Window.Hotkeys[HotkeyID] = this;
                 Registered = true;
                 return true;

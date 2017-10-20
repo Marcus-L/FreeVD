@@ -10,6 +10,10 @@ using System.Threading.Tasks;
 
 namespace FreeVD
 {
+    public class PinnedWindow
+    {
+    }
+
     public class Settings
     {
         private static IsolatedStorageFile Storage = IsolatedStorageFile.GetUserStoreForAssembly();
@@ -19,6 +23,9 @@ namespace FreeVD
         public bool AutoStart { get; set; }
 
         public List<VDHotkey> Hotkeys { get; set; } = new List<VDHotkey>();
+
+        [JsonIgnore]
+        public List<Window> PinnedWindows = new List<Window>();
 
         private const string SETTINGS_FILENAME = "settings.json";
 
@@ -33,7 +40,6 @@ namespace FreeVD
                     {
                         string json = reader.ReadToEnd();
                         Default = JsonConvert.DeserializeObject<Settings>(json);
-                        Debug.WriteLine("loaded settings: " + json);
                         Default.Hotkeys.ForEach(hotkey => hotkey.Register());
                         return Default;
                     }

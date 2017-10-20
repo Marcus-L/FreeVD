@@ -6,8 +6,6 @@ namespace FreeVD.Lib.Interop
 {
     public static class User32
     {
-        public delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
-
         [DllImport("user32.dll")]
         public static extern bool EnumWindows(EnumWindowsProc enumProc, IntPtr lParam);
 
@@ -34,13 +32,13 @@ namespace FreeVD.Lib.Interop
                                                 StringBuilder lpClassName,
                                                 int nMaxCount);
 
-        [DllImport("user32", SetLastError = true)]
+        [DllImport("user32.dll", SetLastError = true)]
         public static extern int RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
 
-        [DllImport("user32", SetLastError = true)]
+        [DllImport("user32.dll", SetLastError = true)]
         public static extern int UnregisterHotKey(IntPtr hWnd, int id);
 
-        [DllImport("USER32.DLL")]
+        [DllImport("user32.dll")]
         public static extern IntPtr GetShellWindow();
 
         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
@@ -51,5 +49,18 @@ namespace FreeVD.Lib.Interop
 
         [DllImport("user32.dll")]
         public static extern int GetSystemMetrics(SystemMetric smIndex);
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr SetWindowsHookEx(HookType code,
+            HookProc func,
+            IntPtr hInstance,
+            int threadID);
+
+        [DllImport("user32.dll")]
+        public static extern int UnhookWindowsHookEx(IntPtr hhook); 
+
+        [DllImport("user32.dll")]
+        public static extern int CallNextHookEx(IntPtr hhook,
+            int code, IntPtr wParam, IntPtr lParam);
     }
 }

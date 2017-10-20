@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using WindowsDesktop;
 
 namespace FreeVD
 {
@@ -40,25 +41,37 @@ namespace FreeVD
         {
             Callback = () =>
             {
+                // non-window Actions
                 switch (Action)
                 {
                     case VDAction.GoToDesktop:
-                        VirtualDesktopFunctions.GoToDesktop(DesktopNumber);
-                        break;
+                        Window.EnsureDesktops(DesktopNumber);
+                        VirtualDesktop.GetDesktops()[DesktopNumber - 1].Switch();
+                        return;
+                }
+                // window Actions
+                var window = Window.GetForegroundWindow();
+
+                // skip non-movable windows
+                if (window.IsDesktop || window.DesktopNumber == -1) return; 
+
+                // perform action
+                switch (Action)
+                {
                     case VDAction.MoveWindowToDesktop:
-                        VirtualDesktopFunctions.DesktopMove(DesktopNumber, Follow);
+                        window.MoveToDesktop(DesktopNumber).Follow(Follow);
                         break;
                     case VDAction.MoveWindowToNextDesktop:
-                        VirtualDesktopFunctions.DesktopMoveNext(Follow);
+                        window.MoveToNextDesktop().Follow(Follow);
                         break;
                     case VDAction.MoveWindowToPreviousDesktop:
-                        VirtualDesktopFunctions.DesktopMovePrevious(Follow);
+                        window.MoveToPreviousDesktop().Follow(Follow);
                         break;
                     case VDAction.TogglePinApplication:
-                        VirtualDesktopFunctions.PinApp();
+                        window.TogglePinApp();
                         break;
                     case VDAction.TogglePinWindow:
-                        VirtualDesktopFunctions.PinWindow();
+                        window.TogglePinWindow();
                         break;
                     default:
                         throw new NotImplementedException($"Unhandled action: {Action}");
