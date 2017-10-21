@@ -7,11 +7,15 @@ using System.Windows.Forms;
 using WindowsDesktop;
 using Newtonsoft.Json;
 using FreeVD.Lib.Interop;
+using System.Reactive.Linq;
 
 namespace FreeVD
 {
     public partial class SettingsForm : Form
     {
+        private IDisposable Subscription;
+        private int LastStateHash;
+
         public SettingsForm()
         {
             InitializeComponent();
@@ -24,6 +28,11 @@ namespace FreeVD
             };
 
             // TODO: Add polling to update Window titles when open
+            Subscription = Observable.Interval(TimeSpan.FromMilliseconds(1000))
+                .Subscribe(token =>
+                {
+                    RefreshPins();
+                });
 
             Load += (obj, args) =>
             {
@@ -42,13 +51,14 @@ namespace FreeVD
             };
 
             Shown += (obj, args) => User32.SetForegroundWindow(Handle);
+            FormClosed += (obj, args) => Subscription.Dispose();
         }
 
         // button event handlers
         private void ButtonApply_Click(object sender, EventArgs e) => SaveSettings(false);
         private void ButtonOK_Click(object sender, EventArgs e) => SaveSettings(true);
         private void ButtonCancel_Click(object sender, EventArgs e) => Close();
-        
+
         private void LoadSettings()
         {
             cbAutoStart.Checked = Settings.Default.AutoStart;
@@ -74,6 +84,13 @@ namespace FreeVD
             if (andClose) Close();
         }
 
+        private int GetStateHash()
+        {
+            return string.Join("|",
+                AppModel.PinnedWindows.Select(w => w.GetWindowText())
+                    .Union(AppModel.PinnedApps.Select(a => a.Name))).GetHashCode();
+        }
+
         public void RefreshPins()
         {
             if (InvokeRequired)
@@ -82,11 +99,19 @@ namespace FreeVD
                 return;
             }
 
-            PinnedAppList.Items.Clear();
-            Action<IEnumerable<string[]>> addItems = items => 
-                PinnedAppList.Items.AddRange(items.Select(s => new ListViewItem(s)).ToArray());
-            addItems(AppModel.PinnedApps.Select(a => new string[] { "Application", a.Name, JsonConvert.SerializeObject(a) }));
-            addItems(AppModel.PinnedWindows.Select(w => new string[] { "Window", w.GetWindowText(), w.Handle.ToString() }));
+            // keep track of state to only refresh the window on changes
+            // to avoid flickering
+            var hash = GetStateHash();
+            if (hash != LastStateHash)
+            {
+                PinnedAppList.Items.Clear();
+                Action<IEnumerable<string[]>> addItems = items =>
+                    PinnedAppList.Items.AddRange(items.Select(s => new ListViewItem(s)).ToArray());
+                addItems(AppModel.PinnedApps.Select(a => new string[] { "Application", a.Name, JsonConvert.SerializeObject(a) }));
+                addItems(AppModel.PinnedWindows.Select(w => new string[] { "Window", w.GetWindowText(), w.Handle.ToString() }));
+
+                LastStateHash = hash;
+            }
         }
 
         private void MenuUnpin_Click(object sender, EventArgs e)

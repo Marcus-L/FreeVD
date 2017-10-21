@@ -159,8 +159,13 @@ namespace FreeVD
         {
             if (DesktopNumber != -1)
             {
+                var info = AppInfo.FromWindow(this);
+                if (IsPinnedApplication)
+                {
+                    VirtualDesktop.UnpinApplication(info.Id);
+                    AppModel.PinnedApps.Remove(info);
+                }
                 AppModel.PinnedWindows.Remove(this);
-                AppModel.PinnedApps.Remove(AppInfo.FromWindow(this));
                 VirtualDesktopHelper.MoveToDesktop(Handle, desktop);
             }
             return this;
