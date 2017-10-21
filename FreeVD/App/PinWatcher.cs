@@ -18,25 +18,39 @@ namespace FreeVD
                 });
         }
 
-        public static void LoadPins()
+        public static void Initialize()
         {
+            // Watch for windows opening, check if they are pinned applications
+            Automation.AddAutomationEventHandler(WindowPattern.WindowOpenedEvent,
+              AutomationElement.RootElement, TreeScope.Children,
+                async (sender, e) =>
+                {
+                    var el = sender as AutomationElement;
+                    var window = new Window((IntPtr)el.Current.NativeWindowHandle);
+                    await Task.Delay(750); // give window some time to fully open
+                    ProcessWindow(window);
+                });
+
             foreach (var window in Window.GetOpenWindows())
             {
-                Debug.WriteLine($">> {window.IsPinnedApplication} {window.IsPinnedWindow}");
-                if (window.IsPinnedApplication)
+                ProcessWindow(window);
+            }
+        }
+
+        private static void ProcessWindow(Window window)
+        {
+            if (window.IsPinnedApplication)
+            {
+                var id = window.GetAppId();
+                if (!AppModel.PinnedApps.Any(a => a.Id == id))
                 {
-                    var id = window.GetAppId();
-                    if (!AppModel.PinnedApps.Any(a => a.Id == id))
-                    {
-                        AppModel.PinnedApps.Add(AppInfo.FromWindow(window));
-                    }
+                    AppModel.PinnedApps.Add(AppInfo.FromWindow(window));
                 }
-                else if (window.IsPinnedWindow)
-                {
-                    Debug.WriteLine($"whaaa {window.IsPinnedApplication}");
-                    AppModel.PinnedWindows.Add(window);
-                    WatchWindow(window);
-                }
+            }
+            else if (window.IsPinnedWindow)
+            {
+                AppModel.PinnedWindows.Add(window);
+                WatchWindow(window);
             }
         }
     }

@@ -2,6 +2,7 @@
 using System;
 using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Automation;
 using System.Windows.Forms;
 using WindowsDesktop;
@@ -11,7 +12,7 @@ namespace FreeVD
     public class TrayContext : ApplicationContext
     {
         private NotifyIcon TrayIcon { get; set; }
-        private SettingsForm SettingsForm { get; set; } = new SettingsForm();
+        private SettingsForm SettingsForm { get; set; }
 
         public TrayContext()
         {
@@ -41,6 +42,9 @@ namespace FreeVD
 
             // remove icon when exiting
             Application.ApplicationExit += (obj, args) => TrayIcon.Visible = false;
+
+            // watch pinned apps/windows
+            PinWatcher.Initialize();
         }
 
         private void ConfigureDesktopsMenu()
@@ -66,23 +70,21 @@ namespace FreeVD
 
         private void OpenSettings()
         {
-            if (SettingsForm.Visible)
+            if (SettingsForm?.Visible ?? false)
             {
-                if (VirtualDesktop.Current.GetNumber() == 
+                if (VirtualDesktop.Current.GetNumber() != 
                     VirtualDesktop.FromHwnd(SettingsForm.Handle).GetNumber())
-                {
-                    User32.SetForegroundWindow(SettingsForm.Handle);
-                }
-                else
                 {
                     VirtualDesktopHelper.MoveToDesktop(SettingsForm.Handle, 
                         VirtualDesktop.Current);
-                    User32.SetForegroundWindow(SettingsForm.Handle);
                 }
+                User32.SetForegroundWindow(SettingsForm.Handle);
             }
             else
             {
+                SettingsForm = new SettingsForm();
                 SettingsForm.ShowDialog();
+                SettingsForm = null;
             }
         }
     }

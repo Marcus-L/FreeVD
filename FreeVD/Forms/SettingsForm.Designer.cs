@@ -45,7 +45,7 @@
             this.TypeHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.NameHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabOptions = new System.Windows.Forms.TabPage();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.cbAutoStart = new System.Windows.Forms.CheckBox();
             this.lblVersion = new System.Windows.Forms.Label();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnApply = new System.Windows.Forms.Button();
@@ -67,12 +67,12 @@
             this.PinnedAppsMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.MenuUnpin});
             this.PinnedAppsMenu.Name = "mnuPinnedApps";
-            this.PinnedAppsMenu.Size = new System.Drawing.Size(153, 48);
+            this.PinnedAppsMenu.Size = new System.Drawing.Size(107, 26);
             // 
             // MenuUnpin
             // 
             this.MenuUnpin.Name = "MenuUnpin";
-            this.MenuUnpin.Size = new System.Drawing.Size(152, 22);
+            this.MenuUnpin.Size = new System.Drawing.Size(106, 22);
             this.MenuUnpin.Text = "Unpin";
             this.MenuUnpin.Click += new System.EventHandler(this.MenuUnpin_Click);
             // 
@@ -210,7 +210,7 @@
             // 
             // tabOptions
             // 
-            this.tabOptions.Controls.Add(this.checkBox1);
+            this.tabOptions.Controls.Add(this.cbAutoStart);
             this.tabOptions.Location = new System.Drawing.Point(4, 22);
             this.tabOptions.Name = "tabOptions";
             this.tabOptions.Size = new System.Drawing.Size(526, 388);
@@ -218,15 +218,15 @@
             this.tabOptions.Text = "Options";
             this.tabOptions.UseVisualStyleBackColor = true;
             // 
-            // checkBox1
+            // cbAutoStart
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(16, 16);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(278, 17);
-            this.checkBox1.TabIndex = 0;
-            this.checkBox1.Text = "Start FreeVD automatically when I sign in to Windows";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.cbAutoStart.AutoSize = true;
+            this.cbAutoStart.Location = new System.Drawing.Point(16, 16);
+            this.cbAutoStart.Name = "cbAutoStart";
+            this.cbAutoStart.Size = new System.Drawing.Size(278, 17);
+            this.cbAutoStart.TabIndex = 0;
+            this.cbAutoStart.Text = "Start FreeVD automatically when I sign in to Windows";
+            this.cbAutoStart.UseVisualStyleBackColor = true;
             // 
             // lblVersion
             // 
@@ -242,10 +242,10 @@
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOK.Location = new System.Drawing.Point(473, 2);
+            this.btnOK.Location = new System.Drawing.Point(298, 3);
             this.btnOK.Margin = new System.Windows.Forms.Padding(2);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(53, 27);
+            this.btnOK.Size = new System.Drawing.Size(74, 27);
             this.btnOK.TabIndex = 22;
             this.btnOK.Text = "&OK";
             this.btnOK.UseVisualStyleBackColor = true;
@@ -255,10 +255,10 @@
             // 
             this.btnApply.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnApply.Location = new System.Drawing.Point(414, 2);
+            this.btnApply.Location = new System.Drawing.Point(376, 3);
             this.btnApply.Margin = new System.Windows.Forms.Padding(2);
             this.btnApply.Name = "btnApply";
-            this.btnApply.Size = new System.Drawing.Size(55, 27);
+            this.btnApply.Size = new System.Drawing.Size(74, 27);
             this.btnApply.TabIndex = 21;
             this.btnApply.Text = "&Apply";
             this.btnApply.UseVisualStyleBackColor = true;
@@ -268,10 +268,11 @@
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCancel.Location = new System.Drawing.Point(354, 2);
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnCancel.Location = new System.Drawing.Point(454, 3);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(2);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(56, 27);
+            this.btnCancel.Size = new System.Drawing.Size(74, 27);
             this.btnCancel.TabIndex = 20;
             this.btnCancel.Text = "&Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -279,8 +280,10 @@
             // 
             // SettingsForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AcceptButton = this.btnOK;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(544, 461);
             this.Controls.Add(this.splitContainer1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -324,7 +327,7 @@
         internal System.Windows.Forms.Button btnDeleteHotkey;
         private System.Windows.Forms.TabPage tabPinnedApps;
         private System.Windows.Forms.TabPage tabOptions;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox cbAutoStart;
         private System.Windows.Forms.ListView PinnedAppList;
         private System.Windows.Forms.ColumnHeader TypeHeader;
         private System.Windows.Forms.ColumnHeader NameHeader;

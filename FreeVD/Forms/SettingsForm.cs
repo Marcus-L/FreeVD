@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using WindowsDesktop;
 using Newtonsoft.Json;
-using Windows.Management.Deployment;
+using FreeVD.Lib.Interop;
 
 namespace FreeVD
 {
@@ -24,6 +23,8 @@ namespace FreeVD
                 MenuUnpin.Enabled = PinnedAppList.SelectedItems.Count > 0;
             };
 
+            // TODO: Add polling to update Window titles when open
+
             Load += (obj, args) =>
             {
                 // reload items
@@ -36,7 +37,11 @@ namespace FreeVD
                 })).ToArray());
                 HotkeyList.Refresh();
                 RefreshPins();
+
+                LoadSettings();
             };
+
+            Shown += (obj, args) => User32.SetForegroundWindow(Handle);
         }
 
         // button event handlers
@@ -44,7 +49,12 @@ namespace FreeVD
         private void ButtonOK_Click(object sender, EventArgs e) => SaveSettings(true);
         private void ButtonCancel_Click(object sender, EventArgs e) => Close();
         
-        public void SaveSettings(bool andClose)
+        private void LoadSettings()
+        {
+            cbAutoStart.Checked = Settings.Default.AutoStart;
+        }
+
+        private void SaveSettings(bool andClose)
         {
             // deactivate all the active hotkeys
             Settings.Default.Hotkeys.ForEach(hotkey => hotkey.Unregister());
@@ -57,6 +67,7 @@ namespace FreeVD
                         lvi.SubItems[lvi.SubItems.Count - 1].Text
                     )
                 ));
+            Settings.Default.AutoStart = cbAutoStart.Checked;
             Settings.Save();
             Settings.Reload(); // reload settings to activate hotkeys
 

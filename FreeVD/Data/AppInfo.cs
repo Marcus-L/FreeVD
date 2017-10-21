@@ -79,11 +79,13 @@ namespace FreeVD
 
         private static string GetPackageDisplayName(Package package)
         {
-            using (var registryHive = RegistryKey.OpenBaseKey(RegistryHive.ClassesRoot, RegistryView.Registry32))
+            using (var capabilitiesKey = Registry.ClassesRoot.OpenSubKey(
+                @"Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel" + 
+                $@"\Repository\Packages\{package.Id.FullName}\App\Capabilities"))
             {
-                var capabilitiesKey = registryHive.OpenSubKey($@"Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\Repository\Packages\{package.Id.FullName}\App\Capabilities");
                 var sb = new StringBuilder(256);
-                Shlwapi.SHLoadIndirectString((string)capabilitiesKey.GetValue("ApplicationName"), sb, sb.Capacity, IntPtr.Zero);
+                Shlwapi.SHLoadIndirectString((string)capabilitiesKey.GetValue("ApplicationName"), 
+                    sb, sb.Capacity, IntPtr.Zero);
                 return sb.ToString();
             }
         }
