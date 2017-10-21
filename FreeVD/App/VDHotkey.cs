@@ -101,7 +101,7 @@ namespace FreeVD
                     Action = VDAction.MoveWindowToPreviousDesktop,
                     Follow = true
                 },
-                new VDHotkey(Keys.Z, Keys.Control | Keys.LWin)
+                new VDHotkey(Keys.W, Keys.Control | Keys.LWin)
                 {
                     Action = VDAction.TogglePinWindow
                 },

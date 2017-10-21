@@ -20,8 +20,17 @@ SOFTWARE.
 
 Credits
 ===================================================================================
+Copyright (c) .NET Foundation and Contributors
+Rx.NET: https://github.com/Reactive-Extensions/Rx.NET
+
+Copyright (c) 2007 James Newton-King
+Newtonsoft.Json: https://www.newtonsoft.com/json
+
+Copyright (c) 2012-2014 Mehdi Khalili
+Humanizer: https://github.com/Humanizr/Humanizer
+
 Copyright (c) 2017 Michael Zomparelli
 zVirtualDesktop: https://github.com/mzomparelli/zVirtualDesktop/tree/b623c87da69e9b45cf87141a216787a30477b934
 
 Copyright (c) 2015 Manato KAMEYA
-Wrapper for API to Virtual Desktop on Windows 10: https://github.com/Grabacr07/VirtualDesktop
+VirtualDesktop: https://github.com/Grabacr07/VirtualDesktop
