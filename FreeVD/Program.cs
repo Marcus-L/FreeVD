@@ -14,6 +14,10 @@ namespace FreeVD
         [STAThread]
         static void Main()
         {
+            if (!Utils.EnsureMinimumOSVersion() ||
+                !Utils.EnsureSingleInstance())
+                return;
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 

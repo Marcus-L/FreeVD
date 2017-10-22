@@ -92,6 +92,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App\PinWatcher.cs" />
+    <Compile Include="App\Utils.cs" />
     <Compile Include="App\VDExtensions.cs" />
     <Compile Include="Data\AppModel.cs" />
     <Compile Include="Data\AppInfo.cs" />

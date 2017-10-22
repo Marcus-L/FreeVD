@@ -15,5 +15,6 @@ namespace FreeVD.Lib.Interop
         public int Code;
         public IntPtr wParam;
         public IntPtr lParam;
+        public bool Handled;
     }
 }

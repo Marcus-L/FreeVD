@@ -28,15 +28,16 @@ namespace FreeVD.Lib.Hooks
                 return User32.CallNextHookEx(m_hhook, code, wParam, lParam);
 
             // Let clients determine what to do
-            Hooked(new HookEventArgs
+            var args = new HookEventArgs
             {
                 Code = code,
                 wParam = wParam,
                 lParam = lParam
-            });
+            };
+            Hooked(args);
 
-            // Yield to the next hook in the chain
-            return User32.CallNextHookEx(m_hhook, code, wParam, lParam);
+            // Yield to the next hook in the chain unless message was handled
+            return args.Handled ? 1 : User32.CallNextHookEx(m_hhook, code, wParam, lParam);
         }
 
         // Install the hook

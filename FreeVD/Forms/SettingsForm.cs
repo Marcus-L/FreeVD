@@ -93,11 +93,8 @@ namespace FreeVD
 
         public void RefreshPins()
         {
-            if (InvokeRequired)
-            {
-                Invoke((Action)(() => RefreshPins()));
-                return;
-            }
+            // join main UI thread if necessary
+            if (InvokeRequired) { Invoke((Action)RefreshPins); return; }
 
             // keep track of state to only refresh the window on changes
             // to avoid flickering

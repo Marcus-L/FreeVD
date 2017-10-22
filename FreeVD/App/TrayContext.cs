@@ -45,6 +45,9 @@ namespace FreeVD
 
             // watch pinned apps/windows
             PinWatcher.Initialize();
+
+            // open settings if app was started again
+            Utils.ListenForAppStarts(OpenSettings);
         }
 
         private void ConfigureDesktopsMenu()

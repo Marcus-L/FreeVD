@@ -73,7 +73,7 @@ namespace FreeVD
                 ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true))
             {
                 string appname = typeof(Program).Assembly.GetName().Name;
-                return rk?.GetValue(appname).ToString() == Application.ExecutablePath.ToString();
+                return rk?.GetValue(appname)?.ToString() == Application.ExecutablePath.ToString();
             }
         }
 
