@@ -41,14 +41,8 @@ namespace FreeVD.Lib.Interop
         [DllImport("user32.dll")]
         public static extern IntPtr GetShellWindow();
 
-        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr FindWindowEx(IntPtr parentHandle, IntPtr childAfter, string lclassName, string windowTitle);
-
         [DllImport("user32.dll")]
         public static extern bool SetForegroundWindow(IntPtr hWnd);
-
-        [DllImport("user32.dll")]
-        public static extern int GetSystemMetrics(SystemMetric smIndex);
 
         [DllImport("user32.dll")]
         public static extern IntPtr SetWindowsHookEx(HookType code,
@@ -62,5 +56,14 @@ namespace FreeVD.Lib.Interop
         [DllImport("user32.dll")]
         public static extern int CallNextHookEx(IntPtr hhook,
             int code, IntPtr wParam, IntPtr lParam);
+
+        [DllImport("user32.dll")]
+        public static extern uint MapVirtualKey(uint uCode, uint uMapType);
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetKeyboardLayout(uint idThread);
+
+        [DllImport("user32.dll")]
+        public static extern int ToUnicodeEx(uint wVirtKey, uint wScanCode, byte[] lpKeyState, [Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pwszBuff, int cchBuff, uint wFlags, IntPtr dwhkl);
     }
 }
