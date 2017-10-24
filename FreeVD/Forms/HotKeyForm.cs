@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Humanizer;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
@@ -10,105 +10,139 @@ using System.Windows.Forms;
 
 namespace FreeVD
 {
-    public partial class HotKeyForm : Form
+    public partial class HotkeyForm : Form
     {
-        public HotKeyForm()
+        public class ActionItem
+        {
+            public VDAction Action { get; set; }
+            public string Text { get; set; }
+        }
+
+        public ActionItem SelectedAction => (ActionItem)ComboAction.SelectedItem;
+
+        public VDHotkey Hotkey { get; set; }
+
+        public HotkeyForm()
         {
             InitializeComponent();
             Array values = Enum.GetValues(typeof(Keys));
 
-            foreach (Keys k in values)
+            var actions = Enum.GetValues(typeof(VDAction)).Cast<VDAction>()
+                .Select(vda => new ActionItem()
+                {
+                    Text = vda.Humanize(LetterCasing.Title),
+                    Action = vda
+                });
+
+            ComboAction.ValueMember = "Action";
+            ComboAction.DisplayMember = "Text";
+            ComboAction.DataSource = actions.ToList();
+
+            Load += (obj, args) =>
             {
-                cmbKey.Items.Add(k.ToString());
+                CbFollow.Checked = Hotkey.Follow;
+                NumDesktop.Value = Hotkey.DesktopNumber;
+                TbKeys.Text = Hotkey.ToString();
+                ComboAction.SelectedValue = Hotkey.Action;
+                ConfigureOptions();
+                ActiveControl = TbKeys;
+            };
+        }
+
+        private void ComboAction_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (Hotkey != null && Hotkey.Action != SelectedAction.Action)
+            {
+                Hotkey.Action = SelectedAction.Action;
+                ConfigureOptions();
             }
         }
 
-        private void txtHotkey_KeyPress(object sender, KeyPressEventArgs e)
+        private void NumDesktop_ValueChanged(object sender, EventArgs e)
         {
-            
+            Hotkey.DesktopNumber = (int)NumDesktop.Value;
         }
 
-        private void txtHotkey_KeyDown(object sender, KeyEventArgs e)
-        {            
-
+        private void CbFollow_CheckedChanged(object sender, EventArgs e)
+        {
+            Hotkey.Follow = CbFollow.Checked;
         }
 
-        private void btnSave_Click(object sender, EventArgs e)
+        private void ConfigureOptions()
         {
-            //Hotkey hk = new Hotkey(cmbDesktopNumber.Text);
-            //HotkeyItem hki = new HotkeyItem(cmbHotkeyType.Text, hk);
-            //KeysConverter kc = new KeysConverter();
-            //if (hk.Register((Keys)kc.ConvertFromString(cmbKey.Text), chkALT.Checked, chkCTRL.Checked, chkSHIFT.Checked, chkWIN.Checked) == true)
-            //{
-            //    Program.hotkeys.Add(hki);
+            NumDesktop.Enabled = SelectedAction.Text.EndsWith("To Desktop");
+            if (!NumDesktop.Enabled)
+            {
+                Hotkey.DesktopNumber = 0;
+                NumDesktop.Value = 0;
+            }
+            CbFollow.Enabled = SelectedAction.Text.StartsWith("Move Window");
+            if (!CbFollow.Enabled)
+            {
+                Hotkey.Follow = false;
+                CbFollow.Checked = false;
+            }
+        }
 
-            //    switch (cmbHotkeyType.Text)
-            //    {
-            //        case "Navigate to Desktop":
-            //            hk.Callback = VirtualDesktopFunctions.DesktopGo;
-            //            break;
-            //        case "Move Window to Desktop":
-            //            switch (cmbDesktopNumber.Text)
-            //            {
-            //                case "1":
-            //                case "2":
-            //                case "3":
-            //                case "4":
-            //                case "5":
-            //                case "6":
-            //                case "7":
-            //                case "8":
-            //                case "9":
-            //                    hk.Callback = VirtualDesktopFunctions.DesktopMove;
-            //                    break;
-            //                case "Next":
-            //                    hk.Callback = VirtualDesktopFunctions.DesktopMoveNext;
-            //                    break;
-            //                case "Previous":
-            //                    hk.Callback = VirtualDesktopFunctions.DesktopMovePrevious;
-            //                    break;
-            //                default:
-            //                    break;
-            //            }
-            //            break;
-            //        case "Move Window to Desktop & Follow":
-            //            switch (cmbDesktopNumber.Text)
-            //            {
-            //                case "1":
-            //                case "2":
-            //                case "3":
-            //                case "4":
-            //                case "5":
-            //                case "6":
-            //                case "7":
-            //                case "8":
-            //                case "9":
-            //                    hk.Callback = VirtualDesktopFunctions.DesktopMoveFollow;
-            //                    break;
-            //                case "Next":
-            //                    hk.Callback = VirtualDesktopFunctions.DesktopMoveNextFollow;
-            //                    break;
-            //                case "Previous":
-            //                    hk.Callback = VirtualDesktopFunctions.DesktopMovePreviousFollow;
-            //                    break;
-            //                default:
-            //                    break;
-            //            }
-            //            break;
-            //        case "Pin/Unpin Window":
-            //            hk.Callback = VirtualDesktopFunctions.PinWindow;
-            //            break;
-            //        case "Pin/Unpin Application":
-            //            hk.Callback = VirtualDesktopFunctions.PinApp;
-            //            break;
-            //        default:
-            //            break;
-            //    }
+        private void BtnOK_Click(object sender, EventArgs e)
+        {
+            if (NumDesktop.Enabled && (NumDesktop.Value < 1 || NumDesktop.Value > 20))
+            {
+                MessageBox.Show("Desktop Number must be between 1 and 20.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (Hotkey.Key == 0)
+            {
+                MessageBox.Show("Please select a valid hotkey.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            DialogResult = DialogResult.OK;
+            Close();
+        }
 
-            //    Program.MainForm.UpdateHotkeyTab();
-            //    Program.MainForm.SaveSettings();
-            //    this.Close();
-            //}
+        private void TbKeys_KeyDown(object sender, KeyEventArgs e)
+        {
+            uint key = (uint)e.KeyCode;
+            switch (e.KeyCode)
+            {
+                case Keys.Menu:
+                    Hotkey.Alt = true;
+                    break;
+                case Keys.ControlKey:
+                    Hotkey.Ctrl = true;
+                    break;
+                case Keys.LWin:
+                case Keys.RWin:
+                    Hotkey.Win = true;
+                    break;
+                case Keys.LShiftKey:
+                case Keys.RShiftKey:
+                case Keys.ShiftKey:
+                    Hotkey.Shift = true;
+                    break;
+                case Keys.Back:
+                case Keys.Delete:
+                    Hotkey.Shift = false;
+                    Hotkey.Alt = false;
+                    Hotkey.Ctrl = false;
+                    Hotkey.Win = false;
+                    Hotkey.Key = 0;
+                    break;
+                default:
+                    Hotkey.Key = (uint)e.KeyCode;
+                    break;
+            }
+            TbKeys.Text = Hotkey.ToString();
+
+            // prevent edit and event bubble
+            e.SuppressKeyPress = true;
+            e.Handled = true;
+        }
+
+        private void TbKeys_KeyUp(object sender, KeyEventArgs e)
+        {
+            // prevent registered hotkeys from picking up the event
+            e.Handled = true;
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace FreeVD
 {
-    partial class HotKeyForm
+    partial class HotkeyForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,188 +28,145 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.lblHotkeyType = new System.Windows.Forms.Label();
-            this.cmbHotkeyType = new System.Windows.Forms.ComboBox();
-            this.cmbDesktopNumber = new System.Windows.Forms.ComboBox();
+            this.lblAction = new System.Windows.Forms.Label();
+            this.ComboAction = new System.Windows.Forms.ComboBox();
             this.lblDesktopNumber = new System.Windows.Forms.Label();
-            this.btnSave = new System.Windows.Forms.Button();
-            this.chkALT = new System.Windows.Forms.CheckBox();
-            this.chkCTRL = new System.Windows.Forms.CheckBox();
-            this.chkSHIFT = new System.Windows.Forms.CheckBox();
-            this.chkWIN = new System.Windows.Forms.CheckBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.cmbKey = new System.Windows.Forms.ComboBox();
-            this.groupBox1.SuspendLayout();
+            this.BtnOK = new System.Windows.Forms.Button();
+            this.TbKeys = new System.Windows.Forms.TextBox();
+            this.CbFollow = new System.Windows.Forms.CheckBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.NumDesktop = new System.Windows.Forms.NumericUpDown();
+            this.BtnCancel = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.NumDesktop)).BeginInit();
             this.SuspendLayout();
             // 
-            // lblHotkeyType
+            // lblAction
             // 
-            this.lblHotkeyType.Location = new System.Drawing.Point(42, 38);
-            this.lblHotkeyType.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lblHotkeyType.Name = "lblHotkeyType";
-            this.lblHotkeyType.Size = new System.Drawing.Size(150, 35);
-            this.lblHotkeyType.TabIndex = 0;
-            this.lblHotkeyType.Text = "Hotkey Type:";
-            this.lblHotkeyType.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblAction.Location = new System.Drawing.Point(22, 7);
+            this.lblAction.Name = "lblAction";
+            this.lblAction.Size = new System.Drawing.Size(85, 27);
+            this.lblAction.TabIndex = 0;
+            this.lblAction.Text = "&Action:";
+            this.lblAction.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // cmbHotkeyType
+            // ComboAction
             // 
-            this.cmbHotkeyType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbHotkeyType.FormattingEnabled = true;
-            this.cmbHotkeyType.Items.AddRange(new object[] {
-            "Navigate to Desktop",
-            "Move Window to Desktop",
-            "Move Window to Desktop & Follow",
-            "Pin/Unpin Window",
-            "Pin/Unpin Application"});
-            this.cmbHotkeyType.Location = new System.Drawing.Point(201, 42);
-            this.cmbHotkeyType.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.cmbHotkeyType.Name = "cmbHotkeyType";
-            this.cmbHotkeyType.Size = new System.Drawing.Size(325, 28);
-            this.cmbHotkeyType.TabIndex = 1;
-            // 
-            // cmbDesktopNumber
-            // 
-            this.cmbDesktopNumber.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbDesktopNumber.FormattingEnabled = true;
-            this.cmbDesktopNumber.Items.AddRange(new object[] {
-            "Next",
-            "Previous",
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-            "7",
-            "8",
-            "9"});
-            this.cmbDesktopNumber.Location = new System.Drawing.Point(201, 83);
-            this.cmbDesktopNumber.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.cmbDesktopNumber.Name = "cmbDesktopNumber";
-            this.cmbDesktopNumber.Size = new System.Drawing.Size(96, 28);
-            this.cmbDesktopNumber.TabIndex = 2;
+            this.ComboAction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ComboAction.FormattingEnabled = true;
+            this.ComboAction.Location = new System.Drawing.Point(114, 9);
+            this.ComboAction.Name = "ComboAction";
+            this.ComboAction.Size = new System.Drawing.Size(221, 23);
+            this.ComboAction.TabIndex = 1;
+            this.ComboAction.SelectedIndexChanged += new System.EventHandler(this.ComboAction_SelectedIndexChanged);
             // 
             // lblDesktopNumber
             // 
-            this.lblDesktopNumber.Location = new System.Drawing.Point(42, 80);
-            this.lblDesktopNumber.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblDesktopNumber.Location = new System.Drawing.Point(7, 45);
             this.lblDesktopNumber.Name = "lblDesktopNumber";
-            this.lblDesktopNumber.Size = new System.Drawing.Size(150, 35);
-            this.lblDesktopNumber.TabIndex = 3;
-            this.lblDesktopNumber.Text = "Desktop Number:";
+            this.lblDesktopNumber.Size = new System.Drawing.Size(100, 27);
+            this.lblDesktopNumber.TabIndex = 2;
+            this.lblDesktopNumber.Text = "Desktop &Number:";
             this.lblDesktopNumber.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // btnSave
+            // BtnOK
             // 
-            this.btnSave.Location = new System.Drawing.Point(604, 282);
-            this.btnSave.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(112, 35);
-            this.btnSave.TabIndex = 6;
-            this.btnSave.Text = "Save";
-            this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            this.BtnOK.Location = new System.Drawing.Point(155, 126);
+            this.BtnOK.Name = "BtnOK";
+            this.BtnOK.Size = new System.Drawing.Size(87, 27);
+            this.BtnOK.TabIndex = 7;
+            this.BtnOK.Text = "&OK";
+            this.BtnOK.UseVisualStyleBackColor = true;
+            this.BtnOK.Click += new System.EventHandler(this.BtnOK_Click);
             // 
-            // chkALT
+            // TbKeys
             // 
-            this.chkALT.AutoSize = true;
-            this.chkALT.Location = new System.Drawing.Point(32, 39);
-            this.chkALT.Name = "chkALT";
-            this.chkALT.Size = new System.Drawing.Size(64, 24);
-            this.chkALT.TabIndex = 8;
-            this.chkALT.Text = "ALT";
-            this.chkALT.UseVisualStyleBackColor = true;
+            this.TbKeys.BackColor = System.Drawing.SystemColors.Window;
+            this.TbKeys.Location = new System.Drawing.Point(114, 85);
+            this.TbKeys.Name = "TbKeys";
+            this.TbKeys.Size = new System.Drawing.Size(221, 23);
+            this.TbKeys.TabIndex = 6;
+            this.TbKeys.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TbKeys_KeyDown);
+            this.TbKeys.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TbKeys_KeyUp);
             // 
-            // chkCTRL
+            // CbFollow
             // 
-            this.chkCTRL.AutoSize = true;
-            this.chkCTRL.Location = new System.Drawing.Point(32, 69);
-            this.chkCTRL.Name = "chkCTRL";
-            this.chkCTRL.Size = new System.Drawing.Size(76, 24);
-            this.chkCTRL.TabIndex = 9;
-            this.chkCTRL.Text = "CTRL";
-            this.chkCTRL.UseVisualStyleBackColor = true;
+            this.CbFollow.AutoSize = true;
+            this.CbFollow.Location = new System.Drawing.Point(182, 50);
+            this.CbFollow.Name = "CbFollow";
+            this.CbFollow.Size = new System.Drawing.Size(86, 19);
+            this.CbFollow.TabIndex = 4;
+            this.CbFollow.Text = "And &Follow";
+            this.CbFollow.UseVisualStyleBackColor = true;
+            this.CbFollow.CheckedChanged += new System.EventHandler(this.CbFollow_CheckedChanged);
             // 
-            // chkSHIFT
+            // label1
             // 
-            this.chkSHIFT.AutoSize = true;
-            this.chkSHIFT.Location = new System.Drawing.Point(32, 99);
-            this.chkSHIFT.Name = "chkSHIFT";
-            this.chkSHIFT.Size = new System.Drawing.Size(82, 24);
-            this.chkSHIFT.TabIndex = 10;
-            this.chkSHIFT.Text = "SHIFT";
-            this.chkSHIFT.UseVisualStyleBackColor = true;
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(73, 88);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(34, 15);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "&Keys:";
             // 
-            // chkWIN
+            // NumDesktop
             // 
-            this.chkWIN.AutoSize = true;
-            this.chkWIN.Location = new System.Drawing.Point(32, 129);
-            this.chkWIN.Name = "chkWIN";
-            this.chkWIN.Size = new System.Drawing.Size(66, 24);
-            this.chkWIN.TabIndex = 11;
-            this.chkWIN.Text = "WIN";
-            this.chkWIN.UseVisualStyleBackColor = true;
+            this.NumDesktop.Location = new System.Drawing.Point(114, 48);
+            this.NumDesktop.Name = "NumDesktop";
+            this.NumDesktop.Size = new System.Drawing.Size(55, 23);
+            this.NumDesktop.TabIndex = 3;
+            this.NumDesktop.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.NumDesktop.ValueChanged += new System.EventHandler(this.NumDesktop_ValueChanged);
             // 
-            // groupBox1
+            // BtnCancel
             // 
-            this.groupBox1.Controls.Add(this.cmbKey);
-            this.groupBox1.Controls.Add(this.chkALT);
-            this.groupBox1.Controls.Add(this.chkWIN);
-            this.groupBox1.Controls.Add(this.chkCTRL);
-            this.groupBox1.Controls.Add(this.chkSHIFT);
-            this.groupBox1.Location = new System.Drawing.Point(201, 134);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(345, 183);
-            this.groupBox1.TabIndex = 12;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Hotkey";
+            this.BtnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.BtnCancel.Location = new System.Drawing.Point(248, 126);
+            this.BtnCancel.Name = "BtnCancel";
+            this.BtnCancel.Size = new System.Drawing.Size(87, 27);
+            this.BtnCancel.TabIndex = 8;
+            this.BtnCancel.Text = "&Cancel";
+            this.BtnCancel.UseVisualStyleBackColor = true;
             // 
-            // cmbKey
+            // HotkeyForm
             // 
-            this.cmbKey.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbKey.FormattingEnabled = true;
-            this.cmbKey.Location = new System.Drawing.Point(146, 39);
-            this.cmbKey.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.cmbKey.Name = "cmbKey";
-            this.cmbKey.Size = new System.Drawing.Size(192, 28);
-            this.cmbKey.TabIndex = 12;
-            // 
-            // frmHotKey
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AcceptButton = this.BtnOK;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(729, 331);
-            this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.btnSave);
+            this.CancelButton = this.BtnCancel;
+            this.ClientSize = new System.Drawing.Size(358, 171);
+            this.Controls.Add(this.BtnCancel);
+            this.Controls.Add(this.NumDesktop);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.TbKeys);
+            this.Controls.Add(this.CbFollow);
+            this.Controls.Add(this.BtnOK);
             this.Controls.Add(this.lblDesktopNumber);
-            this.Controls.Add(this.cmbDesktopNumber);
-            this.Controls.Add(this.cmbHotkeyType);
-            this.Controls.Add(this.lblHotkeyType);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.Controls.Add(this.ComboAction);
+            this.Controls.Add(this.lblAction);
+            this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.KeyPreview = true;
             this.MaximizeBox = false;
-            this.Name = "frmHotKey";
+            this.MinimizeBox = false;
+            this.Name = "HotkeyForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Hotkey";
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.Text = "Edit Hotkey";
+            ((System.ComponentModel.ISupportInitialize)(this.NumDesktop)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Label lblHotkeyType;
-        private System.Windows.Forms.ComboBox cmbHotkeyType;
-        private System.Windows.Forms.ComboBox cmbDesktopNumber;
+        private System.Windows.Forms.Label lblAction;
+        private System.Windows.Forms.ComboBox ComboAction;
         private System.Windows.Forms.Label lblDesktopNumber;
-        private System.Windows.Forms.Button btnSave;
-        private System.Windows.Forms.CheckBox chkALT;
-        private System.Windows.Forms.CheckBox chkCTRL;
-        private System.Windows.Forms.CheckBox chkSHIFT;
-        private System.Windows.Forms.CheckBox chkWIN;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.ComboBox cmbKey;
+        private System.Windows.Forms.Button BtnOK;
+        private System.Windows.Forms.TextBox TbKeys;
+        private System.Windows.Forms.CheckBox CbFollow;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.NumericUpDown NumDesktop;
+        private System.Windows.Forms.Button BtnCancel;
     }
 }
