@@ -3,6 +3,7 @@ using Humanizer;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 using WindowsDesktop;
@@ -21,6 +22,7 @@ namespace FreeVD
 
     public class VDHotkey : Hotkey
     {
+        [DefaultValue(null)]
         public VDAction Action { get; set; }
 
         [JsonIgnore]

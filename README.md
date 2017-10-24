@@ -11,13 +11,12 @@ choco install FreeVD
 
 ### Hotkeys:
 
-These are the default hotkeys. In the future custom hotkeys will be available.
+These are the default hotkeys, which are fully customizable.
 
 <img src="Screenshots/Hotkeys.png"/>
 
 Navigate Desktops:  
 <kbd>WIN</kbd>+<kbd>CTRL</kbd>+<kbd>Numpad</kbd>  
-<kbd>WIN</kbd>+<kbd>CTRL</kbd>+<kbd>LEFT</kbd> or <kbd>RIGHT</kbd> - this is Windows Default
 
 Move Windows:  
 <kbd>WIN</kbd>+<kbd>ALT</kbd>+<kbd>Numpad</kbd>  
@@ -33,11 +32,11 @@ Move Window & Follow:
 
 Pin/Unpin Applications:  
 <kbd>WIN</kbd>+<kbd>ALT</kbd>+<kbd>A</kbd>  
-(Pinning an application will pin all instances of that application.)
+(Pinning an application will pin all windows of that application to appear on all desktops)
 
 Pin/Unpin Windows:  
 <kbd>WIN</kbd>+<kbd>ALT</kbd>+<kbd>W</kbd>  
-(Pinning a window will pin only that window, not other windows from the same application.)
+(Pinning a window will pin only that window, not other windows from the same application)
 
 
 ---

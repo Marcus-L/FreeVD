@@ -20,13 +20,12 @@ Windows 10 Virtual Desktop Hotkeys and System Tray Icon
 
 ## Hotkeys:
 
-These are the default hotkeys:
+These are the default hotkeys, which are fully customizable.
 
 ![Screenshot](https://raw.githubusercontent.com/Marcus-L/FreeVD/master/Screenshots/Hotkeys.png)
 
 **Navigate Desktops:**  
 WIN+CTRL+Numpad
-WIN+CTRL+LEFT or RIGHT - this is Windows Default
 
 **Move Windows:**  
 WIN+ALT+Numpad
@@ -42,16 +41,13 @@ WIN+CTRL+ALT+LEFT or RIGHT
 
 **Pin/Unpin Applications:**  
 WIN+ALT+A
-(Pinning an application will pin all instances of that application.)
+(Pinning an application will pin all windows of that application to appear on all desktops)
 
 **Pin/Unpin Windows:**  
 WIN+ALT+W
-(Pinning a window will pin only that window, not other windows from the same application.)
+(Pinning a window will pin only that window, not other windows from the same application)
     </description>
-    <releaseNotes>Initial release.</releaseNotes>
+    <releaseNotes>See release notes at: https://github.com/Marcus-L/FreeVD/releases</releaseNotes>
     <tags>Windows10 Virtual Desktop Hotkeys Hotkey</tags>
-    <dependencies>
-      <dependency id="dotnet4.7" version="4.7.2053.0" />
-    </dependencies>
   </metadata>
 </package>
