@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -9,17 +10,29 @@ namespace FreeVD.Lib.Hotkeys
 {
     public class Hotkey : IDisposable
     {
-        private static int GlobalID = 0;
+        public static int MaxID = 0;
         private static HotkeyWindow Window = new HotkeyWindow();
 
-        public int HotkeyID { get; set; }
+        private int HotkeyID_ = 0;
+        public int HotkeyID {
+            get { return HotkeyID_; }
+            set {
+                HotkeyID_ = value;
+                if (MaxID < value) MaxID = value;
+            }
+        }
 
         public Hotkey()
         {
-            HotkeyID = Interlocked.Increment(ref GlobalID);
+            HotkeyID = Interlocked.Increment(ref MaxID);
         }
 
         public Hotkey(uint key, Keys modifiers) : this()
+        {
+            SetKeys(key, modifiers);
+        }
+
+        public void SetKeys(uint key, Keys modifiers)
         {
             Alt = (modifiers & Keys.Alt) == Keys.Alt;
             Ctrl = (modifiers & Keys.Control) == Keys.Control;
@@ -44,6 +57,30 @@ namespace FreeVD.Lib.Hotkeys
 
         public uint Key { get; set; }
 
+        public string KeyCodeToString(Keys key)
+        {
+            if ((key >= Keys.D0 && key <= Keys.D9) ||
+                (key >= Keys.A && key <= Keys.Z) ||
+                (key >= Keys.F1 && key <= Keys.F12) ||
+                (key >= Keys.NumPad0 && key <= Keys.NumPad9))
+            {
+                return key.ToString();
+            }
+            if (key == Keys.Next) return "PageDown";
+
+            uint virtualKeyCode = (uint)key;
+            uint scanCode = User32.MapVirtualKey(virtualKeyCode, 0);
+            IntPtr inputLocaleIdentifier = User32.GetKeyboardLayout(0);
+
+            var result = new StringBuilder();
+            User32.ToUnicodeEx(virtualKeyCode, scanCode, new byte[255], result, (int)5, (uint)0, inputLocaleIdentifier);
+
+            string retval = result.ToString();
+            if (retval == "") return key.ToString();
+            return retval;
+        }
+
+
         public override string ToString()
         {
             string keys = (Ctrl ? "Ctrl+" : "") +
@@ -51,7 +88,7 @@ namespace FreeVD.Lib.Hotkeys
                           (Shift ? "Shift+" : "") +
                           (Win ? "Win+" : "");
 
-            return keys + (Keys)Key;
+            return keys + (Key == 0 ? "" : KeyCodeToString((Keys)Key));
         }
 
         public bool Register()
