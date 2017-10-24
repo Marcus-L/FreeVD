@@ -11,11 +11,6 @@ namespace FreeVD
 {
     public class Window : IEquatable<Window>
     {
-        static Window()
-        {
-            Debug.WriteLine("windowww");
-        }
-
         public static IEnumerable<Window> GetOpenWindows()
         {
             IntPtr shellWindow = User32.GetShellWindow();
@@ -38,11 +33,6 @@ namespace FreeVD
         {
             Handle = handle;
         }
-
-        private static readonly List<string> ExcludedWindowText = new List<string>()
-        {
-            "ASUS_Check", "NVIDIA GeForce Overlay", "FreeVD Settings"
-        };
 
         public IntPtr Handle { get; set; }
 
@@ -68,7 +58,7 @@ namespace FreeVD
             {
                 try
                 {
-                    if (!ExcludedWindowText.Contains(GetWindowText()) &&
+                    if (GetProcess().Id != Process.GetCurrentProcess().Id &&
                         ComObjects.GetVirtualDesktopManager().GetWindowDesktopId(Handle) != Guid.Empty)
                     {
                         return (IsPinnedWindow ? VirtualDesktop.Current : VirtualDesktop.FromHwnd(Handle)).GetNumber();
