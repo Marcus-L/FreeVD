@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FreeVD.Lib.Interop;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -39,9 +40,11 @@ namespace FreeVD
             }
         }
 
-        public static void Switch(this VirtualDesktop desktop, bool perform)
+        public static void GotoDesktop(int desktopNumber)
         {
-            if (perform) desktop.Switch();
+            Window.EnsureDesktops(desktopNumber);
+            User32.SetForegroundWindow(Window.GetTaskbar().Handle);
+            VirtualDesktop.GetDesktops()[desktopNumber - 1].Switch();
         }
     }
 }

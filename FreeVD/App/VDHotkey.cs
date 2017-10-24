@@ -1,5 +1,6 @@
 ﻿using FreeVD.Lib.Hotkeys;
 using Humanizer;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,18 +11,19 @@ namespace FreeVD
 {
     public enum VDAction
     {
-        GoToDesktop,
-        MoveWindowToDesktop,
-        MoveWindowToNextDesktop,
-        MoveWindowToPreviousDesktop,
-        TogglePinWindow,
-        TogglePinApplication
+        GoToDesktop = 0,
+        MoveWindowToDesktop = 1,
+        MoveWindowToNextDesktop = 2,
+        MoveWindowToPreviousDesktop = 3,
+        TogglePinWindow = 4,
+        TogglePinApplication = 5
     }
 
     public class VDHotkey : Hotkey
     {
         public VDAction Action { get; set; }
 
+        [JsonIgnore]
         public string ActionString
         {
             get
@@ -37,7 +39,7 @@ namespace FreeVD
 
         public bool Follow { get; set; }
 
-        public VDHotkey(Keys key, Keys modifiers) : base((uint)key, modifiers)
+        public VDHotkey()
         {
             Callback = () =>
             {
@@ -45,15 +47,14 @@ namespace FreeVD
                 switch (Action)
                 {
                     case VDAction.GoToDesktop:
-                        Window.EnsureDesktops(DesktopNumber);
-                        VirtualDesktop.GetDesktops()[DesktopNumber - 1].Switch();
+                        VDExtensions.GotoDesktop(DesktopNumber);
                         return;
                 }
                 // window Actions
                 var window = Window.GetForegroundWindow();
 
                 // skip non-movable windows
-                if (window.IsDesktop || window.DesktopNumber == -1) return; 
+                if (window.IsDesktop || window.DesktopNumber == -1) return;
 
                 // perform action
                 switch (Action)
@@ -77,6 +78,10 @@ namespace FreeVD
                         throw new NotImplementedException($"Unhandled action: {Action}");
                 }
             };
+        }
+
+        public VDHotkey(Keys key, Keys modifiers) : base((uint)key, modifiers)
+        {
         }
 
         public static IEnumerable<VDHotkey> CreateDefaultHotkeys()
@@ -137,7 +142,7 @@ namespace FreeVD
                     DesktopNumber = i
                 });
             }
-            return items.OrderBy(i => i.Action.ToString());
+            return items;
         }
     }
 }
