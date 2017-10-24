@@ -32,7 +32,11 @@ namespace FreeVD
                 HotkeyMenu_Edit.Enabled = HotkeyList.SelectedItems.Count == 1;
                 HotkeyMenu_Delete.Enabled = HotkeyList.SelectedItems.Count > 0;
             };
-            AutoStartCheckbox.CheckedChanged += (obj, args) => ButtonApply.Enabled = true;
+            AutoStartCheckbox.CheckedChanged += (obj, args) =>
+            {
+                if (AutoStartCheckbox.Checked != Settings.Default.AutoStart)
+                    ButtonApply.Enabled = true;
+            };
             Shown += (obj, args) => User32.SetForegroundWindow(Handle);
 
             // Add polling to update Window titles when open

@@ -140,6 +140,7 @@
             this.colHotKey});
             this.HotkeyList.ContextMenuStrip = this.HotkeyMenu;
             this.HotkeyList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.HotkeyList.FullRowSelect = true;
             this.HotkeyList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.HotkeyList.Location = new System.Drawing.Point(2, 2);
             this.HotkeyList.Margin = new System.Windows.Forms.Padding(2);
@@ -229,6 +230,7 @@
             this.NameHeader});
             this.PinnedAppList.ContextMenuStrip = this.PinnedAppsMenu;
             this.PinnedAppList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.PinnedAppList.FullRowSelect = true;
             this.PinnedAppList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.PinnedAppList.Location = new System.Drawing.Point(2, 2);
             this.PinnedAppList.MultiSelect = false;
@@ -271,7 +273,7 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox1.Size = new System.Drawing.Size(491, 223);
+            this.textBox1.Size = new System.Drawing.Size(491, 225);
             this.textBox1.TabIndex = 2;
             this.textBox1.Text = resources.GetString("textBox1.Text");
             // 
