@@ -16,6 +16,23 @@ namespace FreeVD
 
         public TrayContext()
         {
+            // delay startup to idle to avoid DPI scaling issues
+            Application.Idle += Startup;
+        }
+
+        private void Startup(object app, EventArgs evt)
+        {
+            // avoid multiple startup
+            Application.Idle -= Startup;
+
+            // run pre-start checks
+            if (!Utils.EnsureMinimumOSVersion() ||
+                !Utils.EnsureSingleInstance())
+            {
+                Application.Exit();
+                return;
+            }
+
             TrayIcon = new NotifyIcon()
             {
                 Visible = true,
