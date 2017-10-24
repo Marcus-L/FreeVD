@@ -1,7 +1,7 @@
 ﻿
 $ErrorActionPreference = 'Stop';
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-$url        = 'https://github.com/Marcus-L/FreeVD/releases/download/v1.1.0.0/FreeVD.Setup.msi'
+$url        = 'https://github.com/Marcus-L/FreeVD/releases/download/v1.1.1.0/FreeVD.Setup.msi'
 
 $packageArgs = @{
   packageName   = $env:ChocolateyPackageName
