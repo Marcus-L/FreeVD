@@ -1,10 +1,10 @@
-﻿using Microsoft.Win32;
+﻿using FreeVD.Lib.Hotkeys;
+using Microsoft.Win32;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,8 +14,6 @@ namespace FreeVD
 {
     public class Settings
     {
-        private static IsolatedStorageFile Storage = IsolatedStorageFile.GetUserStoreForAssembly();
-
         public static Settings Default = LoadDefaultSettings();
 
         [JsonIgnore]
@@ -26,15 +24,22 @@ namespace FreeVD
         [JsonIgnore]
         public List<Window> PinnedWindows = new List<Window>();
 
-        private const string SETTINGS_FILENAME = "settings.json";
+        private const string SETTINGS_FILENAME = @"m4rc.us\FreeVD\settings.json";
+
+        private static string SettingsFilename()
+        {
+            string loc = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            return Path.Combine(loc, SETTINGS_FILENAME);
+        }
 
         private static Settings LoadDefaultSettings()
         {
-            if (Storage.FileExists(SETTINGS_FILENAME))
+            string settings_file = SettingsFilename();
+            if (File.Exists(settings_file))
             {
                 try
                 {
-                    using (var stream = new IsolatedStorageFileStream(SETTINGS_FILENAME, FileMode.Open, Storage))
+                    using (var stream = new FileStream(settings_file, FileMode.Open))
                     using (var reader = new StreamReader(stream))
                     {
                         string json = reader.ReadToEnd();
@@ -59,10 +64,20 @@ namespace FreeVD
 
         public static void Save()
         {
-            using (var stream = new IsolatedStorageFileStream(SETTINGS_FILENAME, FileMode.Create, Storage))
+            // renumber hotkeys
+            for (int i = 0; i < Default.Hotkeys.Count; i++)
+            {
+                Default.Hotkeys[i].HotkeyID = i + 1;
+            }
+            Hotkey.MaxID = Default.Hotkeys.Count -1;
+
+            string settings_file = SettingsFilename();
+            Directory.CreateDirectory(Path.GetDirectoryName(settings_file));
+            using (var stream = new FileStream(settings_file, FileMode.Create))
             using (var writer = new StreamWriter(stream))
             {
-                writer.Write(JsonConvert.SerializeObject(Default));
+                writer.Write(JsonConvert.SerializeObject(Default, Formatting.Indented,
+                    new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Ignore }));
             }
             SetAutoStart(Default.AutoStart);
         }
