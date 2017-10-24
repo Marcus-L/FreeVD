@@ -12,7 +12,7 @@ $packageArgs = @{
 
   softwareName  = 'FreeVD*'
 
-  checksum      = '16F13A179BC14D812B7726DC263FD449E53E2487D67A656EA4D242374D118412'
+  checksum      = 'A6C28FABABC151C08A4E053F3F2392A505635F83A96FF5AD988CCCBD47A5B58A'
   checksumType  = 'sha256'
 
   silentArgs    = "/qn /norestart /l*v `"$($env:TEMP)\$($packageName).$($env:chocolateyPackageVersion).MsiInstall.log`""
@@ -20,22 +20,3 @@ $packageArgs = @{
 }
 
 Install-ChocolateyPackage @packageArgs
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
