@@ -143,11 +143,12 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.manifest" />
+    <None Include="Chocolatey\tools\chocolateyBeforeModify.ps1" />
     <None Include="Chocolatey\tools\chocolateyInstall.ps1" />
     <None Include="Chocolatey\FreeVD.nuspec">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Chocolatey\tools\chocolateyuninstall.ps1" />
+    <None Include="Chocolatey\tools\chocolateyUninstall.ps1" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
