@@ -4,8 +4,10 @@ Windows 10 Virtual Desktop Hotkeys and System Tray Icon
 ## Installation
 Install the app automatically with [Chocolatey](https://chocolatey.org)
 ```powershell
-choco install FreeVD
+choco install FreeVD --version 1.1.1.0
 ```
+
+Or, download the MSI installer directly from the [Releases Page](https://github.com/Marcus-L/FreeVD/releases).
 
 ## Features:
 
