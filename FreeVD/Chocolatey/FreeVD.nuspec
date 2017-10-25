@@ -49,5 +49,8 @@ WIN+ALT+W
     </description>
     <releaseNotes>See release notes at: https://github.com/Marcus-L/FreeVD/releases</releaseNotes>
     <tags>Windows10 Virtual Desktop Hotkeys Hotkey</tags>
+    <dependencies>
+      <dependency id="dotnet4.7" version="4.7.2053.0" />
+    </dependencies>
   </metadata>
 </package>
