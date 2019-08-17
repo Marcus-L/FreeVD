@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using WindowsDesktop;
-using WindowsDesktop.Interop;
 
 namespace FreeVD
 {
@@ -15,7 +14,7 @@ namespace FreeVD
         {
             IntPtr shellWindow = User32.GetShellWindow();
             var windows = new List<Window>();
-            User32.EnumWindows((handle,lParam) =>
+            User32.EnumWindows((handle, lParam) =>
             {
                 if (handle != shellWindow &&
                     User32.IsWindowVisible(handle) &&
@@ -59,12 +58,13 @@ namespace FreeVD
                 try
                 {
                     if (GetProcess().Id != Process.GetCurrentProcess().Id &&
-                        ComObjects.GetVirtualDesktopManager().GetWindowDesktopId(Handle) != Guid.Empty)
+                        (VirtualDesktop.FromHwnd(Handle) != null || IsPinnedWindow))
+                    //ComObjects.GetVirtualDesktopManager().GetWindowDesktopId(Handle) != Guid.Empty)
                     {
                         return (IsPinnedWindow ? VirtualDesktop.Current : VirtualDesktop.FromHwnd(Handle)).GetNumber();
                     }
                 }
-                catch (Exception ex) when (ex.HResult == Consts.TYPE_E_ELEMENTNOTFOUND) {}
+                catch (Exception ex) when (ex.HResult == Consts.TYPE_E_ELEMENTNOTFOUND) { }
                 catch (Exception ex)
                 {
                     Log.LogEvent("Window", $"Handle: {Handle}\nCaption: {GetWindowText()}", ex);
