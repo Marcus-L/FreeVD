@@ -53,9 +53,9 @@
             // 
             this.ComboAction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ComboAction.FormattingEnabled = true;
-            this.ComboAction.Location = new System.Drawing.Point(114, 9);
+            this.ComboAction.Location = new System.Drawing.Point(135, 9);
             this.ComboAction.Name = "ComboAction";
-            this.ComboAction.Size = new System.Drawing.Size(221, 23);
+            this.ComboAction.Size = new System.Drawing.Size(324, 33);
             this.ComboAction.TabIndex = 1;
             this.ComboAction.SelectedIndexChanged += new System.EventHandler(this.ComboAction_SelectedIndexChanged);
             // 
@@ -70,9 +70,9 @@
             // 
             // BtnOK
             // 
-            this.BtnOK.Location = new System.Drawing.Point(155, 126);
+            this.BtnOK.Location = new System.Drawing.Point(279, 133);
             this.BtnOK.Name = "BtnOK";
-            this.BtnOK.Size = new System.Drawing.Size(87, 27);
+            this.BtnOK.Size = new System.Drawing.Size(87, 37);
             this.BtnOK.TabIndex = 7;
             this.BtnOK.Text = "&OK";
             this.BtnOK.UseVisualStyleBackColor = true;
@@ -81,9 +81,9 @@
             // TbKeys
             // 
             this.TbKeys.BackColor = System.Drawing.SystemColors.Window;
-            this.TbKeys.Location = new System.Drawing.Point(114, 85);
+            this.TbKeys.Location = new System.Drawing.Point(135, 85);
             this.TbKeys.Name = "TbKeys";
-            this.TbKeys.Size = new System.Drawing.Size(221, 23);
+            this.TbKeys.Size = new System.Drawing.Size(324, 31);
             this.TbKeys.TabIndex = 6;
             this.TbKeys.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TbKeys_KeyDown);
             this.TbKeys.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TbKeys_KeyUp);
@@ -91,9 +91,9 @@
             // CbFollow
             // 
             this.CbFollow.AutoSize = true;
-            this.CbFollow.Location = new System.Drawing.Point(182, 50);
+            this.CbFollow.Location = new System.Drawing.Point(203, 50);
             this.CbFollow.Name = "CbFollow";
-            this.CbFollow.Size = new System.Drawing.Size(86, 19);
+            this.CbFollow.Size = new System.Drawing.Size(128, 29);
             this.CbFollow.TabIndex = 4;
             this.CbFollow.Text = "And &Follow";
             this.CbFollow.UseVisualStyleBackColor = true;
@@ -104,25 +104,30 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(73, 88);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(34, 15);
+            this.label1.Size = new System.Drawing.Size(52, 25);
             this.label1.TabIndex = 5;
             this.label1.Text = "&Keys:";
             // 
             // NumDesktop
             // 
-            this.NumDesktop.Location = new System.Drawing.Point(114, 48);
+            this.NumDesktop.Location = new System.Drawing.Point(135, 48);
             this.NumDesktop.Name = "NumDesktop";
-            this.NumDesktop.Size = new System.Drawing.Size(55, 23);
+            this.NumDesktop.Size = new System.Drawing.Size(55, 31);
             this.NumDesktop.TabIndex = 3;
             this.NumDesktop.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.NumDesktop.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             this.NumDesktop.ValueChanged += new System.EventHandler(this.NumDesktop_ValueChanged);
             // 
             // BtnCancel
             // 
             this.BtnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.BtnCancel.Location = new System.Drawing.Point(248, 126);
+            this.BtnCancel.Location = new System.Drawing.Point(372, 133);
             this.BtnCancel.Name = "BtnCancel";
-            this.BtnCancel.Size = new System.Drawing.Size(87, 27);
+            this.BtnCancel.Size = new System.Drawing.Size(87, 37);
             this.BtnCancel.TabIndex = 8;
             this.BtnCancel.Text = "&Cancel";
             this.BtnCancel.UseVisualStyleBackColor = true;
@@ -130,10 +135,10 @@
             // HotkeyForm
             // 
             this.AcceptButton = this.BtnOK;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.BtnCancel;
-            this.ClientSize = new System.Drawing.Size(358, 171);
+            this.ClientSize = new System.Drawing.Size(488, 182);
             this.Controls.Add(this.BtnCancel);
             this.Controls.Add(this.NumDesktop);
             this.Controls.Add(this.label1);
