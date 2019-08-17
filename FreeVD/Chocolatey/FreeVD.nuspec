@@ -2,11 +2,11 @@
 <package >
   <metadata>
     <id>freevd</id>
-    <version>1.1.1.0</version>
+    <version>1.2.0</version>
     <title>FreeVD</title>
     <authors>Marcus Lum</authors>
     <owners>Marcus Lum</owners>
-    <copyright>Copyright (C) 2017 Marcus Lum</copyright>
+    <copyright>Copyright (C) 2019 Marcus Lum</copyright>
     <licenseUrl>https://github.com/Marcus-L/FreeVD/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/Marcus-L/FreeVD</projectUrl>
     <packageSourceUrl>https://github.com/Marcus-L/FreeVD/tree/master/FreeVD/Chocolatey</packageSourceUrl>

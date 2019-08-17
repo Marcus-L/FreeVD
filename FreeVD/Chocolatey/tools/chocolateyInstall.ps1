@@ -1,6 +1,6 @@
 ﻿$ErrorActionPreference = 'Stop';
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-$url        = 'https://github.com/Marcus-L/FreeVD/releases/download/v1.1.1.0/FreeVD.Setup.msi'
+$url        = 'https://github.com/Marcus-L/FreeVD/releases/download/v1.2.0/FreeVD.Setup.msi'
 
 $packageArgs = @{
   packageName   = $env:ChocolateyPackageName
@@ -11,7 +11,7 @@ $packageArgs = @{
 
   softwareName  = 'FreeVD*'
 
-  checksum      = 'A6C28FABABC151C08A4E053F3F2392A505635F83A96FF5AD988CCCBD47A5B58A'
+  checksum      = '544839336aa9c5629bd71db692ee63f785fc1c1c50aff42ed60b1eb41410aaaf'
   checksumType  = 'sha256'
 
   silentArgs    = "/qn /norestart /l*v `"$($env:TEMP)\$($packageName).$($env:chocolateyPackageVersion).MsiInstall.log`""
