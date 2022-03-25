@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FreeVD.Lib.Hotkeys;
+using FreeVD.Lib.Interop;
+using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -19,6 +21,8 @@ namespace FreeVD
 
             // create default settings
             Settings.EnsureDefaultSettings();
+
+            WinTabKeyboardHook.Initialize();
 
             // run tray icon app
             Application.Run(new TrayContext());

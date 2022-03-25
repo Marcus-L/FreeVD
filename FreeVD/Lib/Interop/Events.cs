@@ -10,6 +10,8 @@ namespace FreeVD.Lib.Interop
 
     public delegate int HookProc(int code, IntPtr wParam, IntPtr lParam);
 
+    public delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
+
     public class HookEventArgs : EventArgs
     {
         public int Code;

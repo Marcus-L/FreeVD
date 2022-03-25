@@ -1,6 +1,7 @@
 ﻿using FreeVD.Lib.Interop;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace FreeVD.Lib.Hotkeys
@@ -14,7 +15,7 @@ namespace FreeVD.Lib.Hotkeys
             CreateHandle(new CreateParams());
         }
 
-        protected override void WndProc(ref System.Windows.Forms.Message m)
+        protected override void WndProc(ref Message m)
         {
             switch (m.Msg)
             {

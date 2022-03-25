@@ -1,5 +1,7 @@
-﻿using System;
+﻿using FreeVD.Lib.Interop;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO.Pipes;
 using System.Linq;
 using System.Text;

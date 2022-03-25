@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows;
 
 namespace FreeVD.Lib.Interop
 {
@@ -65,5 +66,29 @@ namespace FreeVD.Lib.Interop
 
         [DllImport("user32.dll")]
         public static extern int ToUnicodeEx(uint wVirtKey, uint wScanCode, byte[] lpKeyState, [Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pwszBuff, int cchBuff, uint wFlags, IntPtr dwhkl);
+
+        [DllImport("user32.dll")]
+        public static extern bool GetWindowPlacement(IntPtr hWnd, out WindowPlacement lpwndpl);
+
+        [DllImport("user32.dll")]
+        public static extern bool SetWindowPlacement(IntPtr hWnd, [In] ref WindowPlacement lpwndpl);
+
+        [DllImport("user32.dll")]
+        public static extern short GetAsyncKeyState(System.Windows.Forms.Keys vKey);
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, int wFlags);
+
+        [DllImport("user32.dll")]
+        public static extern bool GetWindowRect(IntPtr hwnd, ref WinRect rectangle);
+
+        [DllImport("user32.dll", EntryPoint = "RegisterWindowMessageA", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+        public static extern int RegisterWindowMessage(string lpString);
+
+        [DllImport("user32", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+        public static extern int DeregisterShellHookWindow(IntPtr hWnd);
+
+        [DllImport("user32", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+        public static extern int RegisterShellHookWindow(IntPtr hWnd);
     }
 }

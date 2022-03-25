@@ -18,5 +18,11 @@ namespace FreeVD.Lib.Interop
 
         [DllImport("kernel32.dll")]
         public static extern bool CloseHandle(IntPtr handle);
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern IntPtr GetModuleHandle(string lpModuleName);
+
+        [DllImport("kernel32.dll")]
+        public static extern bool AllocConsole();
     }
 }

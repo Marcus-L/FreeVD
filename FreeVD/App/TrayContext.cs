@@ -1,9 +1,10 @@
-﻿using FreeVD.Lib.Interop;
+﻿using FreeVD.Lib.Hotkeys;
+using FreeVD.Lib.Interop;
 using System;
 using System.Drawing;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Automation;
 using System.Windows.Forms;
 using WindowsDesktop;
 
@@ -49,16 +50,30 @@ namespace FreeVD
             });
             SetIcon(VirtualDesktop.Current);
 
+            AppModel.Initialize();
+
             // events
             TrayIcon.MouseDoubleClick += (obj, args) =>
                 { if (args.Button == MouseButtons.Left) OpenSettings(); };
             TrayIcon.ContextMenuStrip.Opening += (obj, args) => ConfigureDesktopsMenu();
+            TrayIcon.MouseMove += (obj, args) => { AppModel.CurrentWindowInFocus = User32.GetForegroundWindow(); };
+            TrayIcon.MouseDown += (obj, args) => AppModel.SaveWindowInFocus();
 
             // keep icon in sync with desktop
-            VirtualDesktop.CurrentChanged += (obj, args) => SetIcon(args.NewDesktop);
+            VirtualDesktop.CurrentChanged += (obj, args) => {
+                SetIcon(args.NewDesktop);
+                AppModel.LoadCopiedWindows();
+                AppModel.LoadPinnedWindowsPos();
+                AppModel.LoadWindowInFocus();
+            };
+            VirtualDesktop.Destroyed += (obj, args) => {
+                AppModel.RemoveDesktop(args.Destroyed.Id);
+            };
 
-            // remove icon when exiting
-            Application.ApplicationExit += (obj, args) => TrayIcon.Visible = false;
+            Application.ApplicationExit += (obj, args) => {
+                TrayIcon.Visible = false;
+                User32.UnhookWindowsHookEx(WinTabKeyboardHook._hookID);
+            };
 
             // watch pinned apps/windows
             PinWatcher.Initialize();
@@ -75,7 +90,7 @@ namespace FreeVD
             switchDesktop.DropDownItems.Clear();
             switchDesktop.DropDownItems.AddRange(
                 VirtualDesktop.GetDesktops().Select((desktop, index) => 
-                    new ToolStripMenuItem($"Desktop {index + 1}", null, (obj,args) => desktop.Switch())
+                    new ToolStripMenuItem($"Desktop {index + 1}", null, (obj,args) => { AppModel.SavePinnedWindowsPos(); desktop.Switch(); })
                     {
                         CheckState = desktop == currentDesktop ? CheckState.Checked : CheckState.Unchecked,
                     })

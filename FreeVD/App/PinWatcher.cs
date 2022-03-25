@@ -1,40 +1,41 @@
-﻿using System;
+﻿using FreeVD.Lib.Interop;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Automation;
 
 namespace FreeVD
 {
     public static class PinWatcher
     {
-        public static void WatchWindow(Window window)
-        {
-            Automation.AddAutomationEventHandler(WindowPattern.WindowClosedEvent, AutomationElement.FromHandle(window.Handle), TreeScope.Element,
-                (sender, e) => {
-                    AppModel.PinnedWindows.Remove(window);
-                });
-        }
+        private static SystemProcessHookForm systemProcessHookForm;
 
         public static void Initialize()
         {
             // Watch for windows opening, check if they are pinned applications
-            Automation.AddAutomationEventHandler(WindowPattern.WindowOpenedEvent,
-              AutomationElement.RootElement, TreeScope.Children,
-                async (sender, e) =>
+            systemProcessHookForm = new SystemProcessHookForm();
+            systemProcessHookForm.WindowCreatedEvent += (sender, hWnd) =>
+            {
+                if(hWnd != IntPtr.Zero)
+                    ProcessWindow(new Window(hWnd));
+            };
+
+            systemProcessHookForm.WindowDestroyedEvent += (sender, hWnd) =>
+            {
+                if (hWnd != IntPtr.Zero)
                 {
-                    var el = sender as AutomationElement;
-                    var window = new Window((IntPtr)el.Current.NativeWindowHandle);
-                    await Task.Delay(750); // give window some time to fully open
-                    ProcessWindow(window);
-                });
+                    var window = new Window(hWnd);
+                    AppModel.PinnedWindows.Remove(window);
+                    AppModel.RemoveWindow(window);
+                }
+            };
+
 
             foreach (var window in Window.GetOpenWindows())
-            {
                 ProcessWindow(window);
-            }
         }
 
         private static void ProcessWindow(Window window)
@@ -46,11 +47,13 @@ namespace FreeVD
                 {
                     AppModel.PinnedApps.Add(AppInfo.FromWindow(window));
                 }
+                if(!AppModel.PinnedWindows.Contains(window))
+                    AppModel.PinnedWindows.Add(window);
             }
             else if (window.IsPinnedWindow)
             {
-                AppModel.PinnedWindows.Add(window);
-                WatchWindow(window);
+                if (!AppModel.PinnedWindows.Contains(window))
+                    AppModel.PinnedWindows.Add(window);
             }
         }
     }

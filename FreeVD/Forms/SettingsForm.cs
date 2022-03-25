@@ -91,22 +91,29 @@ namespace FreeVD
 
         public void RefreshPins()
         {
-            // join main UI thread if necessary
-            if (InvokeRequired) { Invoke((Action)RefreshPins); return; }
-
-            // only refresh the window on changd hash to avoid flickering
-            var hash = string.Join("|",
-                AppModel.PinnedWindows.Select(w => w.GetWindowText())
-                    .Union(AppModel.PinnedApps.Select(a => a.Name))).GetHashCode(); 
-            if (hash != LastStateHash)
+            try
             {
-                PinnedAppList.Items.Clear();
-                PinnedAppList.Items.AddRange(AppModel.PinnedApps.Select(a => 
-                    new ListViewItem().Update(a)).ToArray());
-                PinnedAppList.Items.AddRange(AppModel.PinnedWindows.Select(w =>
-                    new ListViewItem().Update(w)).ToArray());
-                LastStateHash = hash;
+                // join main UI thread if necessary
+                if (InvokeRequired) { Invoke((Action)RefreshPins); return; }
+
+                // only refresh the window on changd hash to avoid flickering
+                var hash = string.Join("|",
+                AppModel.PinnedWindows.Where(w => !w.IsPinnedApplication).Select(w => w.GetWindowText())
+                    .Union(AppModel.CopiedWindows.Where(w => !w.IsPinnedApplication).Select(a => a.GetWindowText()))
+                    .Union(AppModel.PinnedApps.Select(a => a.Name))).GetHashCode();
+                if (hash != LastStateHash)
+                {
+                    PinnedAppList.Items.Clear();
+                    PinnedAppList.Items.AddRange(AppModel.PinnedApps.Select(a =>
+                        new ListViewItem().Update(a)).ToArray());
+                    PinnedAppList.Items.AddRange(AppModel.PinnedWindows.Where(w => !w.IsPinnedApplication).Select(w =>
+                        new ListViewItem().Update(w)).ToArray());
+                    PinnedAppList.Items.AddRange(AppModel.CopiedWindows.Where(w => !w.IsPinnedApplication).Select(w =>
+                        new ListViewItem().Update(w)).ToArray());
+                    LastStateHash = hash;
+                }
             }
+            catch (ObjectDisposedException) { }
         }
 
         private void MenuUnpin_Click(object sender, EventArgs e)
@@ -114,7 +121,11 @@ namespace FreeVD
             try
             {
                 var pin = PinnedAppList.SelectedItems[0].Get<PinInfo>();
-                pin.Window?.TogglePinWindow();
+                if(pin.Window != null)
+                {
+                    if (pin.Window.IsPinnedWindow) pin.Window.TogglePinWindow();
+                    pin.Window.DeleteAllCopies();
+                }
                 if (pin.AppInfo != null)
                 {
                     VirtualDesktop.UnpinApplication(pin.AppInfo.Id);
@@ -205,7 +216,7 @@ namespace FreeVD
         public static ListViewItem Update(this ListViewItem item, Window window)
         {
             item.SubItems.Clear();
-            item.SubItems[0].Text = "Window";
+            item.SubItems[0].Text = "Window" + (window.IsCopied() ? "-Copied" : "") + (window.IsPinnedWindow ? "-Pinned" : "");
             item.SubItems.Add(window.GetWindowText());
             item.SubItems.Add(JsonConvert.SerializeObject(new PinInfo { Window = window }));
             return item;
