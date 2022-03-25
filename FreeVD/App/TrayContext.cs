@@ -95,7 +95,7 @@ namespace FreeVD
                 if (VirtualDesktop.Current.GetNumber() != 
                     VirtualDesktop.FromHwnd(SettingsForm.Handle).GetNumber())
                 {
-                    VirtualDesktopHelper.MoveToDesktop(SettingsForm.Handle, 
+                    VirtualDesktop.MoveToDesktop(SettingsForm.Handle, 
                         VirtualDesktop.Current);
                 }
                 User32.SetForegroundWindow(SettingsForm.Handle);

@@ -39,7 +39,9 @@ namespace FreeVD
         {
             try
             {
-                return ApplicationHelper.GetAppId(Handle);
+                string s;
+                if (!VirtualDesktop.TryGetAppUserModelId(Handle, out s)) throw new Exception();
+                return s;
             }
             catch (Exception)
             {
