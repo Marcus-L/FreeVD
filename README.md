@@ -1,5 +1,5 @@
 # FreeVD
-Windows 10 Virtual Desktop Hotkeys and System Tray Icon
+Windows 11 Virtual Desktop Manager
 
 ## Installation
 Install the app automatically with [Chocolatey](https://chocolatey.org)
