@@ -1,4 +1,4 @@
-# FreeVD - Windows 11 version
+# FreeVD - Virtual Desktop Manager for Windows 11
 Windows 11 Virtual Desktop Manager
 
 ## Installation
