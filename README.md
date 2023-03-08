@@ -29,3 +29,9 @@ Pin/Unpin Applications:
 Pin/Unpin Windows:  
 <kbd>WIN</kbd>+<kbd>ALT</kbd>+<kbd>W</kbd>  
 (Pinning a window will pin only that window, not other windows from the same application)
+
+**Developers Who Participated (payable)**
+- mon1t0r
+  - Github: https://github.com/mon1t0r
+- Ivan
+  - Telegram: https://t.me/BearUkraine
