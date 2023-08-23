@@ -30,8 +30,9 @@ Pin/Unpin Windows:
 <kbd>WIN</kbd>+<kbd>ALT</kbd>+<kbd>W</kbd>  
 (Pinning a window will pin only that window, not other windows from the same application)
 
-**Related libraries:**
+**Related (potential useful) libraries:**
 - https://github.com/MScholtes/VirtualDesktop
+- https://github.com/MScholtes/PSVirtualDesktop
 - https://github.com/Grabacr07/VirtualDesktop
 
 **Developers Who Participated (payable)**
