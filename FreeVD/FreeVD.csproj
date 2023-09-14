@@ -33,6 +33,11 @@
 </ItemGroup>
 
 <ItemGroup>
+  <ProjectReference Include="..\VirtualDesktop\src\VirtualDesktop.WinForms\VirtualDesktop.WinForms.csproj" />
+  <ProjectReference Include="..\VirtualDesktop\src\VirtualDesktop\VirtualDesktop.csproj" />
+</ItemGroup>
+
+<ItemGroup>
 <Compile Update="Properties\Settings.Designer.cs">
   <DesignTimeSharedInput>True</DesignTimeSharedInput>
   <AutoGen>True</AutoGen>
