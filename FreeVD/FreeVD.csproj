@@ -33,15 +33,6 @@
 </ItemGroup>
 
 <ItemGroup>
-  <Reference Include="VirtualDesktop">
-    <HintPath>Lib\Virtual Desktop\VirtualDesktop.dll</HintPath>
-  </Reference>
-  <Reference Include="VirtualDesktop.WinForms">
-    <HintPath>Lib\Virtual Desktop\VirtualDesktop.WinForms.dll</HintPath>
-  </Reference>
-</ItemGroup>
-
-<ItemGroup>
 <Compile Update="Properties\Settings.Designer.cs">
   <DesignTimeSharedInput>True</DesignTimeSharedInput>
   <AutoGen>True</AutoGen>
