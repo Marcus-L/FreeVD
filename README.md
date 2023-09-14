@@ -1,15 +1,5 @@
-# FreeVD
-Windows 10 Virtual Desktop Hotkeys and System Tray Icon
-
-## Installation
-Install the app automatically with [Chocolatey](https://chocolatey.org)
-```powershell
-choco install FreeVD
-```
-
-Or, download the MSI installer directly from the [Releases Page](https://github.com/Marcus-L/FreeVD/releases).
-
-## Features:
+# FreeVD - Virtual Desktop Manager for Windows 11
+Windows 11 Virtual Desktop Manager
 
 ### Hotkeys:
 
@@ -40,6 +30,18 @@ Pin/Unpin Windows:
 <kbd>WIN</kbd>+<kbd>ALT</kbd>+<kbd>W</kbd>  
 (Pinning a window will pin only that window, not other windows from the same application)
 
+**Related (potential useful) libraries:**
+- https://github.com/MScholtes/VirtualDesktop
+- https://github.com/MScholtes/PSVirtualDesktop
+- https://github.com/Grabacr07/VirtualDesktop
 
----
-FreeVD started as a fork from the [last FOSS version](https://github.com/mzomparelli/zVirtualDesktop/tree/b623c87da69e9b45cf87141a216787a30477b934) of [mzomparelli](https://github.com/mzomparelli)'s [zVirtualDesktop](https://github.com/mzomparelli/zVirtualDesktop), and has continued to be developed as free and open-source.
+**Developers Who Participated (payable)**
+- mon1t0r
+  - Github: https://github.com/mon1t0r
+- Ivan
+  - Telegram: https://t.me/BearUkraine
+  - Watch the update of https://github.com/Grabacr07/VirtualDesktop
+  - И на будущее, как я понял, нужно просто несколько дней смотреть pull requests, кто-то за несколько дней выкатит фиксы.
+  - Загрузить, собрать в качестве длл и подключить к проекту. И с версиями немного поиграть
+  - Единственное, что я там сменил app.config, сейчас попробую вернуть, проверю. Потому что он у меня вызвал ошибку
+  - В папке App я создал App.config (ты его в репозиторий прибавил сегодня). Его просто удалили, у тебя есть старый App.config, что в корне проекта

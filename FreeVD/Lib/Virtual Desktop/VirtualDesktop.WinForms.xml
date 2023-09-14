@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>VirtualDesktop.WinForms</name>
+    </assembly>
+    <members>
+        <member name="M:WindowsDesktop.FormExtensions.IsCurrentVirtualDesktop(System.Windows.Forms.Form)">
+            <summary>
+            Determines whether this form is on the current virtual desktop.
+            </summary>
+        </member>
+        <member name="M:WindowsDesktop.FormExtensions.MoveToDesktop(System.Windows.Forms.Form,WindowsDesktop.VirtualDesktop)">
+            <summary>
+            Moves a form to the specified virtual desktop.
+            </summary>
+        </member>
+        <member name="M:WindowsDesktop.FormExtensions.GetCurrentDesktop(System.Windows.Forms.Form)">
+            <summary>
+            Returns the virtual desktop this form is located on.
+            </summary>
+        </member>
+    </members>
+</doc>
