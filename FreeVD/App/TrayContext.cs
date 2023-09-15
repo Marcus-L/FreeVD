@@ -2,6 +2,7 @@
 using FreeVD.Lib.Interop;
 using System;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,7 +49,15 @@ namespace FreeVD
                 new ToolStripMenuItem("Settings", null, (obj,args) => OpenSettings()),
                 new ToolStripMenuItem("Exit", null, (obj,args) => Application.Exit())
             });
-            SetIcon(VirtualDesktop.Current);
+
+            try
+            {
+                SetIcon(VirtualDesktop.Current);
+            }
+            catch (Exception ex)
+            {
+                File.WriteAllText("error.txt", ex.Message + "\n" + ex.StackTrace);
+            }
 
             AppModel.Initialize();
 
