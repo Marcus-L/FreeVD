@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using WindowsDesktop;
@@ -62,13 +63,22 @@ namespace FreeVD
                 if (window.IsDesktop || window.DesktopNumber == -1) return;
 
                 //prepare for action
+                var desktops = VirtualDesktop.GetDesktops();
                 switch (Action)
                 {
                     case VDAction.MoveWindowToDesktop:
+                        window.DeleteAllCopies();
+                        AppModel.SetWindowsInFocusOnDesktop(window.Handle, desktops[DesktopNumber - 1].Id);
+                        break;
                     case VDAction.MoveWindowToNextDesktop:
+                        window.DeleteAllCopies();
+                        int nextDesktop = DesktopNumber == desktops.Length ? 1 : DesktopNumber + 1;
+                        AppModel.SetWindowsInFocusOnDesktop(window.Handle, desktops[nextDesktop].Id);
+                        break;
                     case VDAction.MoveWindowToPreviousDesktop:
                         window.DeleteAllCopies();
-                        AppModel.SetWindowsInFocusOnDesktop(window.Handle, VirtualDesktop.GetDesktops()[DesktopNumber - 1].Id);
+                        int prevDesktop = DesktopNumber == desktops.Length ? 1 : DesktopNumber + 1;
+                        AppModel.SetWindowsInFocusOnDesktop(window.Handle, desktops[prevDesktop].Id);
                         break;
                     case VDAction.CopyWindowToDesktop:
                     case VDAction.DeleteAllCopiesOfWindow:
@@ -77,6 +87,7 @@ namespace FreeVD
                         break;
 
                 }
+
 
                 // perform action
                 switch (Action)

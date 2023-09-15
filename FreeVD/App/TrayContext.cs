@@ -50,14 +50,7 @@ namespace FreeVD
                 new ToolStripMenuItem("Exit", null, (obj,args) => Application.Exit())
             });
 
-            try
-            {
-                SetIcon(VirtualDesktop.Current);
-            }
-            catch (Exception ex)
-            {
-                File.WriteAllText("error.txt", ex.Message + "\n" + ex.StackTrace);
-            }
+            SetIcon(VirtualDesktop.Current);
 
             AppModel.Initialize();
 
