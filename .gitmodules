@@ -1,4 +1,4 @@
 [submodule "VirtualDesktop"]
 	path = VirtualDesktop
-	url = https://github.com/mon1t0r/VirtualDesktop
+	url = https://github.com/mon1t0r/VirtualDesktop/
 	branch = maciejm/fix/windows-11-22622-crash
