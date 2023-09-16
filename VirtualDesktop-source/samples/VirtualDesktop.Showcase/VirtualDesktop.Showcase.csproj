@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows10.0.19041.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <RootNamespace>VirtualDesktopShowcase</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\VirtualDesktop.WPF\VirtualDesktop.WPF.csproj" />
+    <ProjectReference Include="..\..\src\VirtualDesktop\VirtualDesktop.csproj" />
+  </ItemGroup>
+
+</Project>

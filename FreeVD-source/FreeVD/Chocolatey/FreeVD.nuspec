@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>freevd</id>
+    <version>1.2.0</version>
+    <title>FreeVD</title>
+    <authors>Marcus Lum</authors>
+    <owners>Marcus Lum</owners>
+    <copyright>Copyright (C) 2019 Marcus Lum</copyright>
+    <licenseUrl>https://github.com/Marcus-L/FreeVD/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/Marcus-L/FreeVD</projectUrl>
+    <packageSourceUrl>https://github.com/Marcus-L/FreeVD/tree/master/FreeVD/Chocolatey</packageSourceUrl>
+    <iconUrl>https://raw.githubusercontent.com/Marcus-L/FreeVD/master/Screenshots/AppIcon.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>
+# FreeVD
+Windows 10 Virtual Desktop Hotkeys and System Tray Icon
+
+## Features:
+
+## Hotkeys:
+
+These are the default hotkeys, which are fully customizable.
+
+![Screenshot](https://raw.githubusercontent.com/Marcus-L/FreeVD/master/Screenshots/Hotkeys.png)
+
+**Navigate Desktops:**  
+WIN+CTRL+Numpad
+
+**Move Windows:**  
+WIN+ALT+Numpad
+WIN+ALT+LEFT or RIGHT
+
+**Move Window &amp; Follow:**  
+WIN+CTRL+ALT+Numpad
+WIN+CTRL+ALT+LEFT or RIGHT
+
+## Window Pinning:
+
+![Screenshot](https://raw.githubusercontent.com/Marcus-L/FreeVD/master/Screenshots/Pins.png)
+
+**Pin/Unpin Applications:**  
+WIN+ALT+A
+(Pinning an application will pin all windows of that application to appear on all desktops)
+
+**Pin/Unpin Windows:**  
+WIN+ALT+W
+(Pinning a window will pin only that window, not other windows from the same application)
+    </description>
+    <releaseNotes>See release notes at: https://github.com/Marcus-L/FreeVD/releases</releaseNotes>
+    <tags>Windows10 Virtual Desktop Hotkeys Hotkey</tags>
+    <dependencies>
+      <dependency id="dotnet4.7" version="4.7.2053.0" />
+    </dependencies>
+  </metadata>
+</package>

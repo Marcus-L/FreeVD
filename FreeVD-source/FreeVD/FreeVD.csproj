@@ -1,0 +1,55 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+<PropertyGroup>
+<TargetFramework>net6.0-windows10.0.22621.0</TargetFramework>
+<AppDesignerFolder>Properties</AppDesignerFolder>
+<ApplicationManifest>app.manifest</ApplicationManifest>
+<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+<UseWindowsForms>true</UseWindowsForms>
+<ApplicationIcon />
+<OutputType>WinExe</OutputType>
+<StartupObject />
+<Platforms>AnyCPU;x64</Platforms>
+<SignAssembly>false</SignAssembly>
+<DelaySign>true</DelaySign>
+<PackageId>FreeVD</PackageId>
+<RootNamespace>FreeVD</RootNamespace>
+<AssemblyName>FreeVD</AssemblyName>
+<Install>true</Install>
+<InstallFrom>Disk</InstallFrom>
+<ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+</PropertyGroup>
+
+<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+<AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+</PropertyGroup>
+
+<ItemGroup>
+<PackageReference Include="Humanizer" Version="2.14.1" />
+<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.3.1" />
+<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+<PackageReference Include="System.Management" Version="6.0.0" />
+<PackageReference Include="System.Reactive" Version="5.0.0" />
+</ItemGroup>
+
+<ItemGroup>
+  <ProjectReference Include="..\VirtualDesktop\src\VirtualDesktop.WinForms\VirtualDesktop.WinForms.csproj" />
+  <ProjectReference Include="..\VirtualDesktop\src\VirtualDesktop\VirtualDesktop.csproj" />
+</ItemGroup>
+
+<ItemGroup>
+<Compile Update="Properties\Settings.Designer.cs">
+  <DesignTimeSharedInput>True</DesignTimeSharedInput>
+  <AutoGen>True</AutoGen>
+  <DependentUpon>Settings.settings</DependentUpon>
+</Compile>
+</ItemGroup>
+
+<ItemGroup>
+<None Update="Properties\Settings.settings">
+  <Generator>SettingsSingleFileGenerator</Generator>
+  <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+</None>
+</ItemGroup>
+
+</Project>
