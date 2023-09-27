@@ -42,6 +42,9 @@ namespace FreeVD
 
         public static void GotoDesktop(int desktopNumber)
         {
+            if (desktopNumber <= 0 || desktopNumber == VirtualDesktop.Current.GetNumber()) return;
+            AppModel.GetAndSaveWindowInFocus();
+            AppModel.SavePinnedWindowsPos();
             Window.EnsureDesktops(desktopNumber);
             User32.SetForegroundWindow(Window.GetTaskbar().Handle);
             VirtualDesktop.GetDesktops()[desktopNumber - 1].Switch();

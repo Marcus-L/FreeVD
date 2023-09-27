@@ -36,8 +36,8 @@
             this.tabs = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.HotkeyList = new System.Windows.Forms.ListView();
-            this.colTask = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colHotKey = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colTask = new System.Windows.Forms.ColumnHeader();
+            this.colHotKey = new System.Windows.Forms.ColumnHeader();
             this.HotkeyMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.HotkeyMenu_Add = new System.Windows.Forms.ToolStripMenuItem();
             this.HotkeyMenu_Edit = new System.Windows.Forms.ToolStripMenuItem();
@@ -46,8 +46,8 @@
             this.btnDeleteHotkey = new System.Windows.Forms.Button();
             this.tabPinnedApps = new System.Windows.Forms.TabPage();
             this.PinnedAppList = new System.Windows.Forms.ListView();
-            this.TypeHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.NameHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.TypeHeader = new System.Windows.Forms.ColumnHeader();
+            this.NameHeader = new System.Windows.Forms.ColumnHeader();
             this.tabOptions = new System.Windows.Forms.TabPage();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.LicenseLabel = new System.Windows.Forms.Label();
@@ -74,12 +74,12 @@
             this.PinnedAppsMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.MenuUnpin});
             this.PinnedAppsMenu.Name = "mnuPinnedApps";
-            this.PinnedAppsMenu.Size = new System.Drawing.Size(132, 36);
+            this.PinnedAppsMenu.Size = new System.Drawing.Size(107, 26);
             // 
             // MenuUnpin
             // 
             this.MenuUnpin.Name = "MenuUnpin";
-            this.MenuUnpin.Size = new System.Drawing.Size(131, 32);
+            this.MenuUnpin.Size = new System.Drawing.Size(106, 22);
             this.MenuUnpin.Text = "&Unpin";
             this.MenuUnpin.Click += new System.EventHandler(this.MenuUnpin_Click);
             // 
@@ -88,8 +88,7 @@
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
             this.splitContainer1.IsSplitterFixed = true;
-            this.splitContainer1.Location = new System.Drawing.Point(8, 8);
-            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4);
+            this.splitContainer1.Location = new System.Drawing.Point(5, 5);
             this.splitContainer1.Name = "splitContainer1";
             this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -103,9 +102,8 @@
             this.splitContainer1.Panel2.Controls.Add(this.ButtonOK);
             this.splitContainer1.Panel2.Controls.Add(this.ButtonApply);
             this.splitContainer1.Panel2.Controls.Add(this.ButtonCancel);
-            this.splitContainer1.Size = new System.Drawing.Size(800, 676);
-            this.splitContainer1.SplitterDistance = 621;
-            this.splitContainer1.SplitterWidth = 6;
+            this.splitContainer1.Size = new System.Drawing.Size(534, 451);
+            this.splitContainer1.SplitterDistance = 396;
             this.splitContainer1.TabIndex = 20;
             // 
             // tabs
@@ -115,9 +113,10 @@
             this.tabs.Controls.Add(this.tabOptions);
             this.tabs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabs.Location = new System.Drawing.Point(0, 0);
+            this.tabs.Margin = new System.Windows.Forms.Padding(2);
             this.tabs.Name = "tabs";
             this.tabs.SelectedIndex = 0;
-            this.tabs.Size = new System.Drawing.Size(800, 621);
+            this.tabs.Size = new System.Drawing.Size(534, 396);
             this.tabs.TabIndex = 18;
             // 
             // tabPage1
@@ -125,10 +124,11 @@
             this.tabPage1.Controls.Add(this.HotkeyList);
             this.tabPage1.Controls.Add(this.btnAddHotkey);
             this.tabPage1.Controls.Add(this.btnDeleteHotkey);
-            this.tabPage1.Location = new System.Drawing.Point(4, 34);
+            this.tabPage1.Location = new System.Drawing.Point(4, 24);
+            this.tabPage1.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(792, 583);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(2);
+            this.tabPage1.Size = new System.Drawing.Size(526, 368);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Hotkeys";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -143,9 +143,10 @@
             this.HotkeyList.FullRowSelect = true;
             this.HotkeyList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.HotkeyList.HideSelection = false;
-            this.HotkeyList.Location = new System.Drawing.Point(3, 3);
+            this.HotkeyList.Location = new System.Drawing.Point(2, 2);
+            this.HotkeyList.Margin = new System.Windows.Forms.Padding(2);
             this.HotkeyList.Name = "HotkeyList";
-            this.HotkeyList.Size = new System.Drawing.Size(786, 577);
+            this.HotkeyList.Size = new System.Drawing.Size(522, 364);
             this.HotkeyList.TabIndex = 11;
             this.HotkeyList.UseCompatibleStateImageBehavior = false;
             this.HotkeyList.View = System.Windows.Forms.View.Details;
@@ -169,43 +170,45 @@
             this.HotkeyMenu_Edit,
             this.HotkeyMenu_Delete});
             this.HotkeyMenu.Name = "HotkeyMenu";
-            this.HotkeyMenu.Size = new System.Drawing.Size(135, 100);
+            this.HotkeyMenu.Size = new System.Drawing.Size(108, 70);
             // 
             // HotkeyMenu_Add
             // 
             this.HotkeyMenu_Add.Name = "HotkeyMenu_Add";
-            this.HotkeyMenu_Add.Size = new System.Drawing.Size(134, 32);
+            this.HotkeyMenu_Add.Size = new System.Drawing.Size(107, 22);
             this.HotkeyMenu_Add.Text = "&Add";
             this.HotkeyMenu_Add.Click += new System.EventHandler(this.HotkeyMenu_Add_Click);
             // 
             // HotkeyMenu_Edit
             // 
             this.HotkeyMenu_Edit.Name = "HotkeyMenu_Edit";
-            this.HotkeyMenu_Edit.Size = new System.Drawing.Size(134, 32);
+            this.HotkeyMenu_Edit.Size = new System.Drawing.Size(107, 22);
             this.HotkeyMenu_Edit.Text = "&Edit";
             this.HotkeyMenu_Edit.Click += new System.EventHandler(this.HotkeyMenu_Edit_Click);
             // 
             // HotkeyMenu_Delete
             // 
             this.HotkeyMenu_Delete.Name = "HotkeyMenu_Delete";
-            this.HotkeyMenu_Delete.Size = new System.Drawing.Size(134, 32);
+            this.HotkeyMenu_Delete.Size = new System.Drawing.Size(107, 22);
             this.HotkeyMenu_Delete.Text = "&Delete";
             this.HotkeyMenu_Delete.Click += new System.EventHandler(this.HotkeyMenu_Delete_Click);
             // 
             // btnAddHotkey
             // 
-            this.btnAddHotkey.Location = new System.Drawing.Point(14, 436);
+            this.btnAddHotkey.Location = new System.Drawing.Point(9, 291);
+            this.btnAddHotkey.Margin = new System.Windows.Forms.Padding(2);
             this.btnAddHotkey.Name = "btnAddHotkey";
-            this.btnAddHotkey.Size = new System.Drawing.Size(75, 32);
+            this.btnAddHotkey.Size = new System.Drawing.Size(50, 21);
             this.btnAddHotkey.TabIndex = 13;
             this.btnAddHotkey.Text = "Add";
             this.btnAddHotkey.UseVisualStyleBackColor = true;
             // 
             // btnDeleteHotkey
             // 
-            this.btnDeleteHotkey.Location = new System.Drawing.Point(94, 436);
+            this.btnDeleteHotkey.Location = new System.Drawing.Point(63, 291);
+            this.btnDeleteHotkey.Margin = new System.Windows.Forms.Padding(2);
             this.btnDeleteHotkey.Name = "btnDeleteHotkey";
-            this.btnDeleteHotkey.Size = new System.Drawing.Size(75, 32);
+            this.btnDeleteHotkey.Size = new System.Drawing.Size(50, 21);
             this.btnDeleteHotkey.TabIndex = 12;
             this.btnDeleteHotkey.Text = "Delete";
             this.btnDeleteHotkey.UseVisualStyleBackColor = true;
@@ -213,10 +216,11 @@
             // tabPinnedApps
             // 
             this.tabPinnedApps.Controls.Add(this.PinnedAppList);
-            this.tabPinnedApps.Location = new System.Drawing.Point(4, 34);
+            this.tabPinnedApps.Location = new System.Drawing.Point(4, 24);
+            this.tabPinnedApps.Margin = new System.Windows.Forms.Padding(2);
             this.tabPinnedApps.Name = "tabPinnedApps";
-            this.tabPinnedApps.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPinnedApps.Size = new System.Drawing.Size(792, 585);
+            this.tabPinnedApps.Padding = new System.Windows.Forms.Padding(2);
+            this.tabPinnedApps.Size = new System.Drawing.Size(526, 368);
             this.tabPinnedApps.TabIndex = 3;
             this.tabPinnedApps.Text = "Pinned Apps";
             this.tabPinnedApps.UseVisualStyleBackColor = true;
@@ -231,11 +235,10 @@
             this.PinnedAppList.FullRowSelect = true;
             this.PinnedAppList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.PinnedAppList.HideSelection = false;
-            this.PinnedAppList.Location = new System.Drawing.Point(3, 3);
-            this.PinnedAppList.Margin = new System.Windows.Forms.Padding(4);
+            this.PinnedAppList.Location = new System.Drawing.Point(2, 2);
             this.PinnedAppList.MultiSelect = false;
             this.PinnedAppList.Name = "PinnedAppList";
-            this.PinnedAppList.Size = new System.Drawing.Size(786, 579);
+            this.PinnedAppList.Size = new System.Drawing.Size(522, 364);
             this.PinnedAppList.TabIndex = 0;
             this.PinnedAppList.UseCompatibleStateImageBehavior = false;
             this.PinnedAppList.View = System.Windows.Forms.View.Details;
@@ -243,7 +246,7 @@
             // TypeHeader
             // 
             this.TypeHeader.Text = "Type";
-            this.TypeHeader.Width = 87;
+            this.TypeHeader.Width = 110;
             // 
             // NameHeader
             // 
@@ -255,10 +258,9 @@
             this.tabOptions.Controls.Add(this.textBox1);
             this.tabOptions.Controls.Add(this.LicenseLabel);
             this.tabOptions.Controls.Add(this.AutoStartCheckbox);
-            this.tabOptions.Location = new System.Drawing.Point(4, 34);
-            this.tabOptions.Margin = new System.Windows.Forms.Padding(4);
+            this.tabOptions.Location = new System.Drawing.Point(4, 24);
             this.tabOptions.Name = "tabOptions";
-            this.tabOptions.Size = new System.Drawing.Size(792, 585);
+            this.tabOptions.Size = new System.Drawing.Size(526, 368);
             this.tabOptions.TabIndex = 4;
             this.tabOptions.Text = "Options";
             this.tabOptions.UseVisualStyleBackColor = true;
@@ -269,33 +271,30 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox1.BackColor = System.Drawing.SystemColors.Window;
-            this.textBox1.Location = new System.Drawing.Point(24, 219);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(4);
+            this.textBox1.Location = new System.Drawing.Point(16, 146);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox1.Size = new System.Drawing.Size(733, 340);
+            this.textBox1.Size = new System.Drawing.Size(491, 215);
             this.textBox1.TabIndex = 2;
             this.textBox1.Text = resources.GetString("textBox1.Text");
             // 
             // LicenseLabel
             // 
             this.LicenseLabel.AutoSize = true;
-            this.LicenseLabel.Location = new System.Drawing.Point(20, 192);
-            this.LicenseLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.LicenseLabel.Location = new System.Drawing.Point(13, 128);
             this.LicenseLabel.Name = "LicenseLabel";
-            this.LicenseLabel.Size = new System.Drawing.Size(207, 25);
+            this.LicenseLabel.Size = new System.Drawing.Size(138, 15);
             this.LicenseLabel.TabIndex = 1;
             this.LicenseLabel.Text = "FreeVD {Version} License:";
             // 
             // AutoStartCheckbox
             // 
             this.AutoStartCheckbox.AutoSize = true;
-            this.AutoStartCheckbox.Location = new System.Drawing.Point(24, 24);
-            this.AutoStartCheckbox.Margin = new System.Windows.Forms.Padding(4);
+            this.AutoStartCheckbox.Location = new System.Drawing.Point(16, 16);
             this.AutoStartCheckbox.Name = "AutoStartCheckbox";
-            this.AutoStartCheckbox.Size = new System.Drawing.Size(461, 29);
+            this.AutoStartCheckbox.Size = new System.Drawing.Size(307, 19);
             this.AutoStartCheckbox.TabIndex = 0;
             this.AutoStartCheckbox.Text = "Start FreeVD automatically when I sign in to Windows";
             this.AutoStartCheckbox.UseVisualStyleBackColor = true;
@@ -303,9 +302,10 @@
             // VersionLabel
             // 
             this.VersionLabel.AutoSize = true;
-            this.VersionLabel.Location = new System.Drawing.Point(8, 15);
+            this.VersionLabel.Location = new System.Drawing.Point(5, 10);
+            this.VersionLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.VersionLabel.Name = "VersionLabel";
-            this.VersionLabel.Size = new System.Drawing.Size(80, 25);
+            this.VersionLabel.Size = new System.Drawing.Size(53, 15);
             this.VersionLabel.TabIndex = 23;
             this.VersionLabel.Text = "{Version}";
             // 
@@ -313,9 +313,10 @@
             // 
             this.ButtonOK.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.ButtonOK.Location = new System.Drawing.Point(446, 4);
+            this.ButtonOK.Location = new System.Drawing.Point(298, 3);
+            this.ButtonOK.Margin = new System.Windows.Forms.Padding(2);
             this.ButtonOK.Name = "ButtonOK";
-            this.ButtonOK.Size = new System.Drawing.Size(111, 35);
+            this.ButtonOK.Size = new System.Drawing.Size(74, 40);
             this.ButtonOK.TabIndex = 22;
             this.ButtonOK.Text = "&OK";
             this.ButtonOK.UseVisualStyleBackColor = true;
@@ -325,9 +326,10 @@
             // 
             this.ButtonApply.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.ButtonApply.Location = new System.Drawing.Point(563, 4);
+            this.ButtonApply.Location = new System.Drawing.Point(376, 3);
+            this.ButtonApply.Margin = new System.Windows.Forms.Padding(2);
             this.ButtonApply.Name = "ButtonApply";
-            this.ButtonApply.Size = new System.Drawing.Size(111, 35);
+            this.ButtonApply.Size = new System.Drawing.Size(74, 40);
             this.ButtonApply.TabIndex = 21;
             this.ButtonApply.Text = "&Apply";
             this.ButtonApply.UseVisualStyleBackColor = true;
@@ -338,9 +340,10 @@
             this.ButtonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ButtonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.ButtonCancel.Location = new System.Drawing.Point(680, 4);
+            this.ButtonCancel.Location = new System.Drawing.Point(454, 3);
+            this.ButtonCancel.Margin = new System.Windows.Forms.Padding(2);
             this.ButtonCancel.Name = "ButtonCancel";
-            this.ButtonCancel.Size = new System.Drawing.Size(111, 35);
+            this.ButtonCancel.Size = new System.Drawing.Size(74, 40);
             this.ButtonCancel.TabIndex = 20;
             this.ButtonCancel.Text = "&Cancel";
             this.ButtonCancel.UseVisualStyleBackColor = true;
@@ -349,18 +352,19 @@
             // SettingsForm
             // 
             this.AcceptButton = this.ButtonOK;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.CancelButton = this.ButtonCancel;
-            this.ClientSize = new System.Drawing.Size(816, 692);
+            this.ClientSize = new System.Drawing.Size(544, 461);
             this.Controls.Add(this.splitContainer1);
-            this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(829, 722);
+            this.MinimumSize = new System.Drawing.Size(558, 494);
             this.Name = "SettingsForm";
-            this.Padding = new System.Windows.Forms.Padding(8);
+            this.Padding = new System.Windows.Forms.Padding(5);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FreeVD Settings";
             this.PinnedAppsMenu.ResumeLayout(false);

@@ -2,8 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows;
 using WindowsDesktop;
 
 namespace FreeVD
@@ -31,15 +35,112 @@ namespace FreeVD
         public Window(IntPtr handle)
         {
             Handle = handle;
+            WindowPlacements = new Dictionary<Guid, WindowPlacement>();
+            WindowVisibleDesktops = new List<Guid>();
         }
 
         public IntPtr Handle { get; set; }
+        public Dictionary<Guid, WindowPlacement> WindowPlacements { get; set; }
+        public List<Guid> WindowVisibleDesktops;
+
+        public void SaveWindowStateForCurrentDesktop(WindowPlacement p)
+        {
+            if (WindowPlacements.ContainsKey(VirtualDesktop.Current.Id))
+                WindowPlacements[VirtualDesktop.Current.Id] = p;
+            else
+                WindowPlacements.Add(VirtualDesktop.Current.Id, p);
+        }
+
+        public void SaveWindowStateForCurrentDesktop() => SaveWindowStateForCurrentDesktop(GetPlacement());
+
+        public void LoadWindowStateForCurrentDesktop()
+        {
+            if (WindowPlacements.ContainsKey(VirtualDesktop.Current.Id))
+                SetPlacement(WindowPlacements[VirtualDesktop.Current.Id]);
+        }
+
+        public void SetPlacement(WindowPlacement placement)
+        {
+            if (Handle == IntPtr.Zero || placement.length <= 0) return;
+            placement.length = Marshal.SizeOf(placement);
+            User32.SetWindowPlacement(Handle, ref placement);
+        }
+
+        public WindowPlacement GetPlacement()
+        {
+            if (Handle == IntPtr.Zero) return new WindowPlacement { length = 0 };
+            WindowPlacement placement;
+            User32.GetWindowPlacement(Handle, out placement);
+            WinRect r = new WinRect();
+            if(User32.GetWindowRect(Handle, ref r) && r.bottom > -5000 && r.left > -5000) placement.rcNormalPosition = r;
+            return placement;
+        }
+
+        public void LoadCopyStateForCurrentDesktop()
+        {
+            if (WindowVisibleDesktops.Contains(VirtualDesktop.Current.Id) &&
+                DesktopNumber != VirtualDesktop.Current.GetNumber())
+                MoveToDesktop(VirtualDesktop.Current);
+        }
+
+        public bool IsCopied() => AppModel.CopiedWindows.Contains(this);
+
+        public Window DeleteAllCopies()
+        {
+            AppModel.CopiedWindows.Remove(this);
+            return this;
+        }
+
+        public Window CopyToDesktop(VirtualDesktop desktop)
+        {
+            if (DesktopNumber != -1)
+            {
+                if (IsPinnedApplication) return this;
+
+                if(!AppModel.CopiedWindows.Contains(this))
+                    AppModel.CopiedWindows.Add(this);
+
+                if(!WindowVisibleDesktops.Contains(VirtualDesktop.Current.Id))
+                    WindowVisibleDesktops.Add(VirtualDesktop.Current.Id);
+
+                if(!WindowVisibleDesktops.Contains(desktop.Id))
+                    WindowVisibleDesktops.Add(desktop.Id);
+
+                if (IsPinnedWindow) TogglePinWindow();
+
+                if (WindowVisibleDesktops.Count >= VirtualDesktop.GetDesktops().Length)
+                {
+                    WindowVisibleDesktops.Clear();
+                    if (!IsPinnedWindow) TogglePinWindow();
+                }
+            }
+            return this;
+        }
+
+        public Window CopyToDesktop(int desktopNumber)
+        {
+            if (DesktopNumber != -1 && desktopNumber > 0)
+            {
+                try
+                {
+                    EnsureDesktops(desktopNumber); // Create addtional desktops if necessary
+                    CopyToDesktop(VirtualDesktop.GetDesktops()[desktopNumber - 1]);
+                }
+                catch (Exception ex)
+                {
+                    Log.LogEvent("Window", $"Handle: {Handle}\nCaption: {GetWindowText()}", ex);
+                }
+            }
+            return this;
+        }
 
         public string GetAppId()
         {
             try
             {
-                return ApplicationHelper.GetAppId(Handle);
+                string s;
+                if (!VirtualDesktop.TryGetAppUserModelId(Handle, out s)) throw new Exception();
+                return s;
             }
             catch (Exception)
             {
@@ -156,7 +257,7 @@ namespace FreeVD
                     AppModel.PinnedApps.Remove(info);
                 }
                 AppModel.PinnedWindows.Remove(this);
-                VirtualDesktopHelper.MoveToDesktop(Handle, desktop);
+                VirtualDesktop.MoveToDesktop(Handle, desktop);
             }
             return this;
         }
@@ -189,6 +290,7 @@ namespace FreeVD
         {
             if (follow && DesktopNumber != -1) // do not follow immovable windows
             {
+                AppModel.SavePinnedWindowsPos();
                 //User32.SetForegroundWindow(Window.GetTaskbar().Handle);
                 VirtualDesktop.FromHwnd(Handle).Switch();
                 User32.SetForegroundWindow(Handle);
@@ -203,7 +305,6 @@ namespace FreeVD
                 if (!IsPinnedWindow)
                 {
                     VirtualDesktop.PinWindow(Handle);
-                    PinWatcher.WatchWindow(this);
                     AppModel.PinnedWindows.Add(this);
                 }
                 else

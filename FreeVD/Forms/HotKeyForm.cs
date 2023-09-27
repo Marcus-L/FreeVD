@@ -70,13 +70,13 @@ namespace FreeVD
 
         private void ConfigureOptions()
         {
-            NumDesktop.Enabled = SelectedAction.Text.EndsWith("To Desktop");
+            NumDesktop.Enabled = SelectedAction.Text.ToLower().EndsWith("to desktop");
             if (!NumDesktop.Enabled)
             {
                 Hotkey.DesktopNumber = 0;
                 NumDesktop.Value = 0;
             }
-            CbFollow.Enabled = SelectedAction.Text.StartsWith("Move Window");
+            CbFollow.Enabled = SelectedAction.Text.ToLower().StartsWith("move window");
             if (!CbFollow.Enabled)
             {
                 Hotkey.Follow = false;

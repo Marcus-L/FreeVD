@@ -97,7 +97,6 @@ namespace FreeVD.Lib.Hotkeys
                            + (Ctrl ? Consts.MOD_CONTROL : 0)
                            + (Shift ? Consts.MOD_SHIFT : 0)
                            + (Win ? Consts.MOD_WIN : 0);
-
             if (User32.RegisterHotKey(Window.Handle, HotkeyID, Modifiers, Key) == 0)
             {
                 Debug.WriteLine($"error registering {HotkeyID}: {Modifiers} {Key}");
