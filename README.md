@@ -2,42 +2,39 @@
 Windows 11 Virtual Desktop Manager
 
 ### Hotkeys:
-
 These are the default hotkeys, which are fully customizable.
 
-<img src="Screenshots/Hotkeys.png"/>
+Navigate Desktops:
+<kbd>WIN</kbd>+<kbd>CTRL</kbd>+<kbd>Numpad</kbd>
 
-Navigate Desktops:  
-<kbd>WIN</kbd>+<kbd>CTRL</kbd>+<kbd>Numpad</kbd>  
-
-Move Windows:  
-<kbd>WIN</kbd>+<kbd>ALT</kbd>+<kbd>Numpad</kbd>  
+Move Windows:
+<kbd>WIN</kbd>+<kbd>ALT</kbd>+<kbd>Numpad</kbd>
 <kbd>WIN</kbd>+<kbd>ALT</kbd>+<kbd>LEFT</kbd> or <kbd>RIGHT</kbd>
 
-Move Window & Follow:  
-<kbd>WIN</kbd>+<kbd>CTRL</kbd>+<kbd>ALT</kbd>+<kbd>Numpad</kbd>  
+Move Window & Follow:
+<kbd>WIN</kbd>+<kbd>CTRL</kbd>+<kbd>ALT</kbd>+<kbd>Numpad</kbd>
 <kbd>WIN</kbd>+<kbd>CTRL</kbd>+<kbd>ALT</kbd>+<kbd>LEFT</kbd> or <kbd>RIGHT</kbd>
 
-## Window Pinning: 
+## Window Pinning:
 
-<img src="Screenshots/Pins.png"/>
-
-Pin/Unpin Applications:  
-<kbd>WIN</kbd>+<kbd>ALT</kbd>+<kbd>A</kbd>  
+Pin/Unpin Applications:
+<kbd>WIN</kbd>+<kbd>ALT</kbd>+<kbd>A</kbd>
 (Pinning an application will pin all windows of that application to appear on all desktops)
 
-Pin/Unpin Windows:  
-<kbd>WIN</kbd>+<kbd>ALT</kbd>+<kbd>W</kbd>  
+Pin/Unpin Windows:
+<kbd>WIN</kbd>+<kbd>ALT</kbd>+<kbd>W</kbd>
 (Pinning a window will pin only that window, not other windows from the same application)
 
 **Related (potential useful) libraries:**
 - https://github.com/MScholtes/VirtualDesktop
 - https://github.com/MScholtes/PSVirtualDesktop
 - https://github.com/Grabacr07/VirtualDesktop
+- https://github.com/widavies/WinJump
 
 **Developers Who Participated (payable)**
 - mon1t0r
   - Github: https://github.com/mon1t0r
+    > К слову, при переносе помогла ваша новая библиотека, т.к. в ней уже прописанны и адаптированы под новую версию некоторые интерфейсы. Также нашёл такой полезный репозиторий https://github.com/widavies/WinJump, здесь разработчик точно также обновляет свой код после обновлений Windows (https://github.com/widavies/WinJump/tree/main/WinJump/Core/VirtualDesktopDefinitions), и это может быть полезно при очередном переносе на новую версию.
 - Ivan
   - Telegram: https://t.me/BearUkraine
   - Watch the update of https://github.com/Grabacr07/VirtualDesktop
