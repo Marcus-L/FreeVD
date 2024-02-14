@@ -33,8 +33,8 @@
 </ItemGroup>
 
 <ItemGroup>
-  <ProjectReference Include="..\VirtualDesktop\src\VirtualDesktop.WinForms\VirtualDesktop.WinForms.csproj" />
-  <ProjectReference Include="..\VirtualDesktop\src\VirtualDesktop\VirtualDesktop.csproj" />
+  <ProjectReference Include="..\..\VirtualDesktop-source\src\VirtualDesktop.WinForms\VirtualDesktop.WinForms.csproj" />
+  <ProjectReference Include="..\..\VirtualDesktop-source\src\VirtualDesktop\VirtualDesktop.csproj" />
 </ItemGroup>
 
 <ItemGroup>
